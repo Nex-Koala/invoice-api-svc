@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,6 +33,10 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
             _configuration = configuration;
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<InvoiceDocument> InvoiceDocuments { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<InvoiceLine> InvoiceLines { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -53,6 +58,21 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<InvoiceDocument>()
+            .HasOne(i => i.Supplier)
+            .WithMany()
+            .HasForeignKey(i => i.Supplier.Id);
+
+            builder.Entity<InvoiceDocument>()
+                .HasOne(i => i.Customer)
+                .WithMany()
+                .HasForeignKey(i => i.Customer.Id);
+
+            builder.Entity<InvoiceLine>()
+                .HasOne(il => il.InvoiceDocument)
+                .WithMany(i => i.InvoiceLines)
+                .HasForeignKey(il => il.InvoiceDocumentId);
+
             //All Decimals will have 18,6 Range
             foreach (var property in builder.Model.GetEntityTypes()
             .SelectMany(t => t.GetProperties())
@@ -61,41 +81,6 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
                 property.SetColumnType("decimal(18,6)");
             }
             base.OnModelCreating(builder);
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                // Extract countryCode from HttpContext
-                var countryCode = _httpContextAccessor.HttpContext?.Items["CountryCode"]?.ToString();
-
-                if (!string.IsNullOrEmpty(countryCode))
-                {
-                    // Create a dynamic connection string based on the countryCode
-                    var connectionString = GetConnectionStringForCountryCode(countryCode);
-                    if (!string.IsNullOrEmpty(connectionString))
-                    {
-                        optionsBuilder.UseSqlServer(connectionString);
-                    }
-                    else
-                    {
-                        throw new Exception("Unable to determine database connection string for the country code: " + countryCode);
-                    }
-                }
-                else
-                {
-                    // Fallback to default connection if no countryCode is found
-                    optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
-                }
-            }
-        }
-
-        // Method to fetch the connection string based on country code
-        private string GetConnectionStringForCountryCode(string countryCode)
-        {
-            // Assuming the connection strings are stored in the appsettings.json file with a prefix "ConnectionStrings:"
-            return _configuration.GetConnectionString($"Connection_{countryCode}");
         }
     }
 }
