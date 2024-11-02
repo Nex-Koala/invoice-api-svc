@@ -1,4 +1,6 @@
-﻿namespace invoice_api_svc.Application.DTOs.UBL.Common
+﻿using invoice_api_svc.Application.DTOs.Ubl.Common;
+
+namespace invoice_api_svc.Application.DTOs.Ubl.Common
 {
     public class MonetaryTotal
     {

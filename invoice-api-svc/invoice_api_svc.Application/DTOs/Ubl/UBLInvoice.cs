@@ -1,16 +1,16 @@
-﻿using invoice_api_svc.Application.DTOs.UBL.Common;
-using invoice_api_svc.Application.DTOs.UBL.Invoice;
-using invoice_api_svc.Domain.Entities;
+﻿using invoice_api_svc.Domain.Entities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using invoice_api_svc.Application.DTOs.Ubl.Common;
+using invoice_api_svc.Application.DTOs.Ubl.Invoice;
 
-namespace invoice_api_svc.Application.DTOs.UBL
+namespace invoice_api_svc.Application.DTOs.Ubl
 {
-    public class UBLInvoice
+    public class UblInvoice
     {
         [JsonProperty("ID")]
         public BasicComponent[] Id { get; set; }
