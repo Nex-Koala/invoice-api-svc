@@ -1,10 +1,4 @@
-﻿using invoice_api_svc.Domain.Entities;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using invoice_api_svc.Application.DTOs.Ubl.Common;
 using invoice_api_svc.Application.DTOs.Ubl.Invoice;
 
@@ -24,7 +18,7 @@ namespace invoice_api_svc.Application.DTOs.Ubl
         public AccountingSupplierParty[] AccountingSupplierParty { get; set; }
         public AccountingCustomerParty[] AccountingCustomerParty { get; set; }
         public MonetaryTotal[] LegalMonetaryTotal { get; set; }
-        public InvoiceLine[] InvoiceLine { get; set; }
+        public Invoice.InvoiceLine[] InvoiceLine { get; set; }
         public TaxTotal[] TaxTotal { get; set; }
     }
 }

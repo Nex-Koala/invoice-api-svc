@@ -10,4 +10,9 @@ namespace invoice_api_svc.Application.DTOs.Ubl.Common
     {
         public string _ { get; set; }
     }
+
+    public class BasicComponent<T>
+    {
+        public T _ { get; set; }
+    }
 }
