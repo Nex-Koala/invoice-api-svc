@@ -11,6 +11,10 @@ using Microsoft.Extensions.Hosting;
 using invoice_api_svc.WebApi.Extensions;
 using invoice_api_svc.WebApi.Services;
 using invoice_api_svc.Infrastructure.Persistence.Repository;
+using System;
+using System.Configuration;
+using System.Runtime;
+using invoice_api_svc.Domain.Settings;
 
 namespace invoice_api_svc.WebApi
 {
@@ -32,6 +36,15 @@ namespace invoice_api_svc.WebApi
             services.AddApiVersioningExtension();
             services.AddHealthChecks();
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
+
+            services.AddHttpClient("Lhdn", client =>
+            {
+                client.BaseAddress = new Uri(_config.GetSection("EInvoiceSettings:ApiBaseUrl").Value);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
+
+            services.Configure<EInvoiceSettings>(_config.GetSection("EInvoiceSettings"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

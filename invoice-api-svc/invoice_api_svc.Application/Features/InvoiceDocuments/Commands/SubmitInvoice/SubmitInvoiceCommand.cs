@@ -1,25 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Reflection.Metadata;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using invoice_api_svc.Application.DTOs.EInvoice.Invoice;
 using invoice_api_svc.Application.DTOs.Ubl;
 using invoice_api_svc.Application.DTOs.Ubl.Common;
 using invoice_api_svc.Application.DTOs.Ubl.Invoice;
+using invoice_api_svc.Application.Exceptions;
+using invoice_api_svc.Application.Interfaces.Apis;
+using invoice_api_svc.Application.Wrappers;
 using invoice_api_svc.Domain.Entities;
 using MediatR;
+using Newtonsoft.Json;
 
 namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitInvoice
 {
-    public partial class SubmitInvoiceCommand : InvoiceRequest, IRequest<object> { }
+    public partial class SubmitInvoiceCommand : InvoiceRequest, IRequest<object>
+    {
+    }
 
     public class SubmitInvoiceComamndHandler : IRequestHandler<SubmitInvoiceCommand, object>
     {
-        public async Task<object> Handle(
-            SubmitInvoiceCommand request,
-            CancellationToken cancellationToken
-        )
+        private readonly ILhdnApi _lhdnApi;
+
+        public SubmitInvoiceComamndHandler(ILhdnApi lhdnApi)
         {
+            _lhdnApi = lhdnApi;
+        }
+
+        public async Task<object> Handle(SubmitInvoiceCommand request, CancellationToken cancellationToken)
+        {
+            // Step 1: Construct the Invoice JSON document
             var ublInvoice = new UblInvoiceDocument()
             {
                 _D = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
@@ -741,7 +757,46 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                 },
             };
 
-            return null;
+            // Step 2: Convert document to JSON string
+            var documentString = JsonConvert.SerializeObject(ublInvoice);
+
+            // Step 3: Convert document string to Base64
+            var documentBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(documentString));
+
+            // Step 4: Generate SHA256 hash
+            UblDocumentRequest payload = null;
+            using (var sha256 = SHA256.Create())
+            {
+                var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(documentString));
+                var documentHashHex = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+
+                // Step 5: Prepare payload for submission
+                payload =
+                    new()
+                    {
+                        Documents =
+                        [
+                            new()
+                            {
+                                Format = "JSON",
+                                DocumentHash = documentHashHex,
+                                CodeNumber = request.Irn,
+                                Document = documentBase64,
+                            },
+                        ],
+                    };
+            }
+
+
+            var response = await _lhdnApi.SubmitInvoiceAsync(payload);
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException(result);
+            }
+
+            return new Response<string>(result, message: null);
         }
     }
 }

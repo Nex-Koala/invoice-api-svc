@@ -9,5 +9,7 @@ namespace invoice_api_svc.Domain.Settings
     public class EInvoiceSettings
     {
         public string ApiBaseUrl { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
     }
 }
