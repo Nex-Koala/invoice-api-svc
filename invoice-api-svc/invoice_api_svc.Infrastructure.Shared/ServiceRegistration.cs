@@ -17,6 +17,7 @@ namespace invoice_api_svc.Infrastructure.Shared
             services.AddTransient<IEmailService, EmailService>();
 
             services.AddTransient<ILhdnApi, LhdnApi>();
+            services.AddTransient<ILhdnSdk, LhdnSdk>();
         }
     }
 }

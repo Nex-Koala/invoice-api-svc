@@ -37,9 +37,16 @@ namespace invoice_api_svc.WebApi
             services.AddHealthChecks();
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
-            services.AddHttpClient("Lhdn", client =>
+            services.AddHttpClient("LhdnApi", client =>
             {
                 client.BaseAddress = new Uri(_config.GetSection("EInvoiceSettings:ApiBaseUrl").Value);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
+
+            services.AddHttpClient("LhdnSdk", client =>
+            {
+                client.BaseAddress = new Uri(_config.GetSection("EInvoiceSettings:SdkBaseUrl").Value);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.Timeout = TimeSpan.FromSeconds(30);
             });

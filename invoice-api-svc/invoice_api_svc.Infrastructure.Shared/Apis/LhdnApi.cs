@@ -38,7 +38,7 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
         {
             var token = await GetTokenAsync(); // Get token from LHDN API
 
-            var client = _httpClientFactory.CreateClient("Lhdn");
+            var client = _httpClientFactory.CreateClient("LhdnApi");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var requestContent = new StringContent(
@@ -56,7 +56,7 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
             {
                 var token = await GetTokenAsync(); // Get token from LHDN API
 
-                var client = _httpClientFactory.CreateClient("Lhdn");
+                var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var response = await client.GetAsync($"/documents/{uuid}/details");
@@ -104,7 +104,7 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
 
                 var token = await GetTokenAsync(); // Get token from LHDN API
 
-                var client = _httpClientFactory.CreateClient("Lhdn");
+                var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var url = new UriBuilder($"/documents/recent");
@@ -134,7 +134,7 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
         {
             var token = string.Empty;
 
-            var client = _httpClientFactory.CreateClient("Lhdn");
+            var client = _httpClientFactory.CreateClient("LhdnApi");
             var requestContent = new StringContent(
                 new FormUrlEncodedContent(
                     new[]
