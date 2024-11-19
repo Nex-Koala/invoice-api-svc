@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
-
 
 namespace invoice_api_svc.Infrastructure.Persistence.Contexts
 {
@@ -20,9 +18,10 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IConfiguration _configuration;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, 
-            IDateTimeService dateTime, 
-            IAuthenticatedUserService authenticatedUser, 
+        public ApplicationDbContext(
+            DbContextOptions<ApplicationDbContext> options,
+            IDateTimeService dateTime,
+            IAuthenticatedUserService authenticatedUser,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration) : base(options)
         {
@@ -32,6 +31,7 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
         }
+
         public DbSet<Product> Products { get; set; }
         public DbSet<InvoiceDocument> InvoiceDocuments { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
@@ -56,30 +56,35 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
             }
             return base.SaveChangesAsync(cancellationToken);
         }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // Configure InvoiceDocument to Supplier relationship
             builder.Entity<InvoiceDocument>()
-            .HasOne(i => i.Supplier)
-            .WithMany()
-            .HasForeignKey(i => i.Supplier.Id);
+                .HasOne(i => i.Supplier)
+                .WithMany()
+                .HasForeignKey(i => i.SupplierId); // Use FK property
 
+            // Configure InvoiceDocument to Customer relationship
             builder.Entity<InvoiceDocument>()
                 .HasOne(i => i.Customer)
                 .WithMany()
-                .HasForeignKey(i => i.Customer.Id);
+                .HasForeignKey(i => i.CustomerId); // Use FK property
 
+            // Configure InvoiceLine to InvoiceDocument relationship
             builder.Entity<InvoiceLine>()
                 .HasOne(il => il.InvoiceDocument)
                 .WithMany(i => i.InvoiceLines)
-                .HasForeignKey(il => il.InvoiceDocumentId);
+                .HasForeignKey(il => il.InvoiceDocumentId); // Use FK property
 
-            //All Decimals will have 18,6 Range
+            // Apply global decimal configuration
             foreach (var property in builder.Model.GetEntityTypes()
-            .SelectMany(t => t.GetProperties())
-            .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
+                .SelectMany(t => t.GetProperties())
+                .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
             {
                 property.SetColumnType("decimal(18,6)");
             }
+
             base.OnModelCreating(builder);
         }
     }

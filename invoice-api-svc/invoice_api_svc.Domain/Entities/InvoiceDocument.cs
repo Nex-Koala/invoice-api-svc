@@ -26,8 +26,10 @@ namespace invoice_api_svc.Domain.Entities
 
         public decimal TaxAmount { get; set; } // Tax Total
 
+        public int SupplierId { get; set; }
         public Supplier Supplier { get; set; } // Supplier Info
-
+        
+        public int CustomerId { get; set; }
         public Customer Customer { get; set; } // Customer Info
 
         public ICollection<InvoiceLine> InvoiceLines { get; set; } // Invoice Line Items

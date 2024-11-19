@@ -22,13 +22,14 @@ namespace invoice_api_svc.Infrastructure.Persistence
             else
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
-               options.UseNpgsql(
-                   configuration.GetConnectionString("DefaultConnection"),
-                   b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                options.UseNpgsql(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly("invoice_api_svc.Infrastructure.Persistence")));
             }
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient<IProductRepositoryAsync, ProductRepositoryAsync>();
+            services.AddTransient<IInvoiceDocumentRepositoryAsync, InvoiceDocumentRepositoryAsync>();
             #endregion
         }
     }
