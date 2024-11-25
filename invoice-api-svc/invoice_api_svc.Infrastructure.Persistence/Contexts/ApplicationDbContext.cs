@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -76,6 +77,26 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
                 .HasOne(il => il.InvoiceDocument)
                 .WithMany(i => i.InvoiceLines)
                 .HasForeignKey(il => il.InvoiceDocumentId); // Use FK property
+
+            builder.Entity<Uom>(entity =>
+            {
+                entity.ToTable("uoms");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Description).HasMaxLength(255);
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            builder.Entity<UomMapping>(entity =>
+            {
+                entity.ToTable("uom_mappings");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.LhdnUomCode).IsRequired().HasMaxLength(50);
+                entity.HasOne(e => e.Uom)
+                      .WithMany(u => u.UomMappings)
+                      .HasForeignKey(e => e.UomId);
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
 
             // Apply global decimal configuration
             foreach (var property in builder.Model.GetEntityTypes()
