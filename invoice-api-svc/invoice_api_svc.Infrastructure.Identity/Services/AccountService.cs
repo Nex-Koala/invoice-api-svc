@@ -23,6 +23,9 @@ using invoice_api_svc.Application.Enums;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
 using invoice_api_svc.Application.DTOs.Email;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
+using System.Web;
 
 namespace invoice_api_svc.Infrastructure.Identity.Services
 {
@@ -34,12 +37,16 @@ namespace invoice_api_svc.Infrastructure.Identity.Services
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
+        private readonly ClientSettings _clientSettings;
+
+
         public AccountService(UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
             IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
-            IEmailService emailService)
+            IEmailService emailService,
+            IOptions<ClientSettings> clientSettings)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -47,6 +54,7 @@ namespace invoice_api_svc.Infrastructure.Identity.Services
             _dateTimeService = dateTimeService;
             _signInManager = signInManager;
             this._emailService = emailService;
+            _clientSettings = clientSettings.Value;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -76,6 +84,7 @@ namespace invoice_api_svc.Infrastructure.Identity.Services
             response.IsVerified = user.EmailConfirmed;
             var refreshToken = GenerateRefreshToken(ipAddress);
             response.RefreshToken = refreshToken.Token;
+
             return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
         }
 
@@ -208,11 +217,12 @@ namespace invoice_api_svc.Infrastructure.Identity.Services
             if (account == null) return;
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(account);
-            var route = "api/account/reset-password/";
-            var _enpointUri = new Uri(string.Concat($"{origin}/", route));
+
+            var resetPasswordUrl = $"{_clientSettings.BaseUrl}/user/resetPassword?email={model.Email}&code={HttpUtility.UrlEncode(code)}";
+
             var emailRequest = new EmailRequest()
             {
-                Body = $"You reset token is - {code}",
+                Body = $"Reset your password using this link: {resetPasswordUrl}",
                 To = model.Email,
                 Subject = "Reset Password",
             };
@@ -223,7 +233,7 @@ namespace invoice_api_svc.Infrastructure.Identity.Services
         {
             var account = await _userManager.FindByEmailAsync(model.Email);
             if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
-            var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
+            var result = await _userManager.ResetPasswordAsync(account, HttpUtility.UrlDecode(model.Token), model.Password);
             if (result.Succeeded)
             {
                 return new Response<string>(model.Email, message: $"Password Resetted.");
