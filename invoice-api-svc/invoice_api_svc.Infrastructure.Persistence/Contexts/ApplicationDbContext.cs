@@ -80,7 +80,6 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
 
             builder.Entity<Uom>(entity =>
             {
-                entity.ToTable("uoms");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Description).HasMaxLength(255);
@@ -89,7 +88,6 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
 
             builder.Entity<UomMapping>(entity =>
             {
-                entity.ToTable("uom_mappings");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.LhdnUomCode).IsRequired().HasMaxLength(50);
                 entity.HasOne(e => e.Uom)

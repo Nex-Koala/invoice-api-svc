@@ -4,5 +4,30 @@
         <name>invoice_api_svc.WebApi</name>
     </assembly>
     <members>
+        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.GetAllUoms(invoice_api_svc.Application.Features.Products.Queries.GetAllUoms.GetAllUomsQuery)">
+            <summary>
+            Get all UOMs (paginated)
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.GetUomById(System.Int32)">
+            <summary>
+            Get a UOM by ID
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.CreateUom(invoice_api_svc.Application.Features.Uoms.Commands.CreateUom.CreateUomCommand)">
+            <summary>
+            Create a new UOM
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.UpdateUom(invoice_api_svc.Application.Features.Products.Commands.UpdateUom.UpdateUomCommand)">
+            <summary>
+            Update an existing UOM
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.DeleteUom(invoice_api_svc.Application.Features.Products.Commands.DeleteUomById.DeleteUomByIdCommand)">
+            <summary>
+            Delete a UOM by ID (soft delete)
+            </summary>
+        </member>
     </members>
 </doc>

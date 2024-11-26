@@ -8,8 +8,17 @@ namespace invoice_api_svc.Application.Mappings
     {
         public UomProfile()
         {
+            // Map GetAllUomsQuery to GetAllUomsParameter
             CreateMap<GetAllUomsQuery, GetAllUomsParameter>();
-            CreateMap<Uom, GetAllUomsViewModel>();
+
+            // Map Uom entity to GetAllUomsViewModel
+            CreateMap<Uom, GetAllUomsViewModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            // Enable reverse mapping if needed
+            CreateMap<Uom, GetAllUomsViewModel>().ReverseMap();
         }
     }
 }

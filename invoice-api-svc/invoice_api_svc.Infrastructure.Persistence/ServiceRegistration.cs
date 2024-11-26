@@ -31,6 +31,7 @@ namespace invoice_api_svc.Infrastructure.Persistence
             services.AddTransient<IProductRepositoryAsync, ProductRepositoryAsync>();
             services.AddTransient<IInvoiceDocumentRepositoryAsync, InvoiceDocumentRepositoryAsync>();
             services.AddTransient<IUomRepositoryAsync, UomRepositoryAsync>();
+            services.AddTransient<IUomMappingRepositoryAsync, UomMappingRepositoryAsync>();
             #endregion
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,5 +14,7 @@ namespace invoice_api_svc.Application.Interfaces
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
+        Task<T?> GetByConditionAsync(Expression<Func<T, bool>> predicate);
+        Task<IReadOnlyList<T>> GetManyByConditionAsync(Expression<Func<T, bool>> predicate);
     }
 }

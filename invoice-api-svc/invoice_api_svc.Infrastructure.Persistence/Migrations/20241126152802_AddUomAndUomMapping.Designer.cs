@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using invoice_api_svc.Infrastructure.Persistence.Contexts;
@@ -11,9 +12,11 @@ using invoice_api_svc.Infrastructure.Persistence.Contexts;
 namespace invoice_api_svc.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241126152802_AddUomAndUomMapping")]
+    partial class AddUomAndUomMapping
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,7 +267,7 @@ namespace invoice_api_svc.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Uom");
+                    b.ToTable("uoms", (string)null);
                 });
 
             modelBuilder.Entity("invoice_api_svc.Domain.Entities.UomMapping", b =>
@@ -302,7 +305,7 @@ namespace invoice_api_svc.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UomId");
 
-                    b.ToTable("UomMapping");
+                    b.ToTable("uom_mappings", (string)null);
                 });
 
             modelBuilder.Entity("invoice_api_svc.Domain.Entities.InvoiceDocument", b =>
