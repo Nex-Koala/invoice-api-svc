@@ -9,10 +9,10 @@
 		<ProjectReference Include="..\invoice_api_svc.Application\invoice_api_svc.Application.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="MailKit" Version="2.8.0" />
-		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.10" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-		<PackageReference Include="MimeKit" Version="2.9.1" />
+		<PackageReference Include="MailKit" Version="4.8.0" />
+		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.11" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
+		<PackageReference Include="MimeKit" Version="4.8.0" />
 	</ItemGroup>
 </Project>

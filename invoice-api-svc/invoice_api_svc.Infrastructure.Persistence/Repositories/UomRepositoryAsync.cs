@@ -3,6 +3,7 @@ using invoice_api_svc.Domain.Entities;
 using invoice_api_svc.Infrastructure.Persistence.Contexts;
 using invoice_api_svc.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,10 +24,10 @@ namespace invoice_api_svc.Infrastructure.Persistence.Repositories
             return !await _uoms.AnyAsync(u => u.Code == code && !u.IsDeleted);
         }
 
-        public async Task<IReadOnlyList<Uom>> GetPagedReponseAsync(int pageNumber, int pageSize)
+        public async Task<IReadOnlyList<Uom>> GetPagedReponseAsync(int pageNumber, int pageSize, Guid UserId)
         {
             return await _uoms
-                .Where(u => !u.IsDeleted)
+                .Where(u => !u.IsDeleted && u.UserId == UserId)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

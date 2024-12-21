@@ -15,6 +15,7 @@ namespace invoice_api_svc.Application.Features.Products.Queries.GetAllUoms
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public Guid UserId { get; set; }
     }
     public class GetAllUomsQueryHandler : IRequestHandler<GetAllUomsQuery, PagedResponse<IEnumerable<GetAllUomsViewModel>>>
     {
@@ -32,9 +33,10 @@ namespace invoice_api_svc.Application.Features.Products.Queries.GetAllUoms
             var validFilter = _mapper.Map<GetAllUomsParameter>(request);
 
             // Fetch paginated response from repository
-            var uoms = await _uomRepository.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize);
+            var uoms = await _uomRepository.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, request.UserId);
 
             // Map entities to view models
+            
             var uomViewModels = _mapper.Map<IEnumerable<GetAllUomsViewModel>>(uoms);
 
             // Return paged response

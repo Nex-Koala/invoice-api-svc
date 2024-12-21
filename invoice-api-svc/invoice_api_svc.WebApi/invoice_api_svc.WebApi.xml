@@ -4,29 +4,54 @@
         <name>invoice_api_svc.WebApi</name>
     </assembly>
     <members>
-        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.GetAllUoms(invoice_api_svc.Application.Features.Products.Queries.GetAllUoms.GetAllUomsQuery)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.GetAllUoms(invoice_api_svc.Application.Features.Products.Queries.GetAllUoms.GetAllUomsQuery)">
             <summary>
             Get all UOMs (paginated)
             </summary>
         </member>
-        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.GetUomById(System.Int32)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.GetUomById(System.Int32)">
             <summary>
             Get a UOM by ID
             </summary>
         </member>
-        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.CreateUom(invoice_api_svc.Application.Features.Uoms.Commands.CreateUom.CreateUomCommand)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.CreateUom(invoice_api_svc.Application.Features.Uoms.Commands.CreateUom.CreateUomCommand)">
             <summary>
             Create a new UOM
             </summary>
         </member>
-        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.UpdateUom(invoice_api_svc.Application.Features.Products.Commands.UpdateUom.UpdateUomCommand)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.UpdateUom(System.Int32,invoice_api_svc.Application.Features.Products.Commands.UpdateUom.UpdateUomCommand)">
             <summary>
             Update an existing UOM
             </summary>
         </member>
-        <member name="M:invoice_api_svc.WebApi.Controllers.UOMController.DeleteUom(invoice_api_svc.Application.Features.Products.Commands.DeleteUomById.DeleteUomByIdCommand)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.DeleteUom(System.Int32)">
             <summary>
             Delete a UOM by ID (soft delete)
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMMappingController.GetAll(invoice_api_svc.Application.Features.UomMappings.Queries.GetAllUomMappings.GetAllUomMappingsQuery)">
+            <summary>
+            Get all UOM mappings with optional pagination
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMMappingController.GetById(System.Int32)">
+            <summary>
+            Get a UOM mapping by ID
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMMappingController.Create(invoice_api_svc.Application.Features.UomMappings.Commands.CreateUomMapping.CreateUomMappingCommand)">
+            <summary>
+            Create a new UOM mapping
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMMappingController.Update(System.Int32,invoice_api_svc.Application.Features.UomMappings.Commands.UpdateUomMapping.UpdateUomMappingCommand)">
+            <summary>
+            Update an existing UOM mapping
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMMappingController.Delete(System.Int32)">
+            <summary>
+            Delete a UOM mapping by ID
             </summary>
         </member>
     </members>
