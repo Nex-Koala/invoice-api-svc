@@ -1,9 +1,20 @@
-﻿namespace invoice_api_svc.Domain.Entities.AP
+﻿using System;
+
+namespace invoice_api_svc.Domain.Entities.AP
 {
+    /// <summary>
+    /// Represents the Payable Reference.
+    /// Maps to the "APGLREF" table.
+    /// </summary>
     public class PayableReference
     {
-        public int ReferenceId { get; set; }
-        public string ReferenceCode { get; set; }
-        public string Description { get; set; }
+        public decimal SOURCE { get; set; } // Source Identifier
+        public decimal GLDEST { get; set; } // General Ledger Destination
+        public DateTime AUDTDATE { get; set; } // Audit Date
+        public string AUDTUSER { get; set; } // Audit User
+        public string SEGMENT1 { get; set; } // GL Segment 1
+        public string SEGMENT2 { get; set; } // GL Segment 2
+        public decimal BASETAX { get; set; } // Base Tax Amount
+        public decimal TAXAMOUNT { get; set; } // Tax Amount
     }
 }

@@ -4,6 +4,24 @@
         <name>invoice_api_svc.WebApi</name>
     </assembly>
     <members>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetSalesData(System.String)">
+            <summary>
+            Retrieves sales-related data (Invoices, Credit Notes, Debit Notes).
+            Sequence: OrderEntryHeader -> ReceivableInvoiceHeader -> ReceivableInvoiceDetail.
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetPurchaseData(System.String)">
+            <summary>
+            Retrieves purchase-related data (Invoices, Allowances, Charges).
+            Sequence: PurchaseInvoiceHeader -> PurchaseInvoiceDetail.
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetSelfBillingData(System.String)">
+            <summary>
+            Retrieves self-billing data.
+            Sequence: PurchaseInvoiceHeader -> PurchaseInvoiceDetail.
+            </summary>
+        </member>
         <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.GetAllUoms(invoice_api_svc.Application.Features.Products.Queries.GetAllUoms.GetAllUomsQuery)">
             <summary>
             Get all UOMs (paginated)

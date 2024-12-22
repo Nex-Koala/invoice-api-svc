@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace invoice_api_svc.Domain.Entities.PO
 {
+    /// <summary>
+    /// Represents the Purchase Order Header.
+    /// Maps to the "POPORH" table.
+    /// </summary>
     public class PurchaseOrderHeader
     {
-        public int PurchaseOrderId { get; set; }
-        public DateTime OrderDate { get; set; }
-        public string VendorName { get; set; }
-        public ICollection<PurchaseReceipt> PurchaseReceipts { get; set; }
+        public string POPORID { get; set; } // Unique Purchase Order Identifier
+        public string SUPPLIER { get; set; } // Supplier Identifier
+        public DateTime ORDERDATE { get; set; } // Order Date
+        public decimal TOTALAMOUNT { get; set; } // Total Purchase Order Amount
+        public string CURRENCY { get; set; } // Currency Code
     }
 }
