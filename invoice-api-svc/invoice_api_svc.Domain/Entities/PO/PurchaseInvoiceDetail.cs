@@ -6,17 +6,19 @@
     /// </summary>
     public class PurchaseInvoiceDetail
     {
-        public string INVNUMBER { get; set; } // e-Invoice Code/Number (FK)
-        public int LineNumber { get; set; } // Line Number
-        public string ITEMDESC { get; set; } // Description of Product or Service
-        public decimal UNITCOST { get; set; } // Unit Price
+        public decimal INVHSEQ { get; set; } // Invoice Header Sequence
+        public decimal INVLREV { get; set; } // Invoice Line Revision
+        public string ITEMDESC { get; set; } // Item Description
+        public decimal UNITCOST { get; set; } // Unit Cost
+        public decimal EXTENDED { get; set; } // Total Amount
+        public decimal RQRECEIVED { get; set; } // Quantity Received
+        public string RCPUNIT { get; set; } // Measurement Unit
         public decimal TAXRATE1 { get; set; } // Tax Rate
-        public decimal TAXMOUNT1 { get; set; } // Tax Amount
-        public decimal TXEXPSAMT1 { get; set; } // Amount Exempted from Tax
-        public decimal EXTENDED { get; set; } // Subtotal
-        public decimal RQRECEIVED { get; set; } // Quantity
-        public string RCPUNIT { get; set; } // Measurement
+        public decimal TAXAMOUNT1 { get; set; } // Tax Amount
+        public decimal TXEXPSAMT1 { get; set; } // Exempted Tax Amount
         public decimal DISCPCT { get; set; } // Discount Rate
         public decimal DISCOUNT { get; set; } // Discount Amount
+        public PurchaseInvoiceHeader PurchaseInvoiceHeader { get; set; }
+
     }
 }

@@ -1,21 +1,24 @@
-﻿namespace invoice_api_svc.Domain.Entities.OE
+﻿using System.Text.Json.Serialization;
+
+namespace invoice_api_svc.Domain.Entities.OE
 {
     /// <summary>
     /// Represents the Order Entry Detail.
-    /// Maps to the "OEINVDD" table.
+    /// Maps to the "OEINVD" table.
     /// </summary>
     public class OrderEntryDetail
     {
-        public decimal INVUNIQ { get; set; } // Foreign Key to Header
-        public int LINENUM { get; set; } // Line Number
-        public string ITEM { get; set; } // Item Code
-        public decimal QTY { get; set; } // Quantity
+        public string DESC { get; set; } // Description of Product or Service
         public decimal UNITPRICE { get; set; } // Unit Price
-        public decimal AMTTOTAL { get; set; } // Total Amount for the Line
-        public string TAXCODE { get; set; } // Tax Code
-        public decimal TAXAMOUNT { get; set; } // Tax Amount for the Line
-
-        // Navigation Property
+        public decimal TRATE1 { get; set; } // Tax Rate
+        public decimal TAMOUNT1 { get; set; } // Tax Amount
+        public decimal EXTINVMISC { get; set; } // Subtotal
+        public decimal QTYSHIPPED { get; set; } // Quantity
+        public string INVUNIT { get; set; } // Measurement
+        public decimal DISCPER { get; set; } // Discount Rate 
+        public decimal INVDISC { get; set; } // Discount Amount
+        public decimal INVUNIQ { get; set; } // Order ID
+        [JsonIgnore]
         public OrderEntryHeader OrderEntryHeader { get; set; }
     }
 }

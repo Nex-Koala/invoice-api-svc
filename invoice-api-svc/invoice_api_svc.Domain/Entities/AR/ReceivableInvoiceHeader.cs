@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace invoice_api_svc.Domain.Entities.AR
 {
@@ -8,10 +9,22 @@ namespace invoice_api_svc.Domain.Entities.AR
     /// </summary>
     public class ReceivableInvoiceHeader
     {
-        public string INVNUMBER { get; set; } // Invoice Number
-        public string CUSTOMERID { get; set; } // Customer ID
-        public DateTime INVDATE { get; set; } // Invoice Date
-        public string CURRENCY { get; set; } // Currency
-        public decimal RATE { get; set; } // Exchange Rate
+        public decimal CNTBTCH { get; set; } // Batch Count
+        public decimal CNTITEM { get; set; } // Item Count
+        public string IDCUST { get; set; } // Customer ID
+        public string IDINVC { get; set; } // Invoice Number
+        public string CODECURN { get; set; } // Currency Code
+        public decimal EXCHRATEHC { get; set; } // Exchange Rate
+        public decimal AMTTAXTOT { get; set; } // Total Tax Amount
+        public decimal AMTINVCTOT { get; set; } // Total Invoice Amount
+        public decimal AMTNETTOT { get; set; } // Net Total Amount
+        public decimal DATEINVC { get; set; } // Invoice Date
+        public string INVCSTTS { get; set; } // Invoice Status
+        public string INVCDESC { get; set; } // Invoice Description
+        public string EMAIL { get; set; } // Customer Email
+        public string CTACPHONE { get; set; } // Customer Contact Phone
+
+        // Navigation property for related Receivable Invoice Details
+        public ICollection<ReceivableInvoiceDetail> ReceivableInvoiceDetails { get; set; }
     }
 }

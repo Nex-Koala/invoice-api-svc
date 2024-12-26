@@ -4,22 +4,39 @@
         <name>invoice_api_svc.WebApi</name>
     </assembly>
     <members>
-        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetSalesData(System.String)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetSalesInvoices(System.Int32,System.Int32,System.Nullable{System.Decimal})">
             <summary>
-            Retrieves sales-related data (Invoices, Credit Notes, Debit Notes).
-            Sequence: OrderEntryHeader -> ReceivableInvoiceHeader -> ReceivableInvoiceDetail.
+            Retrieves sales invoices from Order Entry tables.
+            Table Reference 
+            OE => OEINVH (Order Entry Header) and OEINVD (Order Entry Detail)
+            AR => ARIBH (Receivable Invoice Header) and ARIBD (Receivable Invoice Detail)
+                  Fields: Item Description (TEXTDESC), Amounts (AMTEXTN), Tax (AMTTAX1)
+            AP => APIBH (Payable Invoice Header) and APIBD (Payable Invoice Detail)
+                  NA??
             </summary>
         </member>
-        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetPurchaseData(System.String)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetCreditDebitNotes(System.Int32,System.Int32,System.Nullable{System.Decimal})">
             <summary>
-            Retrieves purchase-related data (Invoices, Allowances, Charges).
-            Sequence: PurchaseInvoiceHeader -> PurchaseInvoiceDetail.
+            Retrieves credit/debit notes from Order Entry tables.
+            OE => OECRDH (Order Entry Credit/Debit Note Header) and OECRDD (Order Entry Credit/Debit Note Detail)
+            AR => ARIBH (Receivable Invoice Header) and ARIBD (Receivable Invoice Detail)
+                  Fields: Credit Details (TEXTDESC), Adjustments (AMTEXTN)
+            AP => APIBH (Payable Invoice Header) and APIBD (Payable Invoice Detail)
+                  Fields: Description (TEXTDESC), Tax (AMTTAX1)
             </summary>
         </member>
-        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetSelfBillingData(System.String)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetPurchaseInvoices(System.Int32,System.Int32,System.String)">
             <summary>
-            Retrieves self-billing data.
-            Sequence: PurchaseInvoiceHeader -> PurchaseInvoiceDetail.
+            Retrieves purchase invoices (self-billing).
+            PO => POINVH1 (Purchase Invoice Header) and POINVL (Purchase Invoice Line)
+            AP => APIBH (Accounts Payable Invoice Header) and APIBD (Accounts Payable Invoice Detail)
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetPurchaseCreditDebitNotes(System.Int32,System.Int32,System.String)">
+            <summary>
+            Retrieves purchase credit/debit notes (self-billing).
+            PO => POCRNH1 (Purchase Credit/Debit Note Header) and POCRNL (Purchase Credit/Debit Note Line)
+            AP => APIBH (Accounts Payable Invoice Header) and APIBD (Accounts Payable Invoice Detail)
             </summary>
         </member>
         <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.GetAllUoms(invoice_api_svc.Application.Features.Products.Queries.GetAllUoms.GetAllUomsQuery)">

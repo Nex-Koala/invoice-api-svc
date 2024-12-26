@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using invoice_api_svc.Domain.Entities.AP;
-using invoice_api_svc.Domain.Entities.AR;
-using invoice_api_svc.Domain.Entities.OE;
+﻿using invoice_api_svc.Domain.Entities.OE;
 using invoice_api_svc.Domain.Entities.PO;
+using Microsoft.EntityFrameworkCore;
 
 namespace invoice_api_svc.Infrastructure.Persistence.Contexts
 {
@@ -13,61 +11,90 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
     {
         public ClientDbContext(DbContextOptions<ClientDbContext> options) : base(options) { }
 
-        // DbSet for Purchase Invoices
+        // Order Entry Entities
+        public DbSet<OrderEntryHeader> OrderEntryHeaders { get; set; }
+        public DbSet<OrderEntryDetail> OrderEntryDetails { get; set; }
+
+        // Credit/Debit Notes (Order Entry)
+        public DbSet<OrderCreditDebitHeader> OrderCreditDebitHeaders { get; set; }
+        public DbSet<OrderCreditDebitDetail> OrderCreditDebitDetails { get; set; }
+
+        // Purchase Invoice (Self Billing)
         public DbSet<PurchaseInvoiceHeader> PurchaseInvoiceHeaders { get; set; }
         public DbSet<PurchaseInvoiceDetail> PurchaseInvoiceDetails { get; set; }
 
-        // DbSet for Receivables
-        public DbSet<ReceivableInvoiceHeader> ReceivableInvoiceHeaders { get; set; }
-        public DbSet<ReceivableInvoiceDetail> ReceivableInvoiceDetails { get; set; }
-
-        // DbSet for Order Entries
-        public DbSet<OrderEntryHeader> OrderEntryHeaders { get; set; }
+        // Purchase Credit/Debit Notes (Self Billing)
+        public DbSet<PurchaseCreditDebitNoteHeader> PurchaseCreditNoteHeaders { get; set; }
+        public DbSet<PurchaseCreditDebitNoteDetail> PurchaseCreditNoteDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Purchase Invoice Header
+            // Configure Sales Invoice Tables
+            modelBuilder.Entity<OrderEntryHeader>()
+                .ToTable("OEINVH")
+                .HasKey(o => o.INVUNIQ);
+
+            modelBuilder.Entity<OrderEntryDetail>()
+                .ToTable("OEINVD")
+                .HasKey(d => new { d.INVUNIQ });
+
+            modelBuilder.Entity<OrderEntryHeader>()
+                .HasMany(o => o.OrderEntryDetails)
+                .WithOne(d => d.OrderEntryHeader)
+                .HasForeignKey(d => d.INVUNIQ);
+
+            // Configure Credit/Debit Note Tables (Order Entry)
+            modelBuilder.Entity<OrderCreditDebitHeader>()
+                .ToTable("OECRDH")
+                .HasKey(o => o.CRDUNIQ);
+
+            modelBuilder.Entity<OrderCreditDebitDetail>()
+                .ToTable("OECRDD")
+                .HasKey(d => new { d.CRDUNIQ, d.LINENUM });
+
+            modelBuilder.Entity<OrderCreditDebitHeader>()
+                .HasMany(o => o.OrderCreditDebitDetails)
+                .WithOne(d => d.OrderCreditDebitHeader)
+                .HasForeignKey(d => d.CRDUNIQ);
+
+            // Configure Purchase Invoice Tables (Self Billing)
             modelBuilder.Entity<PurchaseInvoiceHeader>()
                 .ToTable("POINVH1")
-                .HasKey(p => p.INVNUMBER);
+                .HasKey(p => p.INVHSEQ);
 
             modelBuilder.Entity<PurchaseInvoiceDetail>()
                 .ToTable("POINVL")
-                .HasKey(p => new { p.INVNUMBER, p.LineNumber });
+                .HasKey(p => new { p.INVHSEQ, p.INVLREV });
 
-            // Receivable Invoice Header
-            modelBuilder.Entity<ReceivableInvoiceHeader>()
-                .ToTable("ARIBH")
-                .HasKey(r => r.INVNUMBER);
+            modelBuilder.Entity<PurchaseInvoiceHeader>()
+                .HasMany(p => p.PurchaseInvoiceDetails)
+                .WithOne(d => d.PurchaseInvoiceHeader)
+                .HasForeignKey(d => d.INVHSEQ)
+                .HasPrincipalKey(d => d.INVHSEQ);
 
-            modelBuilder.Entity<ReceivableInvoiceDetail>()
-                .ToTable("ARIBD")
-                .HasKey(r => new { r.INVNUMBER, r.LINENUMBER });
+            // Configure Purchase Credit/Debit Note Tables (Self Billing)
+            modelBuilder.Entity<PurchaseCreditDebitNoteHeader>()
+                .ToTable("POCRNH1")
+                .HasKey(p => p.CRNHSEQ);
 
-            // Order Entry Header
-            modelBuilder.Entity<OrderEntryHeader>()
-                .ToTable("OEINVH")
-                .HasKey(o => o.ORDERID);
+            modelBuilder.Entity<PurchaseCreditDebitNoteDetail>()
+                .ToTable("POCRNL")
+                .HasKey(p => new { p.CRNHSEQ, p.CRNLREV });
+
+            modelBuilder.Entity<PurchaseCreditDebitNoteHeader>()
+                .HasMany(p => p.PurchaseCreditDebitNoteDetails)
+                .WithOne(d => d.PurchaseCreditDebitNoteHeader)
+                .HasForeignKey(d => d.CRNHSEQ);
 
             ConfigureFieldMappings(modelBuilder);
         }
 
         private void ConfigureFieldMappings(ModelBuilder modelBuilder)
         {
-            // Purchase Invoice Header Field Mappings
-            modelBuilder.Entity<PurchaseInvoiceHeader>().Property(p => p.VDNAME).HasColumnName("VDNAME");
-            modelBuilder.Entity<PurchaseInvoiceHeader>().Property(p => p.VDEMAIL).HasColumnName("VDEMAIL");
-
-            // Purchase Invoice Detail Field Mappings
-            modelBuilder.Entity<PurchaseInvoiceDetail>().Property(p => p.ITEMDESC).HasColumnName("ITEMDESC");
-
-            // Receivable Invoice Header Field Mappings
-            modelBuilder.Entity<ReceivableInvoiceHeader>().Property(r => r.CUSTOMERID).HasColumnName("CUSTOMERID");
-
-            // Order Entry Header Field Mappings
-            modelBuilder.Entity<OrderEntryHeader>().Property(o => o.CUSTOMERID).HasColumnName("CUSTOMERID");
+            //modelBuilder.Entity<AccountPayableInvoiceHeader>().Property(p => p.SUPPLIERID).HasColumnName("SUPPLIER");
+            //modelBuilder.Entity<AccountPayableInvoiceDetail>().Property(p => p.ITEMDESC).HasColumnName("ITEMDESC");
         }
     }
 }
