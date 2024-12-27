@@ -15,6 +15,9 @@ namespace invoice_api_svc.Domain.Entities.OE
         public string BILADDR2 { get; set; } // Buyer Address 
         public string BILADDR3 { get; set; } // Buyer Address 
         public string BILADDR4 { get; set; } // Buyer Address 
+        public string BILSTATE { get; set; } // Buyer State 
+        public string BILZIP { get; set; } // Buyer Zip
+        public string BILCOUNTRY { get; set; } // Buyer Country
         public string BILPHONE { get; set; } // Buyer Contact
         public string INVNUMBER { get; set; } // e-Invoice Code/ Number
         public decimal INVUNIQ { get; set; } // Order ID

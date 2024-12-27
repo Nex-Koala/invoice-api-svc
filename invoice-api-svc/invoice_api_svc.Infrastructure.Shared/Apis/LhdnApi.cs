@@ -146,6 +146,7 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
                             ), // Replace with your actual client_secret
                             new KeyValuePair<string, string>("grant_type", "client_credentials"),
                             new KeyValuePair<string, string>("scope", "InvoicingAPI"),
+                            new KeyValuePair<string, string>("onbehalfof", _settings.OnBehalfOf),
                     }
                 )
                     .ReadAsStringAsync()

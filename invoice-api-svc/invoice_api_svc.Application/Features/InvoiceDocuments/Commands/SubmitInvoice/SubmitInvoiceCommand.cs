@@ -84,14 +84,14 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                         [
                             new()
                             {
-                                AdditionalAccountId =
-                                [
-                                    new()
-                                    {
-                                        _ = request.SupplierAdditionalAccountID,
-                                        SchemeAgencyName = "CertEx",
-                                    },
-                                ],
+                                //AdditionalAccountId =
+                                //[
+                                //    new()
+                                //    {
+                                //        _ = request.SupplierAdditionalAccountID,
+                                //        SchemeAgencyName = "CertEx",
+                                //    },
+                                //],
                                 Party =
                                 [
                                     new()

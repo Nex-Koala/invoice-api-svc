@@ -5,12 +5,22 @@ using invoice_api_svc.WebApi.Services;
 using System.Linq;
 using System.Threading.Tasks;
 using invoice_api_svc.WebApi.Helpers;
+using invoice_api_svc.Application.Features.Products.Commands.CreateProduct;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using invoice_api_svc.Application.Features.Invoices.Commands.CreateInvoice;
+using invoice_api_svc.Application.Features.Codes.Queries.GetClassificationCodes;
+using invoice_api_svc.Application.Features.Codes.Queries.GetCurrencyCodes;
+using invoice_api_svc.Application.Features.Codes.Queries.GetInvoiceTypes;
+using invoice_api_svc.Application.Features.Codes.Queries.GetTaxTypes;
+using invoice_api_svc.Application.Features.Codes.Queries.GetUnitTypes;
+using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitInvoice;
 
 namespace invoice_api_svc.WebApi.Controllers.v1
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class InvoiceApiController : ControllerBase
+    public class InvoiceApiController : BaseApiController
     {
         private readonly ClientDbContext _dbContext;
         private readonly TrimStringService _trimStringService;
@@ -159,6 +169,78 @@ namespace invoice_api_svc.WebApi.Controllers.v1
             }
 
             return Ok(paginatedResult);
+        }
+
+        /// <summary>
+        /// Get a list of invoice types.
+        /// </summary>
+        [HttpGet("invoice-types")]
+        public async Task<IActionResult> GetInvoiceTypes()
+        {
+            var result = await Mediator.Send(new GetInvoiceTypesQuery());
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get a list of tax types.
+        /// </summary>
+        [HttpGet("tax-types")]
+        public async Task<IActionResult> GetTaxTypes()
+        {
+            var result = await Mediator.Send(new GetTaxTypesQuery());
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Create a new invoice.
+        /// </summary>
+        /// <param name="command">CreateInvoiceCommand</param>
+        [HttpPost("create-invoice")]
+        public async Task<IActionResult> CreateInvoice([FromBody] CreateInvoiceCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Submit an invoice.
+        /// </summary>
+        /// <param name="command">SubmitInvoiceCommand</param>
+        [HttpPost("submit-invoice")]
+        public async Task<IActionResult> SubmitInvoice([FromBody] SubmitInvoiceCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get a list of available currency codes.
+        /// </summary>
+        [HttpGet("currency-codes")]
+        public async Task<IActionResult> GetCurrencyCodes()
+        {
+            var result = await Mediator.Send(new GetCurrencyCodesQuery());
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get a list of available unit types.
+        /// </summary>
+        [HttpGet("unit-types")]
+        public async Task<IActionResult> GetUnitTypes()
+        {
+            var result = await Mediator.Send(new GetUnitTypesQuery());
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get a list of classification codes.
+        /// </summary>
+        [HttpGet("classification-codes")]
+        public async Task<IActionResult> GetClassificationCodes()
+        {
+            var result = await Mediator.Send(new GetClassificationCodesQuery());
+            return Ok(result);
         }
     }
 }

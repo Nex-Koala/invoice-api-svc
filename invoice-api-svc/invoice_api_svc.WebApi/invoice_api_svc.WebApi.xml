@@ -39,6 +39,43 @@
             AP => APIBH (Accounts Payable Invoice Header) and APIBD (Accounts Payable Invoice Detail)
             </summary>
         </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetInvoiceTypes">
+            <summary>
+            Get a list of invoice types.
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetTaxTypes">
+            <summary>
+            Get a list of tax types.
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.CreateInvoice(invoice_api_svc.Application.Features.Invoices.Commands.CreateInvoice.CreateInvoiceCommand)">
+            <summary>
+            Create a new invoice.
+            </summary>
+            <param name="command">CreateInvoiceCommand</param>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.SubmitInvoice(invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitInvoice.SubmitInvoiceCommand)">
+            <summary>
+            Submit an invoice.
+            </summary>
+            <param name="command">SubmitInvoiceCommand</param>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetCurrencyCodes">
+            <summary>
+            Get a list of available currency codes.
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetUnitTypes">
+            <summary>
+            Get a list of available unit types.
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetClassificationCodes">
+            <summary>
+            Get a list of classification codes.
+            </summary>
+        </member>
         <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.GetAllUoms(invoice_api_svc.Application.Features.Products.Queries.GetAllUoms.GetAllUomsQuery)">
             <summary>
             Get all UOMs (paginated)

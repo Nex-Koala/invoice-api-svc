@@ -11,5 +11,6 @@ namespace invoice_api_svc.Domain.Settings
         public string ApiBaseUrl { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
+        public string OnBehalfOf { get; set; }
     }
 }
