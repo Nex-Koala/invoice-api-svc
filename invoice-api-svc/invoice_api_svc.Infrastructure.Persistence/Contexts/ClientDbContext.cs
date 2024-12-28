@@ -1,4 +1,5 @@
-﻿using invoice_api_svc.Domain.Entities.OE;
+﻿using invoice_api_svc.Domain.Entities.AR;
+using invoice_api_svc.Domain.Entities.OE;
 using invoice_api_svc.Domain.Entities.PO;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,9 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
         public DbSet<PurchaseCreditDebitNoteHeader> PurchaseCreditNoteHeaders { get; set; }
         public DbSet<PurchaseCreditDebitNoteDetail> PurchaseCreditNoteDetails { get; set; }
 
+        // Account Receivable Customer Entities
+        public DbSet<AccountReceivableCustomer> AccountReceivableCustomers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -34,6 +38,8 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
             // Configure Sales Invoice Tables
             modelBuilder.Entity<OrderEntryHeader>()
                 .ToTable("OEINVH")
+                .Ignore(o => o.CustomerTIN)
+                .Ignore(o => o.CustomerBRN)
                 .HasKey(o => o.INVUNIQ);
 
             modelBuilder.Entity<OrderEntryDetail>()
@@ -87,6 +93,11 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
                 .HasMany(p => p.PurchaseCreditDebitNoteDetails)
                 .WithOne(d => d.PurchaseCreditDebitNoteHeader)
                 .HasForeignKey(d => d.CRNHSEQ);
+
+            // Account Receivable Customer
+            modelBuilder.Entity<AccountReceivableCustomer>()
+                .ToTable("ARCUS")
+                .HasKey(c => c.IDCUST);
 
             ConfigureFieldMappings(modelBuilder);
         }

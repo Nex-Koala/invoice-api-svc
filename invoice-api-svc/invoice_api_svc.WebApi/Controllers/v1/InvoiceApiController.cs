@@ -59,6 +59,11 @@ namespace invoice_api_svc.WebApi.Controllers.v1
 
             foreach (var header in paginatedResult.Data)
             {
+                // Fetch the BRN dynamically from ARCUST table
+                var customer = await _dbContext.AccountReceivableCustomers
+                    .FirstOrDefaultAsync(c => c.IDCUST == header.CUSTOMER.Trim());
+                header.CustomerBRN = customer?.BRN;
+
                 _trimStringService.TrimStringProperties(header);
                 header.OrderEntryDetails = header.OrderEntryDetails
                     .Select(detail => _trimStringService.TrimStringProperties(detail))

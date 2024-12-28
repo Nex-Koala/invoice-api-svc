@@ -36,6 +36,9 @@ namespace invoice_api_svc.Domain.Entities.OE
         public string SHPADDR4 { get; set; }
         public string REFERENCE { get; set; } // Reference Number of Custom Form 1, 9 etc
         public string TERMS { get; set; } // Incoterms
+        public string CUSTOMER { get; set; } // Link to ARCUST.IDCUST
+        public string CustomerBRN { get; set; }
+        public string CustomerTIN { get; set; } = "EI00000000010";
         public ICollection<OrderEntryDetail> OrderEntryDetails { get; set; }
     }
 }

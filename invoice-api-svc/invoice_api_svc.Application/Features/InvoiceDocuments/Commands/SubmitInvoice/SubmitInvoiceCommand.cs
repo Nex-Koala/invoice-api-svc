@@ -1,22 +1,17 @@
-﻿using System;
+﻿using invoice_api_svc.Application.DTOs.EInvoice.Invoice;
+using invoice_api_svc.Application.DTOs.Ubl;
+using invoice_api_svc.Application.DTOs.Ubl.Common;
+using invoice_api_svc.Application.Exceptions;
+using invoice_api_svc.Application.Interfaces.Apis;
+using invoice_api_svc.Application.Wrappers;
+using MediatR;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using invoice_api_svc.Application.DTOs.EInvoice.Invoice;
-using invoice_api_svc.Application.DTOs.Ubl;
-using invoice_api_svc.Application.DTOs.Ubl.Common;
-using invoice_api_svc.Application.DTOs.Ubl.Invoice;
-using invoice_api_svc.Application.Exceptions;
-using invoice_api_svc.Application.Interfaces.Apis;
-using invoice_api_svc.Application.Wrappers;
-using invoice_api_svc.Domain.Entities;
-using MediatR;
-using Newtonsoft.Json;
 
 namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitInvoice
 {
@@ -41,13 +36,13 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                 _D = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
                 _A = "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2",
                 _B = "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2",
-                Invoice = new List<UblInvoice>()
-                {
+                Invoice =
+                [
                     new UblInvoice()
                     {
                         Id = [new() { _ = request.Irn }],
-                        IssueDate = [new() { _ = request.IssueDate }],
-                        IssueTime = [new() { _ = request.IssueTime }],
+                        IssueDate = [new() { _ = DateTime.UtcNow.ToString("yyyy-MM-dd") }],
+                        IssueTime = [new() { _ = DateTime.UtcNow.ToString("HH:mm:ss") + "Z" }],
                         InvoiceTypeCode =
                         [
                             new() { _ = request.InvoiceTypeCode, ListVersionId = "1.0" },
@@ -62,36 +57,41 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                 Description = [new() { _ = request.InvoicePeriodDescription }],
                             },
                         ],
-                        BillingReference =
+                        // need to declare if goods imported
+                        BillingReference = new[]
+                        {
+                            new BillingReference
+                            {
+                                AdditionalDocumentReference = new[]
+                                {
+                                    new DocumentReference
+                                    {
+                                        Id = new[] { new BasicComponent { _ = request.BillingReferenceID ?? "" } },
+                                        DocumentType = new[] { new BasicComponent { _ = "CustomsImportForm" } }
+                                    }
+                                }
+                            },
+                        },
+                        AdditionalDocumentReference = new[]
+                        {
+                            new DocumentReference
+                            {
+                                Id = new[] { new BasicComponent { _ = request.AdditionalDocumentReferenceID ?? "" } },
+                                DocumentType = new[] { new BasicComponent { _ = "CustomsImportForm" } }
+                            }
+                        },
+                        AccountingSupplierParty = 
                         [
                             new()
                             {
-                                AdditionalDocumentReference =
+                                AdditionalAccountId =
                                 [
-                                    new() { Id = [new() { _ = request.BillingReferenceID }] },
+                                    new()
+                                    {
+                                        _ = request.SupplierAdditionalAccountID ?? "",
+                                        SchemeAgencyName = "CertEx",
+                                    },
                                 ],
-                            },
-                        ],
-                        AdditionalDocumentReference =
-                        [
-                            new()
-                            {
-                                Id = [new() { _ = request.AdditionalDocumentReferenceID }],
-                                DocumentType = [new() { _ = "CustomsImportForm" }],
-                            },
-                        ],
-                        AccountingSupplierParty =
-                        [
-                            new()
-                            {
-                                //AdditionalAccountId =
-                                //[
-                                //    new()
-                                //    {
-                                //        _ = request.SupplierAdditionalAccountID,
-                                //        SchemeAgencyName = "CertEx",
-                                //    },
-                                //],
                                 Party =
                                 [
                                     new()
@@ -124,7 +124,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                                     new()
                                                     {
                                                         _ = request.SupplierBRN,
-                                                        SchemeId = "BRN",
+                                                        SchemeId = "NRIC",
                                                     },
                                                 ],
                                             },
@@ -272,7 +272,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                                 [
                                                     new()
                                                     {
-                                                        _ = request.CustomerBRN,
+                                                        _ = request.CustomerBRN ?? "",
                                                         SchemeId = "BRN",
                                                     },
                                                 ],
@@ -575,7 +575,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                         //                    {
                         //                        UBLDocumentSignatures = new[]
                         //                        {
-                        //                            new
+                        //                            newBRN
                         //                            {
                         //                                SignatureInformation = new[]
                         //                                {
@@ -754,7 +754,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                         //    }
                         //}
                     },
-                },
+                ],
             };
 
             // Step 2: Convert document to JSON string
