@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using invoice_api_svc.Application.DTOs.EInvoice;
-using invoice_api_svc.Application.Features.Invoices.Commands.CreateInvoice;
+using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.CreateInvoice;
 using invoice_api_svc.Domain.Entities;
 
 namespace invoice_api_svc.Application.Mappings

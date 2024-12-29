@@ -5,7 +5,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace invoice_api_svc.Application.Features.Products.Queries.GetUomById
+namespace invoice_api_svc.Application.Features.Uoms.Queries.GetUomById
 {
     public class GetUomByIdQuery : IRequest<Response<Uom>>
     {

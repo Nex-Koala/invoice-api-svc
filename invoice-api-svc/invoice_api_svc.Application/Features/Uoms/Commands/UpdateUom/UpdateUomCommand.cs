@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace invoice_api_svc.Application.Features.Products.Commands.UpdateUom
+namespace invoice_api_svc.Application.Features.Uoms.Commands.UpdateUom
 {
     public class UpdateUomCommand : IRequest<Response<int>>
     {
@@ -29,7 +29,7 @@ namespace invoice_api_svc.Application.Features.Products.Commands.UpdateUom
                 var uom = await _uomRepository.GetByIdAsync(request.Id);
                 if (uom == null)
                 {
-                    throw new System.Exception($"UOM with Id {request.Id} not found.");
+                    throw new Exception($"UOM with Id {request.Id} not found.");
                 }
 
                 uom.Code = request.Code;

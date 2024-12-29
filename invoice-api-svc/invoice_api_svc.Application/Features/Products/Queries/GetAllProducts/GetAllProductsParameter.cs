@@ -1,4 +1,4 @@
-﻿using invoice_api_svc.Application.Filters;
+﻿using invoice_api_svc.Application.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Text;

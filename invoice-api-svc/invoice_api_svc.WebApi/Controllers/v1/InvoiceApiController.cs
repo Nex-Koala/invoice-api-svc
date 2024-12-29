@@ -5,16 +5,13 @@ using invoice_api_svc.WebApi.Services;
 using System.Linq;
 using System.Threading.Tasks;
 using invoice_api_svc.WebApi.Helpers;
-using invoice_api_svc.Application.Features.Products.Commands.CreateProduct;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using invoice_api_svc.Application.Features.Invoices.Commands.CreateInvoice;
 using invoice_api_svc.Application.Features.Codes.Queries.GetClassificationCodes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetCurrencyCodes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetInvoiceTypes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetTaxTypes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetUnitTypes;
 using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitInvoice;
+using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.CreateInvoice;
 
 namespace invoice_api_svc.WebApi.Controllers.v1
 {

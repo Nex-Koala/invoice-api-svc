@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using invoice_api_svc.Application.Features.Uoms.Commands.CreateUom;
 
-namespace invoice_api_svc.Application.Features.Products.Commands.CreateUom
+namespace invoice_api_svc.Application.Features.Uoms.Commands.CreateUom
 {
     public class CreateUomCommandValidator : AbstractValidator<CreateUomCommand>
     {

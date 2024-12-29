@@ -49,7 +49,7 @@
             Get a list of tax types.
             </summary>
         </member>
-        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.CreateInvoice(invoice_api_svc.Application.Features.Invoices.Commands.CreateInvoice.CreateInvoiceCommand)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.CreateInvoice(invoice_api_svc.Application.Features.InvoiceDocuments.Commands.CreateInvoice.CreateInvoiceCommand)">
             <summary>
             Create a new invoice.
             </summary>
@@ -76,7 +76,42 @@
             Get a list of classification codes.
             </summary>
         </member>
-        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.GetAllUoms(invoice_api_svc.Application.Features.Products.Queries.GetAllUoms.GetAllUomsQuery)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.PartnerController.GetAllPartners(invoice_api_svc.Application.Features.Partners.Queries.GetAllPartners.GetAllPartnersQuery)">
+            <summary>
+            Get all Partners (paginated)
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.PartnerController.GetPartnerById(System.Int32)">
+            <summary>
+            Get partner by ID
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.PartnerController.CreatePartner(invoice_api_svc.Application.Features.Partners.Commands.CreatePartner.CreatePartnerCommand)">
+            <summary>
+            Create a new partner
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.PartnerController.UpdatePartner(System.Int32,invoice_api_svc.Application.DTOs.User.AdminUpdatePartnerDto)">
+            <summary>
+            Update an existing partner
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.PartnerController.DeletePartner(System.Int32)">
+            <summary>
+            Delete a Partner by ID 
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ProfileController.GetProfile(System.String)">
+            <summary>
+            Get profile details
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ProfileController.UpdateProfile(System.Int32,invoice_api_svc.Application.DTOs.User.UserUpdateProfileDto)">
+            <summary>
+            Update an user profile
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.GetAllUoms(invoice_api_svc.Application.Features.Uoms.Queries.GetAllUoms.GetAllUomsQuery)">
             <summary>
             Get all UOMs (paginated)
             </summary>
@@ -91,7 +126,7 @@
             Create a new UOM
             </summary>
         </member>
-        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.UpdateUom(System.Int32,invoice_api_svc.Application.Features.Products.Commands.UpdateUom.UpdateUomCommand)">
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.UOMController.UpdateUom(System.Int32,invoice_api_svc.Application.Features.Uoms.Commands.UpdateUom.UpdateUomCommand)">
             <summary>
             Update an existing UOM
             </summary>

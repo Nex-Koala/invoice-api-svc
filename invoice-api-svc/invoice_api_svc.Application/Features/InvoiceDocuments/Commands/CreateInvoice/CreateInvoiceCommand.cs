@@ -9,7 +9,7 @@ using invoice_api_svc.Application.DTOs.EInvoice;
 using System.Collections.Generic;
 using System;
 
-namespace invoice_api_svc.Application.Features.Invoices.Commands.CreateInvoice
+namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.CreateInvoice
 {
     public partial class CreateInvoiceCommand : IRequest<Response<int>>
     {

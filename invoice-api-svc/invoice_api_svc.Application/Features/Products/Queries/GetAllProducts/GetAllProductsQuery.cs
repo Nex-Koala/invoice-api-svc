@@ -1,5 +1,4 @@
-﻿using invoice_api_svc.Application.Filters;
-using invoice_api_svc.Application.Interfaces.Repositories;
+﻿using invoice_api_svc.Application.Interfaces.Repositories;
 using invoice_api_svc.Application.Wrappers;
 using AutoMapper;
 using MediatR;

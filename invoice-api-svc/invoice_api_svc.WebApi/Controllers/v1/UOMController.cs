@@ -1,8 +1,8 @@
-﻿using invoice_api_svc.Application.Features.Products.Commands.DeleteUomById;
-using invoice_api_svc.Application.Features.Products.Commands.UpdateUom;
-using invoice_api_svc.Application.Features.Products.Queries.GetAllUoms;
-using invoice_api_svc.Application.Features.Products.Queries.GetUomById;
-using invoice_api_svc.Application.Features.Uoms.Commands.CreateUom;
+﻿using invoice_api_svc.Application.Features.Uoms.Commands.CreateUom;
+using invoice_api_svc.Application.Features.Uoms.Commands.DeleteUomById;
+using invoice_api_svc.Application.Features.Uoms.Commands.UpdateUom;
+using invoice_api_svc.Application.Features.Uoms.Queries.GetAllUoms;
+using invoice_api_svc.Application.Features.Uoms.Queries.GetUomById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
