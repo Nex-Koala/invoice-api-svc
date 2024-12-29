@@ -38,6 +38,7 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<InvoiceLine> InvoiceLines { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -94,6 +95,12 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
                       .WithMany(u => u.UomMappings)
                       .HasForeignKey(e => e.UomId);
                 entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            builder.Entity<User>(entity =>
+            {  
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(u => u.Email).IsUnique();
             });
 
             // Apply global decimal configuration

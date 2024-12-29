@@ -1,4 +1,4 @@
-﻿namespace invoice_api_svc.Application.Features.Products.Queries.GetAllUoms
+﻿namespace invoice_api_svc.Application.Features.Uoms.Queries.GetAllUoms
 {
     public class GetAllUomsViewModel
     {

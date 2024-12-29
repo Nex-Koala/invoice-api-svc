@@ -1,5 +1,4 @@
-﻿using invoice_api_svc.Application.Filters;
-using invoice_api_svc.Application.Interfaces.Repositories;
+﻿using invoice_api_svc.Application.Interfaces.Repositories;
 using invoice_api_svc.Application.Wrappers;
 using AutoMapper;
 using MediatR;
@@ -9,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace invoice_api_svc.Application.Features.Products.Queries.GetAllUoms
+namespace invoice_api_svc.Application.Features.Uoms.Queries.GetAllUoms
 {
     public class GetAllUomsQuery : IRequest<PagedResponse<IEnumerable<GetAllUomsViewModel>>>
     {
@@ -36,7 +35,7 @@ namespace invoice_api_svc.Application.Features.Products.Queries.GetAllUoms
             var uoms = await _uomRepository.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, request.UserId);
 
             // Map entities to view models
-            
+
             var uomViewModels = _mapper.Map<IEnumerable<GetAllUomsViewModel>>(uoms);
 
             // Return paged response

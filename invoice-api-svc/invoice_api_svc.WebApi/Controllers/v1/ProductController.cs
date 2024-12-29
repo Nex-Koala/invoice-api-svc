@@ -8,7 +8,6 @@ using invoice_api_svc.Application.Features.Products.Commands.DeleteProductById;
 using invoice_api_svc.Application.Features.Products.Commands.UpdateProduct;
 using invoice_api_svc.Application.Features.Products.Queries.GetAllProducts;
 using invoice_api_svc.Application.Features.Products.Queries.GetProductById;
-using invoice_api_svc.Application.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

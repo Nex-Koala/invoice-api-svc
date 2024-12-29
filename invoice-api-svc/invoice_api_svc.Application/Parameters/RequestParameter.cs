@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace invoice_api_svc.Application.Filters
+namespace invoice_api_svc.Application.Parameters
 {
     public class RequestParameter
     {
@@ -10,13 +10,13 @@ namespace invoice_api_svc.Application.Filters
         public int PageSize { get; set; }
         public RequestParameter()
         {
-            this.PageNumber = 1;
-            this.PageSize = 10;
+            PageNumber = 1;
+            PageSize = 10;
         }
         public RequestParameter(int pageNumber, int pageSize)
         {
-            this.PageNumber = pageNumber < 1 ? 1 : pageNumber;
-            this.PageSize = pageSize > 10 ? 10 : pageSize;
+            PageNumber = pageNumber < 1 ? 1 : pageNumber;
+            PageSize = pageSize > 10 ? 10 : pageSize;
         }
     }
 }

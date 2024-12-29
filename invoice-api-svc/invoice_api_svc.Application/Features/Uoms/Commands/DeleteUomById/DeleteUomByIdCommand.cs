@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace invoice_api_svc.Application.Features.Products.Commands.DeleteUomById
+namespace invoice_api_svc.Application.Features.Uoms.Commands.DeleteUomById
 {
     public class DeleteUomByIdCommand : IRequest<Response<int>>
     {
@@ -27,7 +27,7 @@ namespace invoice_api_svc.Application.Features.Products.Commands.DeleteUomById
                 var uom = await _uomRepository.GetByIdAsync(request.Id);
                 if (uom == null)
                 {
-                    throw new System.Exception($"UOM with Id {request.Id} not found.");
+                    throw new Exception($"UOM with Id {request.Id} not found.");
                 }
 
                 await _uomRepository.DeleteAsync(uom);
