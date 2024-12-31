@@ -1,17 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using invoice_api_svc.Infrastructure.Persistence.Contexts;
-using invoice_api_svc.WebApi.Services;
-using System.Linq;
-using System.Threading.Tasks;
-using invoice_api_svc.WebApi.Helpers;
-using invoice_api_svc.Application.Features.Codes.Queries.GetClassificationCodes;
+﻿using invoice_api_svc.Application.Features.Codes.Queries.GetClassificationCodes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetCurrencyCodes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetInvoiceTypes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetTaxTypes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetUnitTypes;
-using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitInvoice;
 using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.CreateInvoice;
+using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitInvoice;
+using invoice_api_svc.Application.Features.InvoiceDocuments.Queries.GetDocumentDetails;
+using invoice_api_svc.Application.Features.InvoiceDocuments.Queries.GetRecentDocuments;
+using invoice_api_svc.Infrastructure.Persistence.Contexts;
+using invoice_api_svc.WebApi.Helpers;
+using invoice_api_svc.WebApi.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace invoice_api_svc.WebApi.Controllers.v1
 {
@@ -242,6 +244,26 @@ namespace invoice_api_svc.WebApi.Controllers.v1
         public async Task<IActionResult> GetClassificationCodes()
         {
             var result = await Mediator.Send(new GetClassificationCodesQuery());
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get a list of recent invoice documents
+        /// </summary>
+        [HttpGet("recent")]
+        public async Task<IActionResult> GetRecentDocuments([FromQuery] GetRecentDocumentsQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get single invoice documents
+        /// </summary>
+        [HttpGet("{uuid}/details")]
+        public async Task<IActionResult> GetDocumentDetails()
+        {
+            var result = await Mediator.Send(new GetDocumentDetailsQuery());
             return Ok(result);
         }
     }

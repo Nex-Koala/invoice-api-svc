@@ -1,4 +1,6 @@
-﻿namespace invoice_api_svc.Domain.Entities.PO
+﻿using System.Text.Json.Serialization;
+
+namespace invoice_api_svc.Domain.Entities.PO
 {
     /// <summary>
     /// Represents the Purchase Invoice Details for Self-Billing.
@@ -18,6 +20,7 @@
         public decimal TXEXPSAMT1 { get; set; } // Exempted Tax Amount
         public decimal DISCPCT { get; set; } // Discount Rate
         public decimal DISCOUNT { get; set; } // Discount Amount
+        [JsonIgnore]
         public PurchaseInvoiceHeader PurchaseInvoiceHeader { get; set; }
 
     }

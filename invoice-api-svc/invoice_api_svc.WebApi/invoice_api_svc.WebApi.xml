@@ -76,6 +76,16 @@
             Get a list of classification codes.
             </summary>
         </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetRecentDocuments(invoice_api_svc.Application.Features.InvoiceDocuments.Queries.GetRecentDocuments.GetRecentDocumentsQuery)">
+            <summary>
+            Get a list of recent invoice documents
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetDocumentDetails">
+            <summary>
+            Get single invoice documents
+            </summary>
+        </member>
         <member name="M:invoice_api_svc.WebApi.Controllers.v1.PartnerController.GetAllPartners(invoice_api_svc.Application.Features.Partners.Queries.GetAllPartners.GetAllPartnersQuery)">
             <summary>
             Get all Partners (paginated)

@@ -25,8 +25,8 @@ namespace invoice_api_svc.Application.DTOs.EInvoice.RecentDocument
         public decimal NetAmount { get; set; }
         public decimal Total { get; set; }
         public string Status { get; set; }
-        public DateTime CancelDateTime { get; set; }
-        public DateTime RejectRequestDateTime { get; set; }
+        public DateTime? CancelDateTime { get; set; }
+        public DateTime? RejectRequestDateTime { get; set; }
         public string DocumentStatusReason { get; set; }
         public string CreatedByUserId { get; set; }
         public string SupplierTin { get; set; }

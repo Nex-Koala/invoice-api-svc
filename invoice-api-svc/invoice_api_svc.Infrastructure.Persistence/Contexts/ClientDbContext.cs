@@ -72,13 +72,13 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
 
             modelBuilder.Entity<PurchaseInvoiceDetail>()
                 .ToTable("POINVL")
-                .HasKey(p => new { p.INVHSEQ, p.INVLREV });
+                .HasKey(p => new { p.INVHSEQ });
 
             modelBuilder.Entity<PurchaseInvoiceHeader>()
                 .HasMany(p => p.PurchaseInvoiceDetails)
-                .WithOne(d => d.PurchaseInvoiceHeader)
-                .HasForeignKey(d => d.INVHSEQ)
-                .HasPrincipalKey(d => d.INVHSEQ);
+                .WithOne(p => p.PurchaseInvoiceHeader)
+                .HasForeignKey(p => p.INVHSEQ);
+               
 
             // Configure Purchase Credit/Debit Note Tables (Self Billing)
             modelBuilder.Entity<PurchaseCreditDebitNoteHeader>()

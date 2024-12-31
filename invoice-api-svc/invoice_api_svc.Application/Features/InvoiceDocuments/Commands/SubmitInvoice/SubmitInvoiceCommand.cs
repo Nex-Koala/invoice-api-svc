@@ -378,10 +378,10 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                             {
                                 PayableAmount =
                                 [
-                                    new() { _ = request.TotalAmount, CurrencyId = "MYR" },
+                                    new() { _ = request.TotalAmount, CurrencyId = request.CurrencyCode },
                                 ],
-                                TaxExclusiveAmount = [new() { _ = 0, CurrencyId = "MYR" }],
-                                TaxInclusiveAmount = [new() { _ = 0, CurrencyId = "MYR" }],
+                                TaxExclusiveAmount = [new() { _ = 0, CurrencyId = request.CurrencyCode }],
+                                TaxInclusiveAmount = [new() { _ = 0, CurrencyId = request.CurrencyCode }],
                             },
                         ],
                         InvoiceLine =
@@ -396,7 +396,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                     ],
                                     LineExtensionAmount =
                                     [
-                                        new() { _ = item.TotItemVal, CurrencyId = "MYR" },
+                                        new() { _ = item.TotItemVal, CurrencyId = request.CurrencyCode },
                                     ],
                                     Item =
                                     [
@@ -440,7 +440,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                         {
                                             PriceAmount =
                                             [
-                                                new() { _ = item.UnitPrice, CurrencyId = "MYR" },
+                                                new() { _ = item.UnitPrice, CurrencyId = request.CurrencyCode },
                                             ],
                                         },
                                     ],
@@ -450,7 +450,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                         {
                                             TaxAmount =
                                             [
-                                                new() { _ = item.TaxAmount, CurrencyId = "MYR" },
+                                                new() { _ = item.TaxAmount, CurrencyId = request.CurrencyCode },
                                             ],
                                             TaxSubtotal =
                                             [
@@ -461,7 +461,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                                         new()
                                                         {
                                                             _ = item.TaxableAmount,
-                                                            CurrencyId = "MYR",
+                                                            CurrencyId = request.CurrencyCode,
                                                         },
                                                     ],
                                                     TaxAmount =
@@ -469,7 +469,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                                         new()
                                                         {
                                                             _ = item.TaxAmount,
-                                                            CurrencyId = "MYR",
+                                                            CurrencyId = request.CurrencyCode,
                                                         },
                                                     ],
                                                     TaxCategory =
@@ -511,7 +511,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                     new()
                                     {
                                         _ = Convert.ToDecimal(request.TaxAmount),
-                                        CurrencyId = "MYR",
+                                        CurrencyId = request.CurrencyCode,
                                     },
                                 ],
                                 TaxSubtotal =
@@ -523,7 +523,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                             new()
                                             {
                                                 _ = Convert.ToDecimal(request.TaxableAmount),
-                                                CurrencyId = "MYR",
+                                                CurrencyId = request.CurrencyCode,
                                             },
                                         ],
                                         TaxAmount =
@@ -531,7 +531,7 @@ namespace invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitI
                                             new()
                                             {
                                                 _ = Convert.ToDecimal(request.TaxAmount),
-                                                CurrencyId = "MYR",
+                                                CurrencyId = request.CurrencyCode,
                                             },
                                         ],
                                         TaxCategory =

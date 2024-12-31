@@ -99,7 +99,7 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
                 { "receiverTin", request.ReceiverTin },
                 { "issuerTin", request.IssuerTin },
                 { "issuerIdType", request.IssuerIdType },
-                { "issuerId", request.IssuerId }
+                { "issuerId", request.IssuerId },
             };
 
                 var token = await GetTokenAsync(); // Get token from LHDN API
@@ -107,12 +107,11 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
                 var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                var url = new UriBuilder($"/documents/recent");
-                url.Query = QueryHelpers.AddQueryString(string.Empty, queryDictionary
-                    .Where(p => !string.IsNullOrEmpty(p.Value))
-                    .ToDictionary(p => p.Key, p => p.Value));
+                var queryString = QueryHelpers.AddQueryString("/api/v1.0/documents/recent", queryDictionary
+                   .Where(p => !string.IsNullOrEmpty(p.Value))
+                   .ToDictionary(p => p.Key, p => p.Value));
 
-                var response = await client.GetAsync(url.ToString());
+                var response = await client.GetAsync(queryString);
 
                 if (response.IsSuccessStatusCode)
                 {
