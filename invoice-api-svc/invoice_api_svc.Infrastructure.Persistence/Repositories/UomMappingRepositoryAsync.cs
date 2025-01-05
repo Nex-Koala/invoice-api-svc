@@ -3,6 +3,7 @@ using invoice_api_svc.Domain.Entities;
 using invoice_api_svc.Infrastructure.Persistence.Contexts;
 using invoice_api_svc.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,13 @@ namespace invoice_api_svc.Infrastructure.Persistence.Repositories
         {
             return await _uomMappings
                 .Where(mapping => mapping.UomId == uomId && !mapping.IsDeleted)
+                .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<UomMapping>> GetMappingsByUserIdAsync(Guid userId)
+        {
+            return await _uomMappings
+                .Where(um => um.Uom.UserId == userId && !um.IsDeleted)
                 .ToListAsync();
         }
     }

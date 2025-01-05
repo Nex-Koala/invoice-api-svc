@@ -13,6 +13,7 @@ namespace invoice_api_svc.Application.Features.Uoms.Commands.CreateUom
     {
         public string Code { get; set; }
         public string Description { get; set; }
+        public Guid UserId { get; set; }
 
         public class CreateUomCommandHandler : IRequestHandler<CreateUomCommand, Response<int>>
         {
@@ -28,7 +29,8 @@ namespace invoice_api_svc.Application.Features.Uoms.Commands.CreateUom
                 var newUom = new Uom
                 {
                     Code = request.Code,
-                    Description = request.Description
+                    Description = request.Description,
+                    UserId = request.UserId
                 };
 
                 var createdUom = await _uomRepository.AddAsync(newUom);

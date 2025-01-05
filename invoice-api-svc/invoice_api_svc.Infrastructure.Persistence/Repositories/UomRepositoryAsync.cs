@@ -1,4 +1,5 @@
 ﻿using invoice_api_svc.Application.Interfaces.Repositories;
+using invoice_api_svc.Application.Wrappers;
 using invoice_api_svc.Domain.Entities;
 using invoice_api_svc.Infrastructure.Persistence.Contexts;
 using invoice_api_svc.Infrastructure.Persistence.Repository;
@@ -24,13 +25,29 @@ namespace invoice_api_svc.Infrastructure.Persistence.Repositories
             return !await _uoms.AnyAsync(u => u.Code == code && !u.IsDeleted);
         }
 
-        public async Task<IReadOnlyList<Uom>> GetPagedReponseAsync(int pageNumber, int pageSize, Guid UserId)
+        public async Task<PagedResponse<IReadOnlyList<Uom>>> GetPagedReponseAsync(int pageNumber, int pageSize, Guid userId)
         {
-            return await _uoms
-                .Where(u => !u.IsDeleted && u.UserId == UserId)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            var query = _uoms.Where(u => !u.IsDeleted && u.UserId == userId);
+
+            var totalCount = await query.CountAsync();
+
+            IReadOnlyList<Uom> uoms;
+
+            if (pageNumber > 0 && pageSize > 0)
+            {
+                uoms = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+            }
+            else
+            {
+                uoms = await query
+                    .ToListAsync();
+            }
+
+            return new PagedResponse<IReadOnlyList<Uom>>(uoms, pageNumber, pageSize, totalCount);
         }
+
     }
 }

@@ -36,10 +36,10 @@ namespace invoice_api_svc.Application.Features.Uoms.Queries.GetAllUoms
 
             // Map entities to view models
 
-            var uomViewModels = _mapper.Map<IEnumerable<GetAllUomsViewModel>>(uoms);
+            var uomViewModels = _mapper.Map<IEnumerable<GetAllUomsViewModel>>(uoms.Data);
 
             // Return paged response
-            return new PagedResponse<IEnumerable<GetAllUomsViewModel>>(uomViewModels, validFilter.PageNumber, validFilter.PageSize);
+            return new PagedResponse<IEnumerable<GetAllUomsViewModel>>(uomViewModels, uoms.PageNumber, uoms.PageSize, uoms.TotalCount);
         }
     }
 }
