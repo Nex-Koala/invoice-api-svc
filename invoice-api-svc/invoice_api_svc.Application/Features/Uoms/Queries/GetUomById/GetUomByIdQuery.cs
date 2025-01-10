@@ -10,11 +10,11 @@ namespace invoice_api_svc.Application.Features.Uoms.Queries.GetUomById
     public class GetUomByIdQuery : IRequest<Response<Uom>>
     {
         public int Id { get; set; }
-        public class GetProductByIdQueryHandler : IRequestHandler<GetUomByIdQuery, Response<Uom>>
+        public class GetUomByIdQueryHandler : IRequestHandler<GetUomByIdQuery, Response<Uom>>
         {
             private readonly IUomRepositoryAsync _uomRepository;
 
-            public GetProductByIdQueryHandler(IUomRepositoryAsync uomRepository)
+            public GetUomByIdQueryHandler(IUomRepositoryAsync uomRepository)
             {
                 _uomRepository = uomRepository;
             }

@@ -4,6 +4,56 @@
         <name>invoice_api_svc.WebApi</name>
     </assembly>
     <members>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationController.GetAllClassifications(invoice_api_svc.Application.Features.Classification.Queries.GetAllClassifications.GetAllClassificationQuery)">
+            <summary>
+            Get all classification code (paginated)
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationController.GetClassificationById(System.Int32)">
+            <summary>
+            Get a classification code by ID
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationController.CreateClassification(invoice_api_svc.Application.Features.Classification.Commands.CreateClassification.CreateClassificationCommand)">
+            <summary>
+            Create a new classification code
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationController.UpdateClassification(System.Int32,invoice_api_svc.Application.Features.Classification.Commands.UpdateClassification.UpdateClassificationCommand)">
+            <summary>
+            Update an existing classification code
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationController.DeleteClassification(System.Int32)">
+            <summary>
+            Delete a clssification code by ID (soft delete)
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationMappingController.GetAll(invoice_api_svc.Application.Features.ClassificationMapping.Queries.GetAllClassificationMappings.GetAllClassificationMappingsQuery)">
+            <summary>
+            Get all classification mappings by user ID
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationMappingController.GetById(System.Int32)">
+            <summary>
+            Get a classification mapping by ID
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationMappingController.Create(invoice_api_svc.Application.Features.ClassificationMapping.Commands.CreateClassificationMapping.CreateClassificationMappingCommand)">
+            <summary>
+            Create a new classification mapping
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationMappingController.Update(System.Int32,invoice_api_svc.Application.Features.ClassificationMapping.Commands.UpdateClassificationMapping.UpdateClassificationMappingCommand)">
+            <summary>
+            Update an existing classification mapping
+            </summary>
+        </member>
+        <member name="M:invoice_api_svc.WebApi.Controllers.v1.ClassificationMappingController.Delete(System.Int32)">
+            <summary>
+            Delete a classification mapping by ID
+            </summary>
+        </member>
         <member name="M:invoice_api_svc.WebApi.Controllers.v1.InvoiceApiController.GetSalesInvoices(System.Int32,System.Int32,System.Nullable{System.Decimal})">
             <summary>
             Retrieves sales invoices from Order Entry tables.

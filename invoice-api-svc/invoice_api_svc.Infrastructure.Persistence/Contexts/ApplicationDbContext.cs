@@ -39,6 +39,8 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
         public DbSet<Customer> Customers { get; set; }
         public DbSet<InvoiceLine> InvoiceLines { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Classification> Classifications { get; set; }
+        public DbSet<ClassificationMapping> ClassificationsMappings { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -101,6 +103,24 @@ namespace invoice_api_svc.Infrastructure.Persistence.Contexts
             {  
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(u => u.Email).IsUnique();
+            });
+
+            builder.Entity<Classification>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Description).HasMaxLength(255);
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            builder.Entity<ClassificationMapping>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.LhdnClassificationCode).IsRequired().HasMaxLength(50);
+                entity.HasOne(e => e.Classification)
+                      .WithMany(u => u.ClassificationMappings)
+                      .HasForeignKey(e => e.ClassificationId);
+                entity.HasQueryFilter(e => !e.IsDeleted);
             });
 
             // Apply global decimal configuration
