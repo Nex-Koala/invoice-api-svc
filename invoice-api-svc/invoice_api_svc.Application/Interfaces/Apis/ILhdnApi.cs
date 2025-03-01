@@ -16,5 +16,6 @@ namespace invoice_api_svc.Application.Interfaces.Apis
         Task<DocumentDetails> GetDocumentDetailsAsync(string uuid);
         Task<RecentDocuments> GetRecentDocumentsAsync(GetRecentDocumentsQuery request);
         Task<HttpResponseMessage> SubmitInvoiceAsync(UblDocumentRequest payload);
+        Task<RawDocument> GetDocumentAsync(string uuid);
     }
 }

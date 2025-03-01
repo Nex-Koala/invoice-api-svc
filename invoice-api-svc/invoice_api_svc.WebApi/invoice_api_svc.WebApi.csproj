@@ -41,4 +41,8 @@
     <ProjectReference Include="..\invoice_api_svc.Infrastructure.Shared\invoice_api_svc.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Template\" />
+  </ItemGroup>
+
 </Project>

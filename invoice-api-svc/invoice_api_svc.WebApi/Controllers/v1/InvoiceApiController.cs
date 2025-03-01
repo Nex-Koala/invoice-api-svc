@@ -4,8 +4,10 @@ using invoice_api_svc.Application.Features.Codes.Queries.GetInvoiceTypes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetTaxTypes;
 using invoice_api_svc.Application.Features.Codes.Queries.GetUnitTypes;
 using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.CreateInvoice;
+using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.GenerateInvoice;
 using invoice_api_svc.Application.Features.InvoiceDocuments.Commands.SubmitInvoice;
 using invoice_api_svc.Application.Features.InvoiceDocuments.Queries.GetDocumentDetails;
+using invoice_api_svc.Application.Features.InvoiceDocuments.Queries.GetRawDocument;
 using invoice_api_svc.Application.Features.InvoiceDocuments.Queries.GetRecentDocuments;
 using invoice_api_svc.Infrastructure.Persistence.Contexts;
 using invoice_api_svc.WebApi.Helpers;
@@ -261,10 +263,24 @@ namespace invoice_api_svc.WebApi.Controllers.v1
         /// Get single invoice documents
         /// </summary>
         [HttpGet("{uuid}/details")]
-        public async Task<IActionResult> GetDocumentDetails()
+        public async Task<IActionResult> GetDocumentDetails(string uuid)
         {
-            var result = await Mediator.Send(new GetDocumentDetailsQuery());
+            var result = await Mediator.Send(new GetDocumentDetailsQuery() { Uuid = uuid });
             return Ok(result);
+        }
+
+        [HttpGet("{uuid}/raw")]
+        public async Task<IActionResult> GetDocument(string uuid)
+        {
+            var result = await Mediator.Send(new GetRawDocuemntQuery() { Uuid = uuid });
+            return Ok(result);
+        }
+
+        [HttpGet("{uuid}/generate-invoice")]
+        public async Task<IActionResult> GenerateInvoice(string uuid)
+        {
+            var result = await Mediator.Send(new GenerateInvoiceCommand() { Uuid = uuid });
+            return File(result.Data, "application/pdf", $"invoice_{uuid}.pdf");
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using invoice_api_svc.Application.DTOs.EInvoice.Document;
 using invoice_api_svc.Application.DTOs.EInvoice.RecentDocument;
 using invoice_api_svc.Application.DTOs.EInvoice.Token;
@@ -26,12 +27,14 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
         private readonly ILogger<LhdnApi> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly EInvoiceSettings _settings;
+        private readonly IMapper _mapper;
 
-        public LhdnApi(ILogger<LhdnApi> logger, IHttpClientFactory httpClientFactory, IOptions<EInvoiceSettings> options)
+        public LhdnApi(ILogger<LhdnApi> logger, IHttpClientFactory httpClientFactory, IOptions<EInvoiceSettings> options, IMapper mapper)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
             _settings = options.Value;
+            _mapper = mapper;
         }
 
         public async Task<HttpResponseMessage> SubmitInvoiceAsync(UblDocumentRequest payload)
@@ -50,6 +53,40 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
             return response;
         }
 
+        public async Task<RawDocument> GetDocumentAsync(string uuid)
+        {
+            try
+            {
+                var token = await GetTokenAsync();
+
+                var client = _httpClientFactory.CreateClient("LhdnApi");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await client.GetAsync($"/api/v1.0/documents/{uuid}/raw");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    var document = JsonConvert.DeserializeObject<RawDocumentJson>(result);
+                    var invoiceDocumentObj = JsonConvert.DeserializeObject<UblInvoiceDocument>(document.Document);
+                    var rawDocument = _mapper.Map<RawDocument>(document);
+                    rawDocument.Document = invoiceDocumentObj;
+                    return rawDocument;
+                }
+                else
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    _logger.LogWarning(result);
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex.Message);
+                return null;
+            }
+        }
+
         public async Task<DocumentDetails> GetDocumentDetailsAsync(string uuid)
         {
             try
@@ -59,7 +96,7 @@ namespace invoice_api_svc.Infrastructure.Shared.Apis
                 var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                var response = await client.GetAsync($"/documents/{uuid}/details");
+                var response = await client.GetAsync($"/api/v1.0/documents/{uuid}/details");
 
                 if (response.IsSuccessStatusCode)
                 {
