@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FSH.Framework.Infrastructure</name>
+    </assembly>
+    <members>
+        <member name="M:FSH.Framework.Infrastructure.OpenApi.ConfigureSwaggerOptions.#ctor(Asp.Versioning.ApiExplorer.IApiVersionDescriptionProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FSH.Framework.Infrastructure.OpenApi.ConfigureSwaggerOptions"/> class.
+            </summary>
+            <param name="provider">The <see cref="T:Asp.Versioning.ApiExplorer.IApiVersionDescriptionProvider">provider</see> used to generate Swagger documents.</param>
+        </member>
+        <member name="M:FSH.Framework.Infrastructure.OpenApi.ConfigureSwaggerOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:FSH.Framework.Infrastructure.OpenApi.SwaggerDefaultValues.Apply(Microsoft.OpenApi.Models.OpenApiOperation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

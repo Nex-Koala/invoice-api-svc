@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\NexKoala.WebApi.Host.props" />
+</Project>

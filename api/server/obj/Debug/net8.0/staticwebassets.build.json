@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "H598eh0dWP9FuesgrvGJ8pv62JXttfKWd2txWCnvYxY=",
+  "Source": "NexKoala.WebApi.Host",
+  "BasePath": "_content/NexKoala.WebApi.Host",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

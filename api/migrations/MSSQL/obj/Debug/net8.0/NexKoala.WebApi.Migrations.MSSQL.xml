@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NexKoala.WebApi.Migrations.MSSQL</name>
+    </assembly>
+    <members>
+        <member name="T:NexKoala.WebApi.Migrations.MSSQL.Catalog.AddCatalogSchema">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Catalog.AddCatalogSchema.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Catalog.AddCatalogSchema.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Catalog.AddCatalogSchema.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:NexKoala.WebApi.Migrations.MSSQL.Identity.AddIdentitySchema">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Identity.AddIdentitySchema.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Identity.AddIdentitySchema.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Identity.AddIdentitySchema.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:NexKoala.WebApi.Migrations.MSSQL.Identity.AddAuditTrail">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Identity.AddAuditTrail.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Identity.AddAuditTrail.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Identity.AddAuditTrail.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:NexKoala.WebApi.Migrations.MSSQL.Tenant.AddTenantSchema">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Tenant.AddTenantSchema.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Tenant.AddTenantSchema.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Tenant.AddTenantSchema.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:NexKoala.WebApi.Migrations.MSSQL.Todo.AddTodoSchema">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Todo.AddTodoSchema.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Todo.AddTodoSchema.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NexKoala.WebApi.Migrations.MSSQL.Todo.AddTodoSchema.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

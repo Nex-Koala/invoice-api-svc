@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>NexKoala.WebApi.Catalog.Domain</RootNamespace>
+    <AssemblyName>NexKoala.WebApi.Catalog.Domain</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\framework\Core\Core.csproj" />
+  </ItemGroup>
+</Project>

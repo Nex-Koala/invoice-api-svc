@@ -1,0 +1,1220 @@
+[
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Roles.Endpoints.GetRolesEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetRolesEndpoint\u003Eb__0_0",
+    "RelativePath": "api/roles/",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[NexKoala.Framework.Core.Identity.Roles.RoleDto, FSH.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "roles"
+    ],
+    "EndpointName": "GetRolesEndpoint",
+    "Description": "Retrieve a list of all roles available in the system.",
+    "Summary": "Get a list of all roles"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Roles.Endpoints.CreateOrUpdateRoleEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapCreateOrUpdateRoleEndpoint\u003Eb__0_0",
+    "RelativePath": "api/roles/",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NexKoala.Framework.Core.Identity.Roles.Features.CreateOrUpdateRole.CreateOrUpdateRoleCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Identity.Roles.RoleDto",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "roles"
+    ],
+    "EndpointName": "CreateOrUpdateRoleEndpoint",
+    "Description": "Create a new role or update an existing role.",
+    "Summary": "Create or update a role"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Roles.Endpoints.GetRoleByIdEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetRoleEndpoint\u003Eb__0_0",
+    "RelativePath": "api/roles/{id:guid}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Identity.Roles.RoleDto",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "roles"
+    ],
+    "EndpointName": "GetRoleByIdEndpoint",
+    "Description": "Retrieve the details of a role by its ID.",
+    "Summary": "Get role details by ID"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Roles.Endpoints.DeleteRoleEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapDeleteRoleEndpoint\u003Eb__0_0",
+    "RelativePath": "api/roles/{id:guid}",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "roles"
+    ],
+    "EndpointName": "DeleteRoleEndpoint",
+    "Description": "Remove a role from the system by its ID.",
+    "Summary": "Delete a role by ID"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Roles.Endpoints.GetRolePermissionsEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetRolePermissionsEndpoint\u003Eb__0_0",
+    "RelativePath": "api/roles/{id:guid}/permissions",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Identity.Roles.RoleDto",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "roles"
+    ],
+    "EndpointName": "GetRolePermissionsEndpoint",
+    "Description": "get role permissions",
+    "Summary": "get role permissions"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Roles.Endpoints.UpdateRolePermissionsEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapUpdateRolePermissionsEndpoint\u003Eb__0_0",
+    "RelativePath": "api/roles/{id}/permissions",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NexKoala.Framework.Core.Identity.Roles.Features.UpdatePermissions.UpdatePermissionsCommand",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "roles"
+    ],
+    "EndpointName": "UpdateRolePermissionsEndpoint",
+    "Description": "update role permissions",
+    "Summary": "update role permissions"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Tenant.Endpoints.CreateTenantEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapRegisterTenantEndpoint\u003Eb__0_0",
+    "RelativePath": "api/tenants/",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NexKoala.Framework.Core.Tenant.Features.CreateTenant.CreateTenantCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Tenant.Features.CreateTenant.CreateTenantResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "tenants"
+    ],
+    "EndpointName": "CreateTenantEndpoint",
+    "Description": "creates a tenant",
+    "Summary": "creates a tenant"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Tenant.Endpoints.GetTenantsEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetTenantsEndpoint\u003Eb__0_0",
+    "RelativePath": "api/tenants/",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[NexKoala.Framework.Core.Tenant.Dtos.TenantDetail, FSH.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "tenants"
+    ],
+    "EndpointName": "GetTenantsEndpoint",
+    "Description": "get tenants",
+    "Summary": "get tenants"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Tenant.Endpoints.GetTenantByIdEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetTenantByIdEndpoint\u003Eb__0_0",
+    "RelativePath": "api/tenants/{id}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Tenant.Dtos.TenantDetail",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "tenants"
+    ],
+    "EndpointName": "GetTenantByIdEndpoint",
+    "Description": "get tenant by id",
+    "Summary": "get tenant by id"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Tenant.Endpoints.ActivateTenantEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapActivateTenantEndpoint\u003Eb__0_0",
+    "RelativePath": "api/tenants/{id}/activate",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Tenant.Features.ActivateTenant.ActivateTenantResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "tenants"
+    ],
+    "EndpointName": "ActivateTenantEndpoint",
+    "Description": "activate tenant",
+    "Summary": "activate tenant"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Tenant.Endpoints.DisableTenantEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapDisableTenantEndpoint\u003Eb__0_0",
+    "RelativePath": "api/tenants/{id}/deactivate",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Tenant.Features.DisableTenant.DisableTenantResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "tenants"
+    ],
+    "EndpointName": "DisableTenantEndpoint",
+    "Description": "activate tenant",
+    "Summary": "activate tenant"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Tenant.Endpoints.UpgradeSubscriptionEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapUpgradeTenantSubscriptionEndpoint\u003Eb__0_0",
+    "RelativePath": "api/tenants/upgrade",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "NexKoala.Framework.Core.Tenant.Features.UpgradeSubscription.UpgradeSubscriptionCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Tenant.Features.UpgradeSubscription.UpgradeSubscriptionResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "tenants"
+    ],
+    "EndpointName": "UpgradeSubscriptionEndpoint",
+    "Description": "upgrade tenant subscription",
+    "Summary": "upgrade tenant subscription"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Tokens.Endpoints.TokenGenerationEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapTokenGenerationEndpoint\u003Eb__0_0",
+    "RelativePath": "api/token/",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NexKoala.Framework.Core.Identity.Tokens.Features.Generate.TokenGenerationCommand",
+        "IsRequired": true
+      },
+      {
+        "Name": "tenant",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Identity.Tokens.Models.TokenResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "token"
+    ],
+    "EndpointName": "TokenGenerationEndpoint",
+    "Description": "generate JWTs",
+    "Summary": "generate JWTs"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Tokens.Endpoints.RefreshTokenEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapRefreshTokenEndpoint\u003Eb__0_0",
+    "RelativePath": "api/token/refresh",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NexKoala.Framework.Core.Identity.Tokens.Features.Refresh.RefreshTokenCommand",
+        "IsRequired": true
+      },
+      {
+        "Name": "tenant",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Identity.Tokens.Models.TokenResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "token"
+    ],
+    "EndpointName": "RefreshTokenEndpoint",
+    "Description": "refresh JWTs",
+    "Summary": "refresh JWTs"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.GetUsersListEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetUsersListEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[NexKoala.Framework.Core.Identity.Users.Dtos.UserDetail, FSH.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "GetUsersListEndpoint",
+    "Description": "get users list",
+    "Summary": "get users list"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.DeleteUserEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapDeleteUserEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/{id:guid}",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "DeleteUserEndpoint",
+    "Description": "delete user profile",
+    "Summary": "delete user profile"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.GetUserEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetUserEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/{id:guid}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Identity.Users.Dtos.UserDetail",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "GetUserEndpoint",
+    "Description": "Get another user\u0027s profile details by user ID.",
+    "Summary": "Get user profile by ID"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Audit.Endpoints.GetUserAuditTrailEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetUserAuditTrailEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/{id:guid}/audit-trails",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[NexKoala.Framework.Core.Audit.AuditTrail, FSH.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "GetUserAuditTrailEndpoint",
+    "Description": "Get user\u0027s audit trail details.",
+    "Summary": "Get user\u0027s audit trail details"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.AssignRolesToUserEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapAssignRolesToUserEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/{id:guid}/roles",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.AssignUserRole.AssignUserRoleCommand",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "AssignRolesToUserEndpoint",
+    "Description": "assign roles",
+    "Summary": "assign roles"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.GetUserRolesEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetUserRolesEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/{id:guid}/roles",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[NexKoala.Framework.Core.Identity.Users.Dtos.UserRoleDetail, FSH.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "GetUserRolesEndpoint",
+    "Description": "get user roles",
+    "Summary": "get user roles"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.ToggleUserStatusEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CToggleUserStatusEndpointEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/{id:guid}/toggle-status",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "command",
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.ToggleUserStatus.ToggleUserStatusCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "ToggleUserStatusEndpoint",
+    "Description": "Toggle a user\u0027s active status",
+    "Summary": "Toggle a user\u0027s active status"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.ChangePasswordEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapChangePasswordEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/change-password",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.ChangePassword.ChangePasswordCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "ChangePasswordEndpoint",
+    "Description": "Change password",
+    "Summary": "Changes password"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.ForgotPasswordEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapForgotPasswordEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/forgot-password",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tenant",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "command",
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.ForgotPassword.ForgotPasswordCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "ForgotPasswordEndpoint",
+    "Description": "Generates a password reset token and sends it via email.",
+    "Summary": "Forgot password"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.GetUserPermissionsEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetCurrentUserPermissionsEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/permissions",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "GetUserPermissions",
+    "Description": "Get current user permissions",
+    "Summary": "Get current user permissions"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.UpdateUserEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapUpdateUserEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/profile",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.UpdateUser.UpdateUserCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "UpdateUserEndpoint",
+    "Description": "update user profile",
+    "Summary": "update user profile"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.GetUserProfileEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetMeEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/profile",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Identity.Users.Dtos.UserDetail",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "GetMeEndpoint",
+    "Description": "Get current user information based on token",
+    "Summary": "Get current user information based on token"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.RegisterUserEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapRegisterUserEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/register",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.RegisterUser.RegisterUserCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.RegisterUser.RegisterUserResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "RegisterUserEndpoint",
+    "Description": "register user",
+    "Summary": "register user"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.ResetPasswordEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapResetPasswordEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/reset-password",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.ResetPassword.ResetPasswordCommand",
+        "IsRequired": true
+      },
+      {
+        "Name": "tenant",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "ResetPasswordEndpoint",
+    "Description": "Resets the password using the token and new password provided.",
+    "Summary": "Reset password"
+  },
+  {
+    "ContainingType": "NexKoala.Framework.Infrastructure.Identity.Users.Endpoints.SelfRegisterUserEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapSelfRegisterUserEndpoint\u003Eb__0_0",
+    "RelativePath": "api/users/self-register",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.RegisterUser.RegisterUserCommand",
+        "IsRequired": true
+      },
+      {
+        "Name": "tenant",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Identity.Users.Features.RegisterUser.RegisterUserResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "users"
+    ],
+    "EndpointName": "SelfRegisterUserEndpoint",
+    "Description": "self register user",
+    "Summary": "self register user"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Catalog.Infrastructure.Endpoints.v1.CreateProductEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapProductCreationEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/catalog/products/",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "NexKoala.WebApi.Catalog.Application.Products.Create.v1.CreateProductCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.WebApi.Catalog.Application.Products.Create.v1.CreateProductResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "products"
+    ],
+    "EndpointName": "CreateProductEndpoint",
+    "Description": "creates a product",
+    "Summary": "creates a product"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Catalog.Infrastructure.Endpoints.v1.GetProductEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetProductEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/catalog/products/{id:guid}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.WebApi.Catalog.Application.Products.Get.v1.ProductResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "products"
+    ],
+    "EndpointName": "GetProductEndpoint",
+    "Description": "gets prodct by id",
+    "Summary": "gets product by id"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Catalog.Infrastructure.Endpoints.v1.UpdateProductEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapProductUpdateEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/catalog/products/{id:guid}",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "NexKoala.WebApi.Catalog.Application.Products.Update.v1.UpdateProductCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.WebApi.Catalog.Application.Products.Update.v1.UpdateProductResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "products"
+    ],
+    "EndpointName": "UpdateProductEndpoint",
+    "Description": "update a product",
+    "Summary": "update a product"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Catalog.Infrastructure.Endpoints.v1.DeleteProductEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapProductDeleteEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/catalog/products/{id:guid}",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      }
+    ],
+    "Tags": [
+      "products"
+    ],
+    "EndpointName": "DeleteProductEndpoint",
+    "Description": "deletes product by id",
+    "Summary": "deletes product by id"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Catalog.Infrastructure.Endpoints.v1.SearchProductsEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetProductListEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/catalog/products/search",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "filter",
+        "Type": "NexKoala.Framework.Core.Paging.PaginationFilter",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Paging.PagedList\u00601[[NexKoala.WebApi.Catalog.Application.Products.Get.v1.ProductResponse, NexKoala.WebApi.Catalog.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "products"
+    ],
+    "EndpointName": "SearchProductsEndpoint",
+    "Description": "Gets a list of products with pagination and filtering support",
+    "Summary": "Gets a list of products"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Todo.Features.Create.v1.CreateTodoEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapTodoItemCreationEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/todos/",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "NexKoala.WebApi.Todo.Features.Create.v1.CreateTodoCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.WebApi.Todo.Features.Create.v1.CreateTodoResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 201
+      }
+    ],
+    "Tags": [
+      "todos"
+    ],
+    "EndpointName": "CreateTodoEndpoint",
+    "Description": "Creates a todo item",
+    "Summary": "Creates a todo item"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Todo.Features.Get.v1.GetTodoEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetTodoEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/todos/{id:guid}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.WebApi.Todo.Features.Get.v1.GetTodoResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "todos"
+    ],
+    "EndpointName": "GetTodoEndpoint",
+    "Description": "gets todo item by id",
+    "Summary": "gets todo item by id"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Todo.Features.Update.v1.UpdateTodoEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapTodoItemUpdationEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/todos/{id:guid}",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "NexKoala.WebApi.Todo.Features.Update.v1.UpdateTodoCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.WebApi.Todo.Features.Update.v1.UpdateTodoResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "todos"
+    ],
+    "EndpointName": "UpdateTodoEndpoint",
+    "Description": "Updated a todo item",
+    "Summary": "Updates a todo item"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Todo.Features.Delete.v1.DeleteTodoEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapTodoItemDeletionEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/todos/{id:guid}",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      }
+    ],
+    "Tags": [
+      "todos"
+    ],
+    "EndpointName": "DeleteTodoEndpoint",
+    "Description": "Deleted a todo item",
+    "Summary": "Deletes a todo item"
+  },
+  {
+    "ContainingType": "NexKoala.WebApi.Todo.Features.GetList.v1.GetTodoListEndpoint\u002B\u003C\u003Ec",
+    "Method": "\u003CMapGetTodoListEndpoint\u003Eb__0_0",
+    "RelativePath": "api/v{version}/todos/search",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "filter",
+        "Type": "NexKoala.Framework.Core.Paging.PaginationFilter",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "NexKoala.Framework.Core.Paging.PagedList\u00601[[NexKoala.WebApi.Todo.Features.GetList.v1.TodoDto, NexKoala.WebApi.Todo, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "todos"
+    ],
+    "EndpointName": "GetTodoListEndpoint",
+    "Description": "Gets a list of todo items with paging support",
+    "Summary": "Gets a list of todo items with paging support"
+  }
+]
