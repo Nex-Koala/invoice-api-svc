@@ -17,7 +17,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0'  # Change this to match your .NET version
+        dotnet-version: '8.0'  # Update to match your project
 
     - name: Restore Dependencies
       run: dotnet restore
@@ -31,17 +31,23 @@ jobs:
     - name: Create ZIP Archive
       run: zip -r app.zip ./publish
 
-    - name: Configure SSH and Add Known Hosts
+    - name: Setup SSH Key & Known Hosts
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
+        eval "$(ssh-agent -s)"
+        echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_rsa
         ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-    - name: Copy Files to Server via SCP
-      run: scp -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} app.zip ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/next-koala/api/
+    - name: Test SSH Connection (Debugging)
+      run: ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} "echo SSH Success"
 
-    - name: Deploy to Server via SSH
+    - name: Copy Files to Server
+      run: |
+        scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} app.zip ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/next-koala/api/
+
+    - name: Deploy on Server via SSH
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SERVER_IP }}
