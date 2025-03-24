@@ -1,9 +1,10 @@
 name: Deploy .NET Web API to Ubuntu Server
 
 on:
-  push:
+  workflow_dispatch:  # Allows manual deployment from GitHub UI
+  pull_request:
     branches:
-      - main  # Change this to your deployment branch if different
+      - main  # Deploys when a PR is merged into main
 
 jobs:
   deploy:
@@ -30,7 +31,7 @@ jobs:
     - name: Create ZIP Archive
       run: zip -r app.zip ./publish
 
-    - name: Copy Files to Server
+    - name: Copy Files to Server via SCP
       run: |
         scp -P ${{ secrets.SSH_PORT }} app.zip ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/next-koala/api/
 
@@ -39,10 +40,10 @@ jobs:
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SSH_USERNAME }}
-        key: /home/${{ secrets.SSH_USERNAME }}/.ssh/github-actions-key  # Use the key stored on the Ubuntu server
+        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Use GitHub Secrets for secure key storage
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd /nex-koala/api
+          cd /next-koala/api
           unzip -o app.zip
           rm app.zip
           systemctl restart invoice-api.service
