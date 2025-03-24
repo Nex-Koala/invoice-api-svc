@@ -1,0 +1,48 @@
+name: Deploy .NET Web API to Ubuntu Server
+
+on:
+  push:
+    branches:
+      - main  # Change this to your deployment branch if different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0'  # Change this to your .NET version
+
+    - name: Restore Dependencies
+      run: dotnet restore
+
+    - name: Build the Application
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Publish the Application
+      run: dotnet publish -c Release -o ./publish
+
+    - name: Create ZIP Archive
+      run: zip -r app.zip ./publish
+
+    - name: Copy Files to Server
+      run: |
+        scp -P ${{ secrets.SSH_PORT }} app.zip ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/next-koala/api/
+
+    - name: Deploy to Server via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: /home/${{ secrets.SSH_USERNAME }}/.ssh/github-actions-key  # Use the key stored on the Ubuntu server
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /nex-koala/api
+          unzip -o app.zip
+          rm app.zip
+          systemctl restart invoice-api.service
