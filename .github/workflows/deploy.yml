@@ -48,7 +48,7 @@ jobs:
 
     - name: Copy Files to Server
       run: |
-        scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} app.zip ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/next-koala/api/
+        scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} app.zip ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/nex-koala/api/
         
     - name: Deploy on Server via SSH
       uses: appleboy/ssh-action@v1.0.3
@@ -59,7 +59,7 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd /next-koala/api
+          cd /nex-koala/api
           unzip -o app.zip
           rm app.zip
           systemctl restart invoice-api.service
