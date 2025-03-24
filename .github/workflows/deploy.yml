@@ -1,10 +1,10 @@
 name: Deploy .NET Web API to Ubuntu Server
 
 on:
-  workflow_dispatch:  # Allows manual deployment from GitHub UI
-  pull_request:
+  push:
     branches:
-      - main  # Deploys when a PR is merged into main
+      - master
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -17,7 +17,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0'  # Change this to your .NET version
+        dotnet-version: '8.0'  # Change this to match your .NET version
 
     - name: Restore Dependencies
       run: dotnet restore
@@ -31,19 +31,22 @@ jobs:
     - name: Create ZIP Archive
       run: zip -r app.zip ./publish
 
-    - name: Add Server to Known Hosts
-      run: ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+    - name: Configure SSH and Add Known Hosts
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
     - name: Copy Files to Server via SCP
-      run: |
-        scp -P ${{ secrets.SSH_PORT }} app.zip ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/next-koala/api/
+      run: scp -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} app.zip ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/next-koala/api/
 
     - name: Deploy to Server via SSH
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Use GitHub Secrets for secure key storage
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
           cd /next-koala/api
