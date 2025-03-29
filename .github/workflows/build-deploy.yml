@@ -1,9 +1,9 @@
-name: Deploy .NET Web API to Ubuntu Server
+name: Build Deploy
 
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
