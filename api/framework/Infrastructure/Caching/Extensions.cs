@@ -1,7 +1,7 @@
-﻿using NexKoala.Framework.Core.Caching;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using NexKoala.Framework.Core.Caching;
 
 namespace NexKoala.Framework.Infrastructure.Caching;
 internal static class Extensions

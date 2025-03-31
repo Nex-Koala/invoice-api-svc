@@ -1,8 +1,8 @@
-﻿using NexKoala.Framework.Core.Persistence;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;
+using NexKoala.Framework.Core.Persistence;
 
 namespace NexKoala.Framework.Infrastructure.Persistence.Services;
 internal sealed class ConnectionStringValidator(IOptions<DatabaseOptions> dbSettings, ILogger<ConnectionStringValidator> logger) : IConnectionStringValidator

@@ -1,5 +1,5 @@
-﻿using NexKoala.Framework.Core.Storage.File.Features;
-using MediatR;
+﻿using MediatR;
+using NexKoala.Framework.Core.Storage.File.Features;
 
 namespace NexKoala.Framework.Core.Identity.Users.Features.UpdateUser;
 public class UpdateUserCommand : IRequest

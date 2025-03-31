@@ -1,9 +1,9 @@
-﻿using NexKoala.Framework.Core.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
+using NexKoala.Framework.Core.Exceptions;
 
 namespace NexKoala.Framework.Infrastructure.Exceptions;
 public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IExceptionHandler

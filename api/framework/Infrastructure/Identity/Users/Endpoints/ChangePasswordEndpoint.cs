@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Core.Identity.Users.Features.ChangePassword;
-using NexKoala.Framework.Core.Origin;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
+using NexKoala.Framework.Core.Identity.Users.Features.ChangePassword;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
+using NexKoala.Framework.Core.Origin;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Users.Endpoints;
 public static class ChangePasswordEndpoint

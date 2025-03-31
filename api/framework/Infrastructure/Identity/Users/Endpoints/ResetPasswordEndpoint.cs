@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Core.Identity.Users.Features.ResetPassword;
-using NexKoala.Framework.Core.Tenant;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using NexKoala.Framework.Core.Tenant;
+using NexKoala.Framework.Core.Identity.Users.Features.ResetPassword;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Users.Endpoints;
 

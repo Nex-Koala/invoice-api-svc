@@ -1,8 +1,8 @@
-﻿using NexKoala.Framework.Core.Auth.Jwt;
-using NexKoala.Framework.Infrastructure.Auth.Policy;
+﻿using NexKoala.Framework.Infrastructure.Auth.Policy;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using NexKoala.Framework.Core.Auth.Jwt;
 
 namespace NexKoala.Framework.Infrastructure.Auth.Jwt;
 internal static class Extensions

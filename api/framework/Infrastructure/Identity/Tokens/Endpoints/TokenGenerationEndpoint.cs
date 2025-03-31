@@ -1,10 +1,10 @@
-﻿using NexKoala.Framework.Core.Identity.Tokens;
-using NexKoala.Framework.Core.Identity.Tokens.Features.Generate;
-using NexKoala.Framework.Core.Tenant;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using NexKoala.Framework.Core.Identity.Tokens;
+using NexKoala.Framework.Core.Identity.Tokens.Features.Generate;
+using NexKoala.Framework.Core.Tenant;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Tokens.Endpoints;
 public static class TokenGenerationEndpoint

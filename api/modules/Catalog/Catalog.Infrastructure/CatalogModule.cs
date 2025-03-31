@@ -1,5 +1,4 @@
 ﻿using Carter;
-using NexKoala.Framework.Core.Persistence;
 using NexKoala.Framework.Infrastructure.Persistence;
 using NexKoala.WebApi.Catalog.Domain;
 using NexKoala.WebApi.Catalog.Infrastructure.Endpoints.v1;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using NexKoala.Framework.Core.Persistence;
 
 namespace NexKoala.WebApi.Catalog.Infrastructure;
 public static class CatalogModule

@@ -1,11 +1,11 @@
 ﻿using Finbuckle.MultiTenant.Abstractions;
 using Finbuckle.MultiTenant.EntityFrameworkCore;
-using NexKoala.Framework.Core.Domain.Contracts;
-using NexKoala.Framework.Core.Persistence;
 using NexKoala.Framework.Infrastructure.Tenant;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Domain.Contracts;
 
 namespace NexKoala.Framework.Infrastructure.Persistence;
 public class FshDbContext(IMultiTenantContextAccessor<TenantInfo> multiTenantContextAccessor,

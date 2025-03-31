@@ -1,9 +1,9 @@
-﻿using NexKoala.Framework.Core.Paging;
-using NexKoala.Framework.Core.Persistence;
-using NexKoala.Framework.Core.Specifications;
+﻿using NexKoala.Framework.Core.Specifications;
 using NexKoala.WebApi.Todo.Domain;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Paging;
 
 namespace NexKoala.WebApi.Todo.Features.GetList.v1;
 

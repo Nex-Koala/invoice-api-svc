@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
 using NexKoala.Framework.Core.Exceptions;
-using NexKoala.Framework.Core.Identity.Users.Features.ChangePassword;
-using NexKoala.Framework.Core.Identity.Users.Features.ForgotPassword;
-using NexKoala.Framework.Core.Identity.Users.Features.ResetPassword;
 using NexKoala.Framework.Core.Mail;
 using Microsoft.AspNetCore.WebUtilities;
+using NexKoala.Framework.Core.Identity.Users.Features.ResetPassword;
+using NexKoala.Framework.Core.Identity.Users.Features.ForgotPassword;
+using NexKoala.Framework.Core.Identity.Users.Features.ChangePassword;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Users.Services;
 internal sealed partial class UserService

@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
-using NexKoala.Framework.Core.Jobs;
 using Hangfire;
+using NexKoala.Framework.Core.Jobs;
 
 namespace NexKoala.Framework.Infrastructure.Jobs;
 

@@ -1,9 +1,9 @@
-﻿using NexKoala.Framework.Core.Identity.Roles;
-using NexKoala.Framework.Core.Identity.Roles.Features.CreateOrUpdateRole;
-using NexKoala.Framework.Infrastructure.Auth.Policy;
+﻿using NexKoala.Framework.Infrastructure.Auth.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using NexKoala.Framework.Core.Identity.Roles.Features.CreateOrUpdateRole;
+using NexKoala.Framework.Core.Identity.Roles;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Roles.Endpoints;
 

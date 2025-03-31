@@ -1,8 +1,8 @@
-﻿using NexKoala.Framework.Core.Audit;
-using NexKoala.Framework.Infrastructure.Auth.Policy;
+﻿using NexKoala.Framework.Infrastructure.Auth.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using NexKoala.Framework.Core.Audit;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Audit.Endpoints;
 

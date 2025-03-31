@@ -1,9 +1,9 @@
-﻿using NexKoala.Framework.Core.Persistence;
-using NexKoala.WebApi.Catalog.Domain;
+﻿using NexKoala.WebApi.Catalog.Domain;
 using NexKoala.WebApi.Catalog.Domain.Exceptions;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NexKoala.Framework.Core.Persistence;
 
 namespace NexKoala.WebApi.Catalog.Application.Products.Delete.v1;
 public sealed class DeleteProductHandler(

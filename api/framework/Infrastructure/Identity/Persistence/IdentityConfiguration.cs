@@ -1,11 +1,11 @@
 ﻿using Finbuckle.MultiTenant;
-using NexKoala.Framework.Core.Audit;
 using NexKoala.Framework.Infrastructure.Identity.RoleClaims;
 using NexKoala.Framework.Infrastructure.Identity.Roles;
 using NexKoala.Framework.Infrastructure.Identity.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NexKoala.Framework.Core.Audit;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Persistence;
 

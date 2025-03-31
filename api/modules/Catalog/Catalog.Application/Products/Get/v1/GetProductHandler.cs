@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using NexKoala.WebApi.Catalog.Domain.Exceptions;
-using NexKoala.Framework.Core.Persistence;
-using NexKoala.Framework.Core.Caching;
 using NexKoala.WebApi.Catalog.Domain;
 using MediatR;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Caching;
 
 namespace NexKoala.WebApi.Catalog.Application.Products.Get.v1;
 public sealed class GetProductHandler(

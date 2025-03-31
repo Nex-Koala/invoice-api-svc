@@ -1,11 +1,11 @@
 ﻿using Finbuckle.MultiTenant.Abstractions;
-using NexKoala.Framework.Core.Tenant;
 using NexKoala.Framework.Infrastructure.Constants;
 using NexKoala.Framework.Infrastructure.Identity.Users;
 using Hangfire.Client;
 using Hangfire.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using NexKoala.Framework.Core.Tenant;
 
 namespace NexKoala.Framework.Infrastructure.Jobs;
 

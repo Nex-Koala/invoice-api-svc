@@ -1,13 +1,13 @@
 ﻿using System.Collections.ObjectModel;
-using NexKoala.Framework.Core.Audit;
-using NexKoala.Framework.Core.Domain;
-using NexKoala.Framework.Core.Domain.Contracts;
-using NexKoala.Framework.Core.Identity.Users.Abstractions;
 using NexKoala.Framework.Infrastructure.Identity.Audit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using NexKoala.Framework.Core.Domain;
+using NexKoala.Framework.Core.Domain.Contracts;
+using NexKoala.Framework.Core.Audit;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
 
 namespace NexKoala.Framework.Infrastructure.Persistence.Interceptors;
 public class AuditInterceptor(ICurrentUser currentUser, TimeProvider timeProvider, IPublisher publisher) : SaveChangesInterceptor

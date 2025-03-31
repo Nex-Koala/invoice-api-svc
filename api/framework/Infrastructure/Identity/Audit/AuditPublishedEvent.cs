@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using NexKoala.Framework.Core.Audit;
 using MediatR;
+using NexKoala.Framework.Core.Audit;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Audit;
 public class AuditPublishedEvent : INotification

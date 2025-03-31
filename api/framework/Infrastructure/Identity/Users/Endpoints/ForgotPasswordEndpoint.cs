@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Core.Identity.Users.Features.ForgotPassword;
-using NexKoala.Framework.Core.Origin;
-using NexKoala.Framework.Core.Tenant;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
+using NexKoala.Framework.Core.Tenant;
+using NexKoala.Framework.Core.Identity.Users.Features.ForgotPassword;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
+using NexKoala.Framework.Core.Origin;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Users.Endpoints;
 

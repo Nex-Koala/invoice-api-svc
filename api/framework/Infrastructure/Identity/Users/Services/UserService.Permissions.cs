@@ -1,7 +1,7 @@
-﻿using NexKoala.Framework.Core.Caching;
-using NexKoala.Framework.Core.Exceptions;
+﻿using NexKoala.Framework.Core.Exceptions;
 using NexKoala.WebApi.Shared.Authorization;
 using Microsoft.EntityFrameworkCore;
+using NexKoala.Framework.Core.Caching;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Users.Services;
 internal sealed partial class UserService

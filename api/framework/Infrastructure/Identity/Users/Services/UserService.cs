@@ -2,19 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Finbuckle.MultiTenant.Abstractions;
-using NexKoala.Framework.Core.Caching;
 using NexKoala.Framework.Core.Exceptions;
-using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Core.Identity.Users.Dtos;
-using NexKoala.Framework.Core.Identity.Users.Features.AssignUserRole;
-using NexKoala.Framework.Core.Identity.Users.Features.RegisterUser;
-using NexKoala.Framework.Core.Identity.Users.Features.ToggleUserStatus;
-using NexKoala.Framework.Core.Identity.Users.Features.UpdateUser;
-using NexKoala.Framework.Core.Jobs;
-using NexKoala.Framework.Core.Mail;
-using NexKoala.Framework.Core.Storage;
-using NexKoala.Framework.Core.Storage.File;
-using NexKoala.Framework.Core.Tenant;
 using NexKoala.Framework.Infrastructure.Constants;
 using NexKoala.Framework.Infrastructure.Identity.Persistence;
 using NexKoala.Framework.Infrastructure.Identity.Roles;
@@ -24,6 +12,18 @@ using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using NexKoala.Framework.Core.Tenant;
+using NexKoala.Framework.Core.Identity.Users.Features.AssignUserRole;
+using NexKoala.Framework.Core.Identity.Users.Features.UpdateUser;
+using NexKoala.Framework.Core.Identity.Users.Dtos;
+using NexKoala.Framework.Core.Identity.Users.Features.ToggleUserStatus;
+using NexKoala.Framework.Core.Identity.Users.Features.RegisterUser;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
+using NexKoala.Framework.Core.Storage.File;
+using NexKoala.Framework.Core.Storage;
+using NexKoala.Framework.Core.Jobs;
+using NexKoala.Framework.Core.Mail;
+using NexKoala.Framework.Core.Caching;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Users.Services;
 
@@ -127,15 +127,15 @@ internal sealed partial class UserService(
         await userManager.AddToRoleAsync(user, IdentityConstants.Roles.Basic);
 
         // send confirmation mail
-        if (!string.IsNullOrEmpty(user.Email))
-        {
-            string emailVerificationUri = await GetEmailVerificationUriAsync(user, origin);
-            var mailRequest = new MailRequest(
-                new Collection<string> { user.Email },
-                "Confirm Registration",
-                emailVerificationUri);
-            jobService.Enqueue("email", () => mailService.SendAsync(mailRequest, CancellationToken.None));
-        }
+        //if (!string.IsNullOrEmpty(user.Email))
+        //{
+        //    string emailVerificationUri = await GetEmailVerificationUriAsync(user, origin);
+        //    var mailRequest = new MailRequest(
+        //        new Collection<string> { user.Email },
+        //        "Confirm Registration",
+        //        emailVerificationUri);
+        //    jobService.Enqueue("email", () => mailService.SendAsync(mailRequest, CancellationToken.None));
+        //}
 
         return new RegisterUserResponse(user.Id);
     }

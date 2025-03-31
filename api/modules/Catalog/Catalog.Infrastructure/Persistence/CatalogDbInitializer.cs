@@ -1,7 +1,7 @@
-﻿using NexKoala.Framework.Core.Persistence;
-using NexKoala.WebApi.Catalog.Domain;
+﻿using NexKoala.WebApi.Catalog.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NexKoala.Framework.Core.Persistence;
 
 namespace NexKoala.WebApi.Catalog.Infrastructure.Persistence;
 internal sealed class CatalogDbInitializer(

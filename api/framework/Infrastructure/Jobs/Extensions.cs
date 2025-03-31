@@ -1,12 +1,12 @@
 ﻿using NexKoala.Framework.Core.Exceptions;
-using NexKoala.Framework.Core.Jobs;
-using NexKoala.Framework.Core.Persistence;
 using NexKoala.Framework.Infrastructure.Persistence;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Jobs;
 
 namespace NexKoala.Framework.Infrastructure.Jobs;
 

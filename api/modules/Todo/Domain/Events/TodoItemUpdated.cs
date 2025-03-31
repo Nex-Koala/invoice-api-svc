@@ -1,9 +1,8 @@
-﻿
-using NexKoala.Framework.Core.Caching;
-using NexKoala.Framework.Core.Domain.Events;
-using NexKoala.WebApi.Todo.Features.Get.v1;
+﻿using NexKoala.WebApi.Todo.Features.Get.v1;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using NexKoala.Framework.Core.Domain.Events;
+using NexKoala.Framework.Core.Caching;
 
 namespace NexKoala.WebApi.Todo.Domain.Events;
 public record TodoItemUpdated(TodoItem item) : DomainEvent;

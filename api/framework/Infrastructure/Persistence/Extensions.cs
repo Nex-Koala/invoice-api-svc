@@ -1,11 +1,11 @@
-﻿using NexKoala.Framework.Core.Persistence;
-using NexKoala.Framework.Infrastructure.Persistence.Interceptors;
+﻿using NexKoala.Framework.Infrastructure.Persistence.Interceptors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Serilog;
+using NexKoala.Framework.Core.Persistence;
 
 namespace NexKoala.Framework.Infrastructure.Persistence;
 public static class Extensions

@@ -1,7 +1,7 @@
-﻿using NexKoala.Framework.Core.Audit;
-using NexKoala.Framework.Infrastructure.Identity.Persistence;
+﻿using NexKoala.Framework.Infrastructure.Identity.Persistence;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using NexKoala.Framework.Core.Audit;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Audit;
 public class AuditPublishedEventHandler(ILogger<AuditPublishedEventHandler> logger, IdentityDbContext context) : INotificationHandler<AuditPublishedEvent>

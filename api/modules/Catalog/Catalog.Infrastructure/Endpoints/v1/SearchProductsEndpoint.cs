@@ -1,4 +1,3 @@
-using NexKoala.Framework.Core.Paging;
 using NexKoala.Framework.Infrastructure.Auth.Policy;
 using NexKoala.WebApi.Catalog.Application.Products.Get.v1;
 using NexKoala.WebApi.Catalog.Application.Products.Search.v1;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using NexKoala.Framework.Core.Paging;
 
 namespace NexKoala.WebApi.Catalog.Infrastructure.Endpoints.v1;
 

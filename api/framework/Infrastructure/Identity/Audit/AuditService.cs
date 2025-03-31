@@ -1,6 +1,6 @@
-﻿using NexKoala.Framework.Core.Audit;
-using NexKoala.Framework.Infrastructure.Identity.Persistence;
+﻿using NexKoala.Framework.Infrastructure.Identity.Persistence;
 using Microsoft.EntityFrameworkCore;
+using NexKoala.Framework.Core.Audit;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Audit;
 public class AuditService(IdentityDbContext context) : IAuditService

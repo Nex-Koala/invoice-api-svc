@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>NexKoala.WebApi.Invoice.Application</RootNamespace>
+    <AssemblyName>NexKoala.WebApi.Invoice.Application</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\framework\Core\Core.csproj" />
+    <ProjectReference Include="..\Invoice.Domain\Invoice.Domain.csproj" />
+  </ItemGroup>
+</Project>

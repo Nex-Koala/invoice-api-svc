@@ -1,8 +1,8 @@
-﻿using NexKoala.Framework.Core.Persistence;
-using NexKoala.WebApi.Catalog.Domain;
+﻿using NexKoala.WebApi.Catalog.Domain;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NexKoala.Framework.Core.Persistence;
 
 namespace NexKoala.WebApi.Catalog.Application.Products.Create.v1;
 public sealed class CreateProductHandler(

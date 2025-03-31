@@ -1,9 +1,9 @@
-﻿using NexKoala.Framework.Core.Tenant.Features.UpgradeSubscription;
-using NexKoala.Framework.Infrastructure.Auth.Policy;
+﻿using NexKoala.Framework.Infrastructure.Auth.Policy;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using NexKoala.Framework.Core.Tenant.Features.UpgradeSubscription;
 
 namespace NexKoala.Framework.Infrastructure.Tenant.Endpoints;
 

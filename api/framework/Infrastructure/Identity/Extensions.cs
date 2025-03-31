@@ -1,9 +1,4 @@
-﻿using NexKoala.Framework.Core.Audit;
-using NexKoala.Framework.Core.Identity.Roles;
-using NexKoala.Framework.Core.Identity.Tokens;
-using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Core.Persistence;
-using NexKoala.Framework.Infrastructure.Auth;
+﻿using NexKoala.Framework.Infrastructure.Auth;
 using NexKoala.Framework.Infrastructure.Identity.Audit;
 using NexKoala.Framework.Infrastructure.Identity.Persistence;
 using NexKoala.Framework.Infrastructure.Identity.Roles;
@@ -19,6 +14,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using NexKoala.Framework.Core.Identity.Tokens;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Identity.Roles;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
+using NexKoala.Framework.Core.Audit;
 
 namespace NexKoala.Framework.Infrastructure.Identity;
 internal static class Extensions

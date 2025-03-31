@@ -1,8 +1,8 @@
 ﻿using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
+using Mapster;
 using NexKoala.Framework.Core.Domain.Contracts;
 using NexKoala.Framework.Core.Persistence;
-using Mapster;
 
 namespace NexKoala.WebApi.Catalog.Infrastructure.Persistence;
 internal sealed class CatalogRepository<T> : RepositoryBase<T>, IReadRepository<T>, IRepository<T>

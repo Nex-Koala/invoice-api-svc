@@ -1,7 +1,4 @@
 ﻿using Finbuckle.MultiTenant.Abstractions;
-using NexKoala.Framework.Core.Origin;
-using NexKoala.Framework.Core.Persistence;
-using NexKoala.Framework.Core.Tenant;
 using NexKoala.Framework.Infrastructure.Identity.RoleClaims;
 using NexKoala.Framework.Infrastructure.Identity.Roles;
 using NexKoala.Framework.Infrastructure.Identity.Users;
@@ -11,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Tenant;
+using NexKoala.Framework.Core.Origin;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Persistence;
 internal sealed class IdentityDbInitializer(

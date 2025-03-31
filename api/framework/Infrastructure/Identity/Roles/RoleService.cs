@@ -1,16 +1,16 @@
 ﻿using Finbuckle.MultiTenant.Abstractions;
 using NexKoala.Framework.Core.Exceptions;
-using NexKoala.Framework.Core.Identity.Roles;
-using NexKoala.Framework.Core.Identity.Roles.Features.CreateOrUpdateRole;
-using NexKoala.Framework.Core.Identity.Roles.Features.UpdatePermissions;
-using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Core.Tenant;
 using NexKoala.Framework.Infrastructure.Identity.Persistence;
 using NexKoala.Framework.Infrastructure.Identity.RoleClaims;
 using NexKoala.Framework.Infrastructure.Tenant;
 using NexKoala.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NexKoala.Framework.Core.Identity.Roles;
+using NexKoala.Framework.Core.Identity.Roles.Features.CreateOrUpdateRole;
+using NexKoala.Framework.Core.Tenant;
+using NexKoala.Framework.Core.Identity.Roles.Features.UpdatePermissions;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Roles;
 

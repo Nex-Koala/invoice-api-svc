@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>FSH.Framework.Infrastructure</RootNamespace>
-    <AssemblyName>FSH.Framework.Infrastructure</AssemblyName>
+    <RootNamespace>NexKoala.Framework.Infrastructure</RootNamespace>
+    <AssemblyName>NexKoala.Framework.Infrastructure</AssemblyName>
     <IsAspireSharedProject>true</IsAspireSharedProject>
   </PropertyGroup>
   <ItemGroup>

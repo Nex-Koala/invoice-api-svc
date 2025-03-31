@@ -1,7 +1,7 @@
-﻿using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Infrastructure.Identity.Users;
+﻿using NexKoala.Framework.Infrastructure.Identity.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
 
 namespace NexKoala.Framework.Infrastructure.Auth.Policy;
 public sealed class RequiredPermissionAuthorizationHandler(IUserService userService) : AuthorizationHandler<PermissionAuthorizationRequirement>

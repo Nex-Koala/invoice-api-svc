@@ -1,7 +1,5 @@
 ﻿using Finbuckle.MultiTenant.Abstractions;
 using Finbuckle.MultiTenant.EntityFrameworkCore;
-using NexKoala.Framework.Core.Audit;
-using NexKoala.Framework.Core.Persistence;
 using NexKoala.Framework.Infrastructure.Identity.RoleClaims;
 using NexKoala.Framework.Infrastructure.Identity.Roles;
 using NexKoala.Framework.Infrastructure.Identity.Users;
@@ -10,6 +8,8 @@ using NexKoala.Framework.Infrastructure.Tenant;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Audit;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Persistence;
 public class IdentityDbContext : MultiTenantIdentityDbContext<User,

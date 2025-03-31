@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using Asp.Versioning.Conventions;
 using FluentValidation;
-using NexKoala.Framework.Core;
-using NexKoala.Framework.Core.Origin;
 using NexKoala.Framework.Infrastructure.Auth;
 using NexKoala.Framework.Infrastructure.Auth.Jwt;
 using NexKoala.Framework.Infrastructure.Behaviours;
@@ -26,6 +24,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using NexKoala.Framework.Core.Origin;
 
 namespace NexKoala.Framework.Infrastructure;
 

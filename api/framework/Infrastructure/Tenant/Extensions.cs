@@ -1,9 +1,6 @@
 ﻿using Finbuckle.MultiTenant;
 using Finbuckle.MultiTenant.Abstractions;
 using Finbuckle.MultiTenant.Stores.DistributedCacheStore;
-using NexKoala.Framework.Core.Persistence;
-using NexKoala.Framework.Core.Tenant;
-using NexKoala.Framework.Core.Tenant.Abstractions;
 using NexKoala.Framework.Infrastructure.Persistence;
 using NexKoala.Framework.Infrastructure.Persistence.Services;
 using NexKoala.Framework.Infrastructure.Tenant.Persistence;
@@ -14,6 +11,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Tenant;
+using NexKoala.Framework.Core.Tenant.Abstractions;
 
 namespace NexKoala.Framework.Infrastructure.Tenant;
 internal static class Extensions

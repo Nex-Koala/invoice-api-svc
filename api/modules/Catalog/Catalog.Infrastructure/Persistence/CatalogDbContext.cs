@@ -1,11 +1,11 @@
 ﻿using Finbuckle.MultiTenant.Abstractions;
-using NexKoala.Framework.Core.Persistence;
 using NexKoala.Framework.Infrastructure.Persistence;
 using NexKoala.Framework.Infrastructure.Tenant;
 using NexKoala.WebApi.Catalog.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using NexKoala.Framework.Core.Persistence;
 
 namespace NexKoala.WebApi.Catalog.Infrastructure.Persistence;
 

@@ -19,6 +19,7 @@
     <ProjectReference Include="..\framework\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\migrations\PostgreSQL\PostgreSQL.csproj" />
     <ProjectReference Include="..\modules\Catalog\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="..\modules\Invoice\Invoice.Infrastructure\Invoice.Infrastructure.csproj" />
     <ProjectReference Include="..\modules\Todo\Todo.csproj" />
   </ItemGroup>
   <ItemGroup>

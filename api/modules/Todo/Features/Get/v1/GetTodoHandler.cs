@@ -1,9 +1,9 @@
-﻿using NexKoala.Framework.Core.Caching;
-using NexKoala.Framework.Core.Persistence;
-using NexKoala.WebApi.Todo.Domain;
+﻿using NexKoala.WebApi.Todo.Domain;
 using NexKoala.WebApi.Todo.Exceptions;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Caching;
 
 namespace NexKoala.WebApi.Todo.Features.Get.v1;
 public sealed class GetTodoHandler(

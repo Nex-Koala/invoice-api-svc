@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
 using System.Text;
-using NexKoala.Framework.Core.Auth.Jwt;
 using NexKoala.Framework.Core.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NexKoala.Framework.Core.Auth.Jwt;
 
 namespace NexKoala.Framework.Infrastructure.Auth.Jwt;
 public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>

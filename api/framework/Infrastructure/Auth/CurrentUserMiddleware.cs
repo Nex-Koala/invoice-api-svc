@@ -1,5 +1,5 @@
-﻿using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
 
 namespace NexKoala.Framework.Infrastructure.Auth;
 public class CurrentUserMiddleware(ICurrentUserInitializer currentUserInitializer) : IMiddleware

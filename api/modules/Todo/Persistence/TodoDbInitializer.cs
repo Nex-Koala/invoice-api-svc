@@ -1,7 +1,7 @@
-﻿using NexKoala.Framework.Core.Persistence;
-using NexKoala.WebApi.Todo.Domain;
+﻿using NexKoala.WebApi.Todo.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NexKoala.Framework.Core.Persistence;
 
 namespace NexKoala.WebApi.Todo.Persistence;
 internal sealed class TodoDbInitializer(

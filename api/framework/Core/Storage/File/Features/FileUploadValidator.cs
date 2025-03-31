@@ -15,7 +15,7 @@ public class FileUploadRequestValidator : AbstractValidator<FileUploadCommand>
             .MaximumLength(5);
 
         RuleFor(p => p.Data)
-            .NotEmpty();  
+            .NotEmpty();
     }
 }
 

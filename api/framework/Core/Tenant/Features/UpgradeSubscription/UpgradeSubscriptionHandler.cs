@@ -1,5 +1,5 @@
-﻿using NexKoala.Framework.Core.Tenant.Abstractions;
-using MediatR;
+﻿using MediatR;
+using NexKoala.Framework.Core.Tenant.Abstractions;
 
 namespace NexKoala.Framework.Core.Tenant.Features.UpgradeSubscription;
 

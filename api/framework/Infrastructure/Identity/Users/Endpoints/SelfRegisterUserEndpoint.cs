@@ -1,11 +1,11 @@
-﻿using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Core.Identity.Users.Features.RegisterUser;
-using NexKoala.Framework.Core.Tenant;
-using NexKoala.Framework.Infrastructure.Auth.Policy;
+﻿using NexKoala.Framework.Infrastructure.Auth.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using NexKoala.Framework.Core.Tenant;
+using NexKoala.Framework.Core.Identity.Users.Features.RegisterUser;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Users.Endpoints;
 public static class SelfRegisterUserEndpoint

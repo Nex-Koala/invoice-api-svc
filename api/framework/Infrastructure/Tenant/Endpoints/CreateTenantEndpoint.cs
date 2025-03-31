@@ -1,9 +1,9 @@
-﻿using NexKoala.Framework.Core.Tenant.Features.CreateTenant;
-using NexKoala.Framework.Infrastructure.Auth.Policy;
+﻿using NexKoala.Framework.Infrastructure.Auth.Policy;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using NexKoala.Framework.Core.Tenant.Features.CreateTenant;
 
 namespace NexKoala.Framework.Infrastructure.Tenant.Endpoints;
 public static class CreateTenantEndpoint

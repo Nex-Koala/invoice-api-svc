@@ -1,10 +1,10 @@
-using NexKoala.Framework.Core.Paging;
-using NexKoala.Framework.Core.Persistence;
 using NexKoala.Framework.Core.Specifications;
 using NexKoala.WebApi.Catalog.Application.Products.Get.v1;
 using NexKoala.WebApi.Catalog.Domain;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using NexKoala.Framework.Core.Persistence;
+using NexKoala.Framework.Core.Paging;
 
 
 namespace NexKoala.WebApi.Catalog.Application.Products.Search.v1;

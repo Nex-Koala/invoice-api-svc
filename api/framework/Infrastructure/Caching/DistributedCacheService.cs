@@ -1,8 +1,8 @@
 using System.Text;
 using System.Text.Json;
-using NexKoala.Framework.Core.Caching;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using NexKoala.Framework.Core.Caching;
 
 namespace NexKoala.Framework.Infrastructure.Caching;
 

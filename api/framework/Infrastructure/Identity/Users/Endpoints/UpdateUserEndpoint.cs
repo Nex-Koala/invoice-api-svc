@@ -1,12 +1,12 @@
 ﻿using System.Security.Claims;
 using NexKoala.Framework.Core.Exceptions;
-using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Core.Identity.Users.Features.UpdateUser;
 using NexKoala.Framework.Infrastructure.Auth.Policy;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using NexKoala.Framework.Core.Identity.Users.Features.UpdateUser;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Users.Endpoints;
 public static class UpdateUserEndpoint

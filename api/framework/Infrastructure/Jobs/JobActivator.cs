@@ -1,13 +1,13 @@
 ﻿using Finbuckle.MultiTenant;
 using Finbuckle.MultiTenant.Abstractions;
-using NexKoala.Framework.Core.Identity.Users.Abstractions;
-using NexKoala.Framework.Core.Tenant;
 using NexKoala.Framework.Infrastructure.Constants;
 using NexKoala.Framework.Infrastructure.Tenant;
 using Hangfire;
 using Hangfire.Server;
 using Microsoft.Extensions.DependencyInjection;
 using TenantInfo = NexKoala.Framework.Infrastructure.Tenant.TenantInfo;
+using NexKoala.Framework.Core.Tenant;
+using NexKoala.Framework.Core.Identity.Users.Abstractions;
 
 namespace NexKoala.Framework.Infrastructure.Jobs;
 

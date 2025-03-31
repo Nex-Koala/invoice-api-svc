@@ -1,6 +1,6 @@
-﻿using NexKoala.Framework.Core.Tenant.Abstractions;
+﻿using MediatR;
 using NexKoala.Framework.Core.Tenant.Dtos;
-using MediatR;
+using NexKoala.Framework.Core.Tenant.Abstractions;
 
 namespace NexKoala.Framework.Core.Tenant.Features.GetTenantById;
 public sealed class GetTenantByIdHandler(ITenantService service) : IRequestHandler<GetTenantByIdQuery, TenantDetail>

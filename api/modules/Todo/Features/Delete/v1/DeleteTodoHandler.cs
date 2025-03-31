@@ -1,9 +1,9 @@
-﻿using NexKoala.Framework.Core.Persistence;
-using NexKoala.WebApi.Todo.Domain;
+﻿using NexKoala.WebApi.Todo.Domain;
 using NexKoala.WebApi.Todo.Exceptions;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NexKoala.Framework.Core.Persistence;
 
 namespace NexKoala.WebApi.Todo.Features.Delete.v1;
 public sealed class DeleteTodoHandler(
