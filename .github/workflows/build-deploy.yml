@@ -13,19 +13,24 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0'
-        fetch-depth: 0
 
     - name: Restore Dependencies
-      run: dotnet restore
+      run: dotnet restore ./invoice-api-svc/NexKoala.API.sln
       working-directory: ./invoice-api-svc
 
     - name: Build the Application
       run: dotnet build --configuration Release --no-restore
+
+    - name: Run tests
+      run: dotnet test ./invoice-api-svc/NexKoala.API.sln
+      working-directory: ./invoice-api-svc
 
     - name: Publish the Application
       run: dotnet publish -c Release -o ./publish
