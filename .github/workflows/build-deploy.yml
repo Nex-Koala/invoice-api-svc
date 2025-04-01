@@ -21,15 +21,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0'
-        
-    - name: List files in the repository
-      run: ls -R /
-
-    - name: List files in invoice-api-svc directory
-      run: ls -R ./invoice-api-svc
-      
+  
     - name: Restore Dependencies
-      run: dotnet restore
+      run: dotnet restore ./NexKoala.API.sln
 
     - name: Build the Application
       run: dotnet build --configuration Release --no-restore
