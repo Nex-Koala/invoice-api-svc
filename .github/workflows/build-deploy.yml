@@ -15,13 +15,17 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        submodules: 'recursive'
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0'
         
-    - name: List files in working directory
+    - name: Check current working directory
+      run: pwd
+
+    - name: List files in invoice-api-svc
       run: ls -R ./invoice-api-svc
       
     - name: Restore Dependencies
