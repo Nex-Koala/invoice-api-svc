@@ -43,12 +43,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Domain", "api\modul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Infrastructure", "api\modules\Catalog\Catalog.Infrastructure\Catalog.Infrastructure.csproj", "{89FE1C3B-29D3-48A8-8E7D-90C261D266C5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{D36E77BC-4568-4BC8-9506-1EFB7B1CD335}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceDefaults", "aspire\service-defaults\ServiceDefaults.csproj", "{990CA37A-86D3-4FE6-B777-3CF0DDAC6BF6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Host", "aspire\host\Host.csproj", "{2119CE89-308D-4932-BFCE-8CDC0A05EB9E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Invoice", "Invoice", "{F49B3A47-1251-4C5C-B1FA-52EB931236FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invoice.Application", "api\modules\Invoice\Invoice.Application\Invoice.Application.csproj", "{B525AF17-3334-4824-8E1A-97E7EE9B10A6}"
