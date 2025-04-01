@@ -20,7 +20,8 @@ jobs:
         dotnet-version: '8.0'  # Update to match your project
 
     - name: Restore Dependencies
-      run: dotnet restore --verbosity d
+      run: dotnet restore
+      working-directory: ./invoice-api-svc
 
     - name: Build the Application
       run: dotnet build --configuration Release --no-restore
