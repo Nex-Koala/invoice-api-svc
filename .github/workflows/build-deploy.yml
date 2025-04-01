@@ -20,7 +20,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0'
-
+        
+    - name: List files in working directory
+      run: ls -R ./invoice-api-svc
+      
     - name: Restore Dependencies
       run: dotnet restore
 
