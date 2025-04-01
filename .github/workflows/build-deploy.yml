@@ -21,11 +21,14 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0'
+        
+    - name: List solution file contents
+      run: cat ./NexKoala.API.sln
   
     - name: Restore Dependencies
       run: |
         dotnet clean
-        dotnet restore ./NexKoala.API.sln
+        dotnet restore ./NexKoala.API.sln --verbosity detailed
         
     - name: Build the Application
       run: dotnet build --configuration Release --no-restore
