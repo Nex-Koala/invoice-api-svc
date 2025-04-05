@@ -126,6 +126,7 @@ public static class InvoiceModule
         builder.Services.AddScoped<IInvoiceService, InvoiceService>();
         builder.Services.AddScoped<ILhdnApi, LhdnApi>();
         builder.Services.AddScoped<ILhdnSdk, LhdnSdk>();
+        builder.Services.AddScoped<IQuotaService, QuotaService>();
 
         return builder;
     }
