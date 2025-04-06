@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NexKoala.Framework.Core.Persistence;
 using NexKoala.Framework.Infrastructure.Persistence;
@@ -71,6 +73,10 @@ public static class InvoiceModule
             invoiceApiGroup.MapCreateInvoiceEndpoint();
             invoiceApiGroup.MapSubmitInvoiceEndpoint();
             invoiceApiGroup.MapGenerateInvoiceEndpoint();
+            invoiceApiGroup.MapGetSalesInvoicesEndpoint();
+            invoiceApiGroup.MapGetPurchaseInvoicesEndpoint();
+            invoiceApiGroup.MapGetCreditDebitNotesEndpoint();
+            invoiceApiGroup.MapGetPurchaseCreditDebitNotesEndpoint();
 
             var partnerGroup = app.MapGroup("partners").WithTags("Partners");
             partnerGroup.MapPartnerCreationEndpoint();
@@ -90,6 +96,11 @@ public static class InvoiceModule
         ArgumentNullException.ThrowIfNull(builder);
         builder.Services.BindDbContext<InvoiceDbContext>();
         builder.Services.AddScoped<IDbInitializer, InvoiceDbInitializer>();
+
+        builder.Services.AddDbContext<ClientDbContext>(options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("ClientConnection"),
+            b => b.MigrationsAssembly(typeof(ClientDbContext).Assembly.FullName)));
 
         builder.Services.AddKeyedScoped<IRepository<Uom>, InvoiceRepository<Uom>>("invoice:uoms");
         builder.Services.AddKeyedScoped<IReadRepository<Uom>, InvoiceRepository<Uom>>("invoice:uoms");
@@ -127,6 +138,7 @@ public static class InvoiceModule
         builder.Services.AddScoped<ILhdnApi, LhdnApi>();
         builder.Services.AddScoped<ILhdnSdk, LhdnSdk>();
         builder.Services.AddScoped<IQuotaService, QuotaService>();
+        builder.Services.AddScoped<TrimStringService>();
 
         return builder;
     }
