@@ -17,6 +17,7 @@ using NexKoala.Framework.Core.Identity.Tokens.Features.Refresh;
 using NexKoala.Framework.Core.Identity.Tokens.Features.Generate;
 using NexKoala.Framework.Core.Identity.Tokens.Models;
 using NexKoala.Framework.Core.Auth.Jwt;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Tokens;
 public sealed class TokenService : ITokenService
@@ -104,7 +105,8 @@ public sealed class TokenService : ITokenService
             }
         }));
 
-        return new TokenResponse(token, user.RefreshToken, user.RefreshTokenExpiryTime);
+        var roles = (await _userManager.GetRolesAsync(user)).ToList();
+        return new TokenResponse(user.Id, user.UserName, user.Email, roles, token, user.RefreshToken, user.RefreshTokenExpiryTime);
     }
 
     private string GenerateJwt(User user, string ipAddress) =>

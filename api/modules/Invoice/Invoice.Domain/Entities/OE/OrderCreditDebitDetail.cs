@@ -10,7 +10,7 @@ namespace NexKoala.WebApi.Invoice.Domain.Entities.OE
     public class OrderCreditDebitDetail
     {
         public decimal CRDUNIQ { get; set; } // Unique Identifier for Credit/Debit Note
-        public int LINENUM { get; set; } // Line Number
+        public short LINENUM { get; set; } // Line Number
         public string ITEM { get; set; } // Item Code
         public string DESC { get; set; } // Item Description
         public decimal QTYRETURN { get; set; } // Quantity Returned
