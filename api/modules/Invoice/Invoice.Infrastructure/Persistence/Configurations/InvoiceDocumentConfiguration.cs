@@ -15,6 +15,7 @@ internal class InvoiceDocumentConfiguration : IEntityTypeConfiguration<InvoiceDo
     public void Configure(EntityTypeBuilder<InvoiceDocument> builder)
     {
         builder.HasKey(x => x.Id);
+        builder.Property(x => x.Uuid).HasMaxLength(50);
         builder.Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
         builder.Property(x => x.IssueDate).IsRequired();
         builder.Property(x => x.DocumentCurrencyCode).IsRequired().HasMaxLength(3);

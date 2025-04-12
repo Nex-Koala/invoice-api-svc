@@ -120,6 +120,18 @@ public static class InvoiceModule
         builder.Services.AddKeyedScoped<IRepository<Partner>, InvoiceRepository<Partner>>("invoice:partners");
         builder.Services.AddKeyedScoped<IReadRepository<Partner>, InvoiceRepository<Partner>>("invoice:partners");
 
+        builder.Services.AddKeyedScoped<IRepository<InvoiceDocument>, InvoiceRepository<InvoiceDocument>>("invoice:invoiceDocuments");
+        builder.Services.AddKeyedScoped<IReadRepository<InvoiceDocument>, InvoiceRepository<InvoiceDocument>>("invoice:invoiceDocuments");
+
+        builder.Services.AddKeyedScoped<IRepository<InvoiceLine>, InvoiceRepository<InvoiceLine>>("invoice:invoiceLines");
+        builder.Services.AddKeyedScoped<IReadRepository<InvoiceLine>, InvoiceRepository<InvoiceLine>>("invoice:invoiceLines");
+
+        builder.Services.AddKeyedScoped<IRepository<Supplier>, InvoiceRepository<Supplier>>("invoice:suppliers");
+        builder.Services.AddKeyedScoped<IReadRepository<Supplier>, InvoiceRepository<Supplier>>("invoice:suppliers");
+
+        builder.Services.AddKeyedScoped<IRepository<Customer>, InvoiceRepository<Customer>>("invoice:customers");
+        builder.Services.AddKeyedScoped<IReadRepository<Customer>, InvoiceRepository<Customer>>("invoice:customers");
+
         builder.Services.AddHttpClient("LhdnApi", client =>
         {
             client.BaseAddress = new Uri(builder.Configuration.GetSection("EInvoiceSettings:ApiBaseUrl").Value);

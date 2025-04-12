@@ -17,6 +17,7 @@ using NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Token;
 using NexKoala.Framework.Core.Exceptions;
 using Mapster;
 using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GetRecentDocuments.v1;
+using NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Invoice;
 
 namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
 {
@@ -33,7 +34,7 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
             _settings = options.Value;
         }
 
-        public async Task<HttpResponseMessage> SubmitInvoiceAsync(UblDocumentRequest payload)
+        public async Task<SubmitInvoiceResponse> SubmitInvoiceAsync(UblDocumentRequest payload)
         {
             var token = await GetTokenAsync(); // Get token from LHDN API
 
@@ -46,7 +47,18 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
                 "application/json"
             );
             var response = await client.PostAsync("/api/v1.0/documentsubmissions/", requestContent);
-            return response;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var submissionResult = JsonConvert.DeserializeObject<SubmitInvoiceResponse>(result);
+                return submissionResult;
+            }
+            else
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                throw new GenericException(result);
+            }
         }
 
         public async Task<RawDocument> GetDocumentAsync(string uuid)

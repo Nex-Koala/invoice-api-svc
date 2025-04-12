@@ -18,5 +18,6 @@ namespace NexKoala.WebApi.Invoice.Application.Dtos.Ubl.Invoice
         public Item[] Item { get; set; }
         public Price[] Price { get; set; }
         public TaxTotal[] TaxTotal { get; set; }
+        public ItemPriceExtension[] ItemPriceExtension { get; set; }
     }
 }

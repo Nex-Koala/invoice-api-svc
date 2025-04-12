@@ -26,8 +26,8 @@ public sealed class GetPartnerByEmailHandler(
             $"partner:{request.Email}",
             async () =>
             {
-                var spec = new PartnerByEmailSpec(request.Email);
-                var partner = await repository.FirstOrDefaultAsync(spec, cancellationToken);
+        var spec = new PartnerByEmailSpec(request.Email);
+        var partner = await repository.FirstOrDefaultAsync(spec, cancellationToken);
                 if (partner == null)
                     throw new PartnerNotFoundException(request.Email);
                 return partner.Adapt<PartnerResponse>();

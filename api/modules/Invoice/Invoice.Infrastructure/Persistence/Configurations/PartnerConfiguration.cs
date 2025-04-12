@@ -26,11 +26,11 @@ internal class PartnerConfiguration : IEntityTypeConfiguration<Partner>
 
         builder.Property(x => x.Tin).HasMaxLength(20);
 
-        builder.Property(x => x.SchemeID).HasMaxLength(20);
+        builder.Property(x => x.SchemeId).HasMaxLength(20);
 
         builder.Property(x => x.RegistrationNumber).HasMaxLength(20);
 
-        builder.Property(x => x.SSTRegistrationNumber).HasMaxLength(20);
+        builder.Property(x => x.SstRegistrationNumber).HasMaxLength(20);
 
         builder.Property(x => x.TourismTaxRegistrationNumber).HasMaxLength(30);
 
@@ -38,7 +38,7 @@ internal class PartnerConfiguration : IEntityTypeConfiguration<Partner>
 
         builder.Property(x => x.Phone).IsRequired().HasMaxLength(20);
 
-        builder.Property(x => x.MSICCode).HasMaxLength(20);
+        builder.Property(x => x.MsicCode).HasMaxLength(20);
 
         builder.Property(x => x.BusinessActivityDescription).HasMaxLength(200);
 
