@@ -56,7 +56,7 @@ namespace NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Invoice
         // Invoice Line Items
         public decimal TotalAmount { get; set; }
         public List<InvoiceItemRequest> ItemList { get; set; }
-        public string TaxableAmount { get; set; }
-        public string TaxAmount { get; set; }
+        public decimal TaxableAmount { get; set; }
+        public decimal TaxAmount { get; set; }
     }
 }

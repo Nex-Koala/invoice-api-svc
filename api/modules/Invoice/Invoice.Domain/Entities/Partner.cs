@@ -12,13 +12,13 @@ public class Partner : AuditableEntity, IAggregateRoot
     public string Name { get; set; }
     public string CompanyName { get; set; }
     public string? Tin { get; set; }
-    public string? SchemeID { get; set; }
+    public string? SchemeId { get; set; }
     public string? RegistrationNumber { get; set; }
-    public string? SSTRegistrationNumber { get; set; }
+    public string? SstRegistrationNumber { get; set; }
     public string? TourismTaxRegistrationNumber { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
-    public string? MSICCode { get; set; }
+    public string? MsicCode { get; set; }
     public string? BusinessActivityDescription { get; set; }
     public string Address1 { get; set; }
     public string? Address2 { get; set; }
@@ -134,14 +134,14 @@ public class Partner : AuditableEntity, IAggregateRoot
         if (tin is not null && Tin?.Equals(tin, StringComparison.OrdinalIgnoreCase) is not true)
             Tin = tin;
 
-        if (schemeID is not null && SchemeID?.Equals(schemeID, StringComparison.OrdinalIgnoreCase) is not true)
-            SchemeID = schemeID;
+        if (schemeID is not null && SchemeId?.Equals(schemeID, StringComparison.OrdinalIgnoreCase) is not true)
+            SchemeId = schemeID;
 
         if (registrationNumber is not null && RegistrationNumber?.Equals(registrationNumber, StringComparison.OrdinalIgnoreCase) is not true)
             RegistrationNumber = registrationNumber;
 
-        if (sstRegistrationNumber is not null && SSTRegistrationNumber?.Equals(sstRegistrationNumber, StringComparison.OrdinalIgnoreCase) is not true)
-            SSTRegistrationNumber = sstRegistrationNumber;
+        if (sstRegistrationNumber is not null && SstRegistrationNumber?.Equals(sstRegistrationNumber, StringComparison.OrdinalIgnoreCase) is not true)
+            SstRegistrationNumber = sstRegistrationNumber;
 
         if (tourismTaxRegistrationNumber is not null && TourismTaxRegistrationNumber?.Equals(tourismTaxRegistrationNumber, StringComparison.OrdinalIgnoreCase) is not true)
             TourismTaxRegistrationNumber = tourismTaxRegistrationNumber;
@@ -152,8 +152,8 @@ public class Partner : AuditableEntity, IAggregateRoot
         if (phone is not null && Phone?.Equals(phone, StringComparison.OrdinalIgnoreCase) is not true)
             Phone = phone;
 
-        if (msicCode is not null && MSICCode?.Equals(msicCode, StringComparison.OrdinalIgnoreCase) is not true)
-            MSICCode = msicCode;
+        if (msicCode is not null && MsicCode?.Equals(msicCode, StringComparison.OrdinalIgnoreCase) is not true)
+            MsicCode = msicCode;
 
         if (businessActivityDescription is not null && BusinessActivityDescription?.Equals(businessActivityDescription, StringComparison.OrdinalIgnoreCase) is not true)
             BusinessActivityDescription = businessActivityDescription;

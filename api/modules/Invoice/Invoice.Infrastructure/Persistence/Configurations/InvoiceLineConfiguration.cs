@@ -17,6 +17,7 @@ internal class InvoiceLineConfiguration : IEntityTypeConfiguration<InvoiceLine>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.LineNumber).HasMaxLength(50);
         builder.Property(x => x.Quantity).HasColumnType("decimal(18,2)");
+        builder.Property(x => x.UnitPrice).HasColumnType("decimal(18,2)");
         builder.Property(x => x.LineAmount).HasColumnType("decimal(18,2)");
         builder.Property(x => x.Description).HasMaxLength(100);
         builder.Property(x => x.UnitCode).HasMaxLength(10);
