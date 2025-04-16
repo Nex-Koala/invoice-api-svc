@@ -42,7 +42,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: app-build
-        path: app.zip
+        path: app-build.zip
 
     - name: Setup SSH Key & Known Hosts
       run: |
