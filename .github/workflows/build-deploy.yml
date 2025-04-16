@@ -69,12 +69,13 @@ jobs:
         script: |
           cd /nex-koala/api
 
-          # backup existing zip if not exist
-          if [ ! -f backup_app.zip ]; then
-            echo "Creating backup..."
-            cp app.zip backup_app.zip || echo "No previous app.zip to backup"
-          else
-            echo "Backup already exists"
+          # Create backup folder if not exists
+          mkdir -p /nex-koala/backup
+
+          # Backup existing app.zip if exists
+          if [ -f app.zip ]; then
+            echo "Backing up current app.zip to /nex-koala/backup/backup_app.zip"
+            mv app.zip /nex-koala/backup/backup_app.zip
           fi
 
           unzip -o app.zip
