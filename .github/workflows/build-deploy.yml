@@ -44,6 +44,13 @@ jobs:
         name: app-build
         path: app.zip
 
+    - name: Setup SSH Key & Known Hosts
+      run: |
+        mkdir -p ~/.ssh
+        printf "%s\n" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
     - name: Copy Files to Server
       run: |
         scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -P ${{ secrets.SSH_PORT }} app.zip ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/nex-koala/api/
