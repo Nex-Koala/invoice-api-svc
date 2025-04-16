@@ -72,12 +72,12 @@ jobs:
           # Create backup folder if not exists
           mkdir -p /nex-koala/backup
 
-          # Backup existing app.zip if exists
-          if [ -f app.zip ]; then
+          # Backup existing app-build.zip if exists
+          if [ -f app-build.zip ]; then
             echo "Backing up current app.zip to /nex-koala/backup/backup_app.zip"
             mv app.zip /nex-koala/backup/backup_app.zip
           fi
 
-          unzip -o app.zip
+          unzip -o app-build.zip
           rm app.zip
           systemctl restart invoice-api.service
