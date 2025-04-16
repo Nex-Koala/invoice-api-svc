@@ -30,10 +30,10 @@ jobs:
         dotnet restore ./NexKoala.API.sln --verbosity minimal
 
     - name: Build the Application
-      run: dotnet build ./src/NexKoala.API/NexKoala.API.csproj --configuration Release --no-restore
+      run: dotnet build ./NexKoala.API.sln --configuration Release --no-restore
 
     - name: Publish the Application
-      run: dotnet publish ./src/NexKoala.API/NexKoala.API.csproj -c Release -o ./publish --no-build
+      run: dotnet publish ./NexKoala.API.sln -c Release -o ./publish --no-build
 
     - name: Create ZIP Archive
       run: zip -r app.zip ./publish
