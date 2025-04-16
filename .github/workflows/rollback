@@ -19,20 +19,20 @@ jobs:
         script: |
           cd /nex-koala/backup
 
-          latest_zip=$(ls -t api_backup_*.zip 2>/dev/null | head -n 1)
+          latest_tar=$(ls -t api_backup_*.tar.gz 2>/dev/null | head -n 1)
 
-          if [ -z "$latest_zip" ]; then
-            echo "❌ No backup zip file found. Cannot rollback."
+          if [ -z "$latest_tar" ]; then
+            echo "❌ No backup tar.gz file found. Cannot rollback."
             exit 1
           fi
 
-          echo "🔄 Rolling back using $latest_zip"
+          echo "🔄 Rolling back using $latest_tar"
 
           # Clear current deployment
           rm -rf /nex-koala/api/*
 
           # Restore from latest backup
-          unzip -o "/nex-koala/backup/$latest_zip" -d /nex-koala/api
+          tar -xzf "$latest_tar" -C /nex-koala/api
 
           # Restart service
           systemctl restart invoice-api.service
