@@ -76,17 +76,27 @@ jobs:
           # Create backup directory
           mkdir -p /nex-koala/backup
         
-          # If /nex-koala/api has content, zip and move it
+          # Move app.zip temporarily to avoid deletion
+          mv /nex-koala/api/app.zip /tmp/app.zip
+        
+          # Backup existing code
           if [ "$(ls -A /nex-koala/api)" ]; then
-            echo "Zipping and backing up existing code..."
-            zip -r /nex-koala/backup/api_backup_$timestamp.zip /nex-koala/api/*
-            rm -rf /nex-koala/api/*
+            echo "📦 Creating backup archive..."
+            tar -czf /nex-koala/backup/api_backup_$timestamp.tar.gz -C /nex-koala/api .
           else
-            echo "/nex-koala/api is empty, no backup created"
+            echo "ℹ️ /nex-koala/api is empty, no backup created"
           fi
         
-          # Deploy new build
+          # Clear old deployment
+          rm -rf /nex-koala/api/*
+          echo "🧹 Cleared /nex-koala/api"
+        
+          # Move app.zip back and deploy
+          mv /tmp/app.zip /nex-koala/api/
           cd /nex-koala/api
           unzip -o app.zip
           rm app.zip
+        
+          # Restart the service
           systemctl restart invoice-api.service
+          echo "✅ Deployment complete."
