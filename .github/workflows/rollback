@@ -1,4 +1,4 @@
-name: Rollback Deployment
+name: Rollback Latest Backup
 
 on:
   workflow_dispatch:
@@ -17,14 +17,24 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd /nex-koala/api
+          cd /nex-koala/backup
 
-          if [ -f backup_app.zip ]; then
-            echo "Rolling back to backup_app.zip"
-            cp backup_app.zip app.zip
-            unzip -o app.zip
-            systemctl restart invoice-api.service
-          else
-            echo "No backup_app.zip found — rollback failed."
+          latest_zip=$(ls -t api_backup_*.zip 2>/dev/null | head -n 1)
+
+          if [ -z "$latest_zip" ]; then
+            echo "❌ No backup zip file found. Cannot rollback."
             exit 1
           fi
+
+          echo "🔄 Rolling back using $latest_zip"
+
+          # Clear current deployment
+          rm -rf /nex-koala/api/*
+
+          # Restore from latest backup
+          unzip -o "/nex-koala/backup/$latest_zip" -d /nex-koala/api
+
+          # Restart service
+          systemctl restart invoice-api.service
+
+          echo "✅ Rollback complete."
