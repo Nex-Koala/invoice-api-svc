@@ -71,17 +71,22 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd /nex-koala/api
-
-          # Create backup folder if not exists
+          timestamp=$(date +%Y%m%d_%H%M%S)
+        
+          # Create backup directory
           mkdir -p /nex-koala/backup
-
-          # Backup existing app.zip if exists
-          if [ -f app.zip ]; then
-            echo "Backing up current app.zip to /nex-koala/backup/backup_app.zip"
-            mv app.zip /nex-koala/backup/backup_app.zip
+        
+          # If /nex-koala/api has content, zip and move it
+          if [ "$(ls -A /nex-koala/api)" ]; then
+            echo "Zipping and backing up existing code..."
+            zip -r /nex-koala/backup/api_backup_$timestamp.zip /nex-koala/api/*
+            rm -rf /nex-koala/api/*
+          else
+            echo "/nex-koala/api is empty, no backup created"
           fi
-
+        
+          # Deploy new build
+          cd /nex-koala/api
           unzip -o app.zip
           rm app.zip
           systemctl restart invoice-api.service
