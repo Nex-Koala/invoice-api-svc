@@ -129,6 +129,10 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
 
         foreach (var note in paginatedResult.Data)
         {
+            var customer = await dbContext.AccountReceivableCustomers
+                .FirstOrDefaultAsync(c => c.IDCUST == note.CUSTOMER.Trim());
+            note.CustomerBRN = customer?.BRN;
+
             trimStringService.TrimStringProperties(note);
             note.OrderCreditDebitDetails = note.OrderCreditDebitDetails
                 .Select(detail => trimStringService.TrimStringProperties(detail))
@@ -160,6 +164,11 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
 
         foreach (var invoice in paginatedResult.Data)
         {
+            // Fetch the BRN dynamically from APVEN table
+            var supplier = await dbContext.AccountPayableVendors
+                .FirstOrDefaultAsync(c => c.VENDORID == invoice.VDCODE.Trim());
+            invoice.SupplierBRN = supplier?.BRN;
+
             trimStringService.TrimStringProperties(invoice);
             invoice.PurchaseInvoiceDetails = invoice.PurchaseInvoiceDetails
                 .Select(detail => trimStringService.TrimStringProperties(detail))
@@ -191,6 +200,11 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
 
         foreach (var note in paginatedResult.Data)
         {
+            // Fetch the BRN dynamically from APVEN table
+            var supplier = await dbContext.AccountPayableVendors
+                .FirstOrDefaultAsync(c => c.VENDORID == note.VDCODE.Trim());
+            note.SupplierBRN = supplier?.BRN;
+
             trimStringService.TrimStringProperties(note);
             note.PurchaseCreditDebitNoteDetails = note.PurchaseCreditDebitNoteDetails
                 .Select(detail => trimStringService.TrimStringProperties(detail))
