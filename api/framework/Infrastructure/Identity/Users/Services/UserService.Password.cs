@@ -28,11 +28,37 @@ internal sealed partial class UserService
         var token = await userManager.GeneratePasswordResetTokenAsync(user);
         token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-        var resetPasswordUri = $"{origin}/reset-password?token={token}&email={request.Email}";
+        if (!origin.EndsWith("/"))
+        {
+            origin += "/";
+        }
+
+        var resetPasswordUrl = $"{origin}user/reset-password?token={token}&email={request.Email}";
+
+        var emailBody = $@"
+                <html>
+                    <body style='font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; padding: 20px;'>
+                        <div style='max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px;'>
+                            <h2 style='text-align: center;'>Password Reset Request</h2>
+                            <p>Hi {user.FirstName},</p>
+                            <p>We received a request to reset your password. You can reset your password by clicking the link below:</p>
+                            <p style='text-align: center;'>
+                                <a href='{resetPasswordUrl}' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>
+                                    Reset Password
+                                </a>
+                            </p>
+                            <p>If you did not request this, please ignore this email. Your password will remain unchanged.</p>
+                            <p>If you have any questions, feel free to reach out to our support team at 
+                                <a href='mailto:contactus@nexkoala.com.my'>contactus@nexkoala.com.my</a>.</p>
+                            <p>Best regards,<br/>The Nex Koala e-Invoice Team</p>
+                        </div>
+                    </body>
+                </html>";
+
         var mailRequest = new MailRequest(
             new Collection<string> { user.Email },
             "Reset Password",
-            $"Please reset your password using the following link: {resetPasswordUri}");
+            emailBody);
 
         jobService.Enqueue(() => mailService.SendAsync(mailRequest, CancellationToken.None));
     }

@@ -3,4 +3,5 @@
 public class OriginOptions
 {
     public Uri? OriginUrl { get; set; }
+    public Uri? FrontendUrl { get; set; }
 }

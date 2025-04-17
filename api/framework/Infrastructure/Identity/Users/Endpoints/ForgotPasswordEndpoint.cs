@@ -27,13 +27,13 @@ public static class ForgotPasswordEndpoint
             // Obtain origin from appsettings
             var origin = settings.Value;
 
-            if (origin?.OriginUrl == null)
+            if (origin?.FrontendUrl == null)
             {
-                // Handle the case where OriginUrl is null
+                // Handle the case where Frontend Url is null
                 return Results.BadRequest("Origin URL is not configured.");
             }
 
-            await userService.ForgotPasswordAsync(command, origin.OriginUrl.ToString(), cancellationToken);
+            await userService.ForgotPasswordAsync(command, origin.FrontendUrl.ToString(), cancellationToken);
             return Results.Ok("Password reset email sent.");
         })
         .WithName(nameof(ForgotPasswordEndpoint))

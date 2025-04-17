@@ -24,6 +24,8 @@ using NexKoala.Framework.Core.Storage;
 using NexKoala.Framework.Core.Jobs;
 using NexKoala.Framework.Core.Mail;
 using NexKoala.Framework.Core.Caching;
+using Microsoft.Extensions.Options;
+using NexKoala.Framework.Core.Origin;
 
 namespace NexKoala.Framework.Infrastructure.Identity.Users.Services;
 
@@ -36,7 +38,8 @@ internal sealed partial class UserService(
     IJobService jobService,
     IMailService mailService,
     IMultiTenantContextAccessor<TenantInfo> multiTenantContextAccessor,
-    IStorageService storageService
+    IStorageService storageService,
+    IOptions<OriginOptions> originOptions
     ) : IUserService
 {
     private void EnsureValidTenant()
@@ -126,16 +129,47 @@ internal sealed partial class UserService(
         // add basic role
         await userManager.AddToRoleAsync(user, IdentityConstants.Roles.Basic);
 
-        // send confirmation mail
-        //if (!string.IsNullOrEmpty(user.Email))
-        //{
-        //    string emailVerificationUri = await GetEmailVerificationUriAsync(user, origin);
-        //    var mailRequest = new MailRequest(
-        //        new Collection<string> { user.Email },
-        //        "Confirm Registration",
-        //        emailVerificationUri);
-        //    jobService.Enqueue("email", () => mailService.SendAsync(mailRequest, CancellationToken.None));
-        //}
+        // Send reset password email
+        if (!string.IsNullOrEmpty(user.Email))
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            string frontendUrl = originOptions.Value.FrontendUrl.AbsoluteUri;
+            if (!frontendUrl.EndsWith("/"))
+            {
+                frontendUrl += "/";
+            }
+
+            string resetPasswordUrl = $"{frontendUrl}user/reset-password?token={token}&email={request.Email}";
+
+            var emailBody = $@"
+                <html>
+                    <body style='font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; padding: 20px;'>
+                        <div style='max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px;'>
+                            <h2 style='text-align: center;'>Welcome to Nex Koala e-Invoice!</h2>
+                            <p>Hi {user.FirstName},</p>
+                            <p>We're excited to have you on board! To get started, please set up a new password for your account.</p>
+                            <p style='text-align: center;'>
+                                <a href='{resetPasswordUrl}' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>
+                                    Reset My Password
+                                </a>
+                            </p>
+                            <p>The link will expire in 24 hours for security reasons.</p>
+                            <p>If you have any questions, feel free to reach out to our support team at 
+                            <a href='mailto:contactus@nexkoala.com.my'>contactus@nexkoala.com.my</a>.</p>
+                            <p>Best regards,<br/>The Nex Koala e-Invoice Team</p>
+                        </div>
+                    </body>
+                </html>";
+
+            var mailRequest = new MailRequest(
+                new Collection<string> { user.Email },
+                "Welcome to Nex Koala e-Invoice – Please Reset Your Password",
+                emailBody);
+
+            jobService.Enqueue(() => mailService.SendAsync(mailRequest, CancellationToken.None));
+        }
 
         return new RegisterUserResponse(user.Id);
     }
