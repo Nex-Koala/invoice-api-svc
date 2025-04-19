@@ -17,13 +17,19 @@ namespace NexKoala.WebApi.Invoice.Domain.Entities.OE
         public string CUSTOMER { get; set; } // Customer Identifier
         public string BILNAME { get; set; } // Billing Name
         public string BILEMAIL { get; set; } // Billing Email
+        public string BILPHONE { get; set; } // Billing Phone
         public string BILADDR1 { get; set; } // Billing Address Line 1
         public string BILADDR2 { get; set; } // Billing Address Line 2
         public string BILADDR3 { get; set; } // Billing Address Line 3
         public string BILADDR4 { get; set; } // Billing Address Line 4
+        public string BILCITY { get; set; } // Buyer City
+        public string BILSTATE { get; set; } // Buyer State 
+        public string BILZIP { get; set; } // Buyer Zip
+        public string BILCOUNTRY { get; set; } // Buyer Country
         public decimal INVDATE { get; set; } // Invoice Date
         public decimal CRDDATE { get; set; } // Credit/Debit Date
         public decimal CRDNET { get; set; } // Total Amount
+        public decimal CRDNETNOTX { get; set; } // Total Excluding Tax
         public decimal CRDITAXTOT { get; set; } // Total Tax Amount
         public decimal CRDNETWTX { get; set; } // Total Payable Amount
         public string TAXGROUP { get; set; } // Tax Group Code
@@ -33,6 +39,9 @@ namespace NexKoala.WebApi.Invoice.Domain.Entities.OE
         public string SHPADDR2 { get; set; } // Shipping Address Line 2
         public string SHPADDR3 { get; set; } // Shipping Address Line 3
         public string SHPADDR4 { get; set; } // Shipping Address Line 4
+        public string CRSOURCURR { get; set; } // Invoice Currency Code
+        public string CustomerBRN { get; set; }
+        public string CustomerTIN { get; set; } = "EI00000000010";
         public ICollection<OrderCreditDebitDetail> OrderCreditDebitDetails { get; set; }
     }
 }

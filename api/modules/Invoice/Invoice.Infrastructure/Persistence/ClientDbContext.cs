@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NexKoala.WebApi.Invoice.Domain.Entities.AP;
 using NexKoala.WebApi.Invoice.Domain.Entities.AR;
 using NexKoala.WebApi.Invoice.Domain.Entities.OE;
 using NexKoala.WebApi.Invoice.Domain.Entities.PO;
@@ -32,6 +33,9 @@ public class ClientDbContext : DbContext
     // Account Receivable Customer Entities
     public DbSet<AccountReceivableCustomer> AccountReceivableCustomers { get; set; }
 
+    // Account Payable Vendor Entities
+    public DbSet<AccountPayableVendor> AccountPayableVendors { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -55,6 +59,8 @@ public class ClientDbContext : DbContext
         // Configure Credit/Debit Note Tables (Order Entry)
         modelBuilder.Entity<OrderCreditDebitHeader>()
             .ToTable("OECRDH")
+            .Ignore(o => o.CustomerTIN)
+            .Ignore(o => o.CustomerBRN)
             .HasKey(o => o.CRDUNIQ);
 
         modelBuilder.Entity<OrderCreditDebitDetail>()
@@ -69,6 +75,8 @@ public class ClientDbContext : DbContext
         // Configure Purchase Invoice Tables (Self Billing)
         modelBuilder.Entity<PurchaseInvoiceHeader>()
             .ToTable("POINVH1")
+            .Ignore(o => o.SupplierTIN)
+            .Ignore(o => o.SupplierBRN)
             .HasKey(p => p.INVHSEQ);
 
         modelBuilder.Entity<PurchaseInvoiceDetail>()
@@ -84,6 +92,8 @@ public class ClientDbContext : DbContext
         // Configure Purchase Credit/Debit Note Tables (Self Billing)
         modelBuilder.Entity<PurchaseCreditDebitNoteHeader>()
             .ToTable("POCRNH1")
+            .Ignore(o => o.SupplierTIN)
+            .Ignore(o => o.SupplierBRN)
             .HasKey(p => p.CRNHSEQ);
 
         modelBuilder.Entity<PurchaseCreditDebitNoteDetail>()
@@ -99,6 +109,10 @@ public class ClientDbContext : DbContext
         modelBuilder.Entity<AccountReceivableCustomer>()
             .ToTable("ARCUS")
             .HasKey(c => c.IDCUST);
+
+        modelBuilder.Entity<AccountPayableVendor>()
+            .ToTable("APVEN")
+            .HasKey("VENDORID");
 
         ConfigureFieldMappings(modelBuilder);
     }

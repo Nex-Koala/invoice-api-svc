@@ -37,6 +37,7 @@ public static class SubmitInvoiceEndpoint
                         });
                     }
 
+                    request.UserId = userId;
                     var response = await mediator.Send(request);
                     return Results.Ok(response);
                 }

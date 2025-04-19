@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using MediatR;
 using Newtonsoft.Json;
-using NexKoala.Framework.Core.Exceptions;
 using NexKoala.Framework.Core.Wrappers;
 using NexKoala.WebApi.Invoice.Application.Dtos.Ubl;
 using NexKoala.WebApi.Invoice.Application.Dtos.Ubl.Common;
@@ -15,6 +14,9 @@ using NexKoala.Framework.Core.Persistence;
 using NexKoala.WebApi.Invoice.Domain.Entities;
 using NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Invoice;
 using Microsoft.Extensions.DependencyInjection;
+using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specifications;
+using Microsoft.Extensions.Logging;
+using NexKoala.WebApi.Invoice.Application.Features.UomMappings.Specifications;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.SubmitInvoice.v1;
 
@@ -23,11 +25,16 @@ public sealed class SubmitInvoiceComamndHandler
 {
     private readonly ILhdnApi _lhdnApi;
     private readonly IRepository<InvoiceDocument> _invoiceDocumentRepository;
+    private readonly IRepository<UomMapping> _uomMappingRepository;
+    private readonly ILogger<SubmitInvoiceComamndHandler> _logger;
 
-    public SubmitInvoiceComamndHandler(ILhdnApi lhdnApi, [FromKeyedServices("invoice:invoiceDocuments")] IRepository<InvoiceDocument> invoiceDocumentRepository)
+    public SubmitInvoiceComamndHandler(ILhdnApi lhdnApi, [FromKeyedServices("invoice:invoiceDocuments")] IRepository<InvoiceDocument> invoiceDocumentRepository,
+        [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, ILogger<SubmitInvoiceComamndHandler> logger)
     {
         _lhdnApi = lhdnApi;
         _invoiceDocumentRepository = invoiceDocumentRepository;
+        _uomMappingRepository = uomMappingRepository;
+        _logger = logger;
     }
 
     public async Task<object> Handle(
@@ -37,56 +44,52 @@ public sealed class SubmitInvoiceComamndHandler
     {
         var now = DateTime.UtcNow.AddSeconds(-10);
 
-        // store data to db
-        var supplier = new Supplier
+        if (!Guid.TryParse(request.UserId, out Guid userId))
         {
-            Name = request.SupplierName,
-            Tin = request.SupplierTIN,
-            Brn = request.SupplierBRN,
-            Address = FormatAddress(request.SupplierAddressLine1, request.SupplierAddressLine2, request.SupplierAddressLine3),
-            City = request.SupplierCity,
-            PostalCode = request.SupplierPostalCode,
-            CountryCode = request.SupplierCountryCode
-        };
+            return new Response<object>("Invalid or missing user ID");
+        }
 
-        var customer = new Customer
+        // check submission is exist
+        var existingInvoiceDocument = await _invoiceDocumentRepository
+            .FirstOrDefaultAsync(new GetInvoiceDocumentByInvoiceNumber(request.Irn), cancellationToken);
+
+        if (existingInvoiceDocument != null)
         {
-            Name = request.CustomerName,
-            Tin = request.CustomerTIN,
-            Brn = request.CustomerBRN,
-            Address = FormatAddress(request.CustomerAddressLine1, request.CustomerAddressLine2, request.CustomerAddressLine3),
-            City = request.CustomerCity,
-            PostalCode = request.CustomerPostalCode,
-            CountryCode = request.CustomerCountryCode
-        };
+            _logger.LogError($"Invoice with invoice number {request.Irn} has already been submitted.");
+            return new Response<object>("Invoice has already been submitted.");
+        }
 
-        var invoiceLine = request.ItemList.ConvertAll(item => new InvoiceLine()
+        // get user uom mapping
+        var userRequestUomCodes = request.ItemList
+            .Select(i => i.Unit)
+            .Distinct()
+            .ToList();
+
+        var userUomMappings = await _uomMappingRepository
+            .ListAsync(new UomMappingByUserIdAndCodeList(userId, userRequestUomCodes), cancellationToken);
+
+        var mappedCodes = userUomMappings
+            .Select(m => m.Uom.Code)
+            .Distinct()
+            .ToList();
+
+        // find missing codes
+        var missingCodes = userRequestUomCodes
+            .Except(mappedCodes, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        // check if any are missing
+        if (missingCodes.Count != 0)
         {
-            LineNumber = item.Id,
-            Quantity = item.Qty,
-            UnitPrice = item.UnitPrice,
-            LineAmount = item.TotItemVal,
-            Description = item.Description,
-            UnitCode = item.Unit,
-            CurrencyCode = request.CurrencyCode
-        });
+            _logger.LogError($"User with ID {userId} is missing UOM mappings for: {string.Join(", ", missingCodes)}");
+            return new Response<object>($"Missing UOM mapping for: {string.Join(", ", missingCodes)}");
+        }
 
-        var invoiceDocument = new InvoiceDocument()
-        {
-            InvoiceNumber = request.BillingReferenceID,
-            IssueDate = now,
-            DocumentCurrencyCode = request.CurrencyCode,
-            TaxCurrencyCode = request.CurrencyCode,
-            TotalAmount = request.TotalAmount,
-            TaxAmount = request.TaxAmount,
-            Supplier = supplier,
-            SupplierId = supplier.Id,
-            Customer = customer,
-            CustomerId = customer.Id,
-            InvoiceLines = invoiceLine
-        };
-
-        await _invoiceDocumentRepository.AddAsync(invoiceDocument, cancellationToken);
+        var uomMappingDictionary = userUomMappings.ToDictionary(
+            m => m.Uom.Code, 
+            m => m.LhdnUomCode,
+            StringComparer.OrdinalIgnoreCase
+        );
 
         // Step 1: Construct the Invoice JSON document
         var ublInvoice = new UblInvoiceDocument()
@@ -405,7 +408,7 @@ public sealed class SubmitInvoiceComamndHandler
                         .. request.ItemList.ConvertAll(item => new Dtos.Ubl.Invoice.InvoiceLine()
                         {
                             Id = [new() { _ = item.Id.ToString() }],
-                            InvoicedQuantity = [new() { _ = item.Qty, UnitCode = item.Unit }],
+                            InvoicedQuantity = [new() { _ = item.Qty, UnitCode = uomMappingDictionary[item.Unit] }],
                             LineExtensionAmount =
                             [
                                 new() { _ = item.TotItemVal, CurrencyId = request.CurrencyCode },
@@ -518,7 +521,7 @@ public sealed class SubmitInvoiceComamndHandler
                                     ],
                                 },
                             ],
-                            ItemPriceExtension = 
+                            ItemPriceExtension =
                             [
                                 new()
                                 {
@@ -820,11 +823,95 @@ public sealed class SubmitInvoiceComamndHandler
 
         var response = await _lhdnApi.SubmitInvoiceAsync(payload);
 
-        // update uuid
-        invoiceDocument.Uuid = response.AcceptedDocuments.FirstOrDefault()?.Uuid;
-        await _invoiceDocumentRepository.UpdateAsync(invoiceDocument, cancellationToken);
+        // submission success
+        if (response.AcceptedDocuments.Count > 0)
+        {
+            // store data to db
+            var supplier = new Supplier
+            {
+                Name = request.SupplierName,
+                Tin = request.SupplierTIN,
+                Brn = request.SupplierBRN,
+                Address = FormatAddress(request.SupplierAddressLine1, request.SupplierAddressLine2, request.SupplierAddressLine3),
+                City = request.SupplierCity,
+                PostalCode = request.SupplierPostalCode,
+                CountryCode = request.SupplierCountryCode
+            };
 
-        return new Response<SubmitInvoiceResponse>(response, message: null);
+            var customer = new Customer
+            {
+                Name = request.CustomerName,
+                Tin = request.CustomerTIN,
+                Brn = request.CustomerBRN,
+                Address = FormatAddress(request.CustomerAddressLine1, request.CustomerAddressLine2, request.CustomerAddressLine3),
+                City = request.CustomerCity,
+                PostalCode = request.CustomerPostalCode,
+                CountryCode = request.CustomerCountryCode
+            };
+
+            var invoiceLine = request.ItemList.ConvertAll(item => new InvoiceLine()
+            {
+                LineNumber = item.Id,
+                Quantity = item.Qty,
+                UnitPrice = item.UnitPrice,
+                LineAmount = item.TotItemVal,
+                Description = item.Description,
+                UnitCode = uomMappingDictionary[item.Unit],
+                CurrencyCode = request.CurrencyCode
+            });
+
+            var invoiceDocument = new InvoiceDocument()
+            {
+                Uuid = response.AcceptedDocuments.FirstOrDefault()?.Uuid,
+                InvoiceNumber = request.BillingReferenceID,
+                IssueDate = now,
+                DocumentCurrencyCode = request.CurrencyCode,
+                TaxCurrencyCode = request.CurrencyCode,
+                TotalAmount = request.TotalAmount,
+                TaxAmount = request.TaxAmount,
+                Supplier = supplier,
+                SupplierId = supplier.Id,
+                Customer = customer,
+                CustomerId = customer.Id,
+                InvoiceLines = invoiceLine
+            };
+
+            await _invoiceDocumentRepository.AddAsync(invoiceDocument, cancellationToken);
+            return new Response<SubmitInvoiceResponse>(response, "Successfully submit invoice");
+        }
+        else
+        {
+            var errorMessages = new List<string>();
+            if (response.RejectedDocuments != null)
+            {
+                foreach (var rejectedDoc in response.RejectedDocuments)
+                {
+                    var error = rejectedDoc?.Error;
+                    if (error?.Details != null && error.Details.Any())
+                    {
+                        foreach (var detail in error.Details)
+                        {
+                            var message = $"{error?.Message ?? "Unknown Error"}: {detail?.Message ?? "No detail message"}";
+                            errorMessages.Add(message);
+                        }
+                    }
+                    else
+                    {
+                        var message = $"{error?.Message ?? "Unknown Error"}";
+                        errorMessages.Add(message);
+                    }
+                }
+            }
+
+            var errorResponse = new Response<object>
+            {
+                Succeeded = false,
+                Errors = errorMessages,
+                Message = "Failed to submit invoice"
+            };
+
+            return errorResponse;
+        }
     }
 
     public static string FormatAddress(string line1, string line2, string line3)

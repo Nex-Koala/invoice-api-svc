@@ -10,10 +10,10 @@ namespace NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Error
     {
         public string PropertyName { get; set; }
         public string PropertyPath { get; set; }
-        public string ErrorCode { get; set; }
+        public string Code { get; set; }
         public string Error { get; set; }
-        public string ErrorMS { get; set; }
+        public string Message { get; set; }
         public string Target { get; set; }
-        public List<ErrorDetail> InnerError { get; set; }
+        public List<ErrorDetail> Details { get; set; }
     }
 }

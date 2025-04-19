@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NexKoala.Framework.Core.Auth.Jwt;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace NexKoala.Framework.Infrastructure.Auth.Jwt;
 public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
@@ -48,13 +50,15 @@ public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions
         {
             OnChallenge = context =>
             {
-                context.HandleResponse();
-                if (!context.Response.HasStarted)
+                var endpoint = context.HttpContext.GetEndpoint();
+                if (endpoint?.Metadata.GetMetadata<IAllowAnonymous>() != null)
                 {
-                    throw new UnauthorizedException();
+                    // Skip challenge for anonymous endpoints
+                    return Task.CompletedTask;
                 }
 
-                return Task.CompletedTask;
+                context.HandleResponse();
+                throw new UnauthorizedException();
             },
             OnForbidden = _ => throw new ForbiddenException(),
             OnMessageReceived = context =>
