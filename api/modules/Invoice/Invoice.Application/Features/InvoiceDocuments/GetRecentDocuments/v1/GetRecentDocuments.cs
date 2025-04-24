@@ -27,4 +27,5 @@ public partial class GetRecentDocuments : IRequest<Response<RecentDocuments>>
     public string? IssuerTin { get; set; }
     public string? IssuerIdType { get; set; }
     public string? IssuerId { get; set; }
+    public string? UserId { get; set; } = default!;
 }

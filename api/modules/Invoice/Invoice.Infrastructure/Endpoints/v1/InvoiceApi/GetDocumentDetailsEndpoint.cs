@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using NexKoala.Framework.Core.Wrappers;
 using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GetDocumentDetails.v1;
 using NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Document;
+using NexKoala.Framework.Infrastructure.Identity.Users;
 
 namespace NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.InvoiceApi;
 
@@ -15,9 +16,14 @@ public static class GetDocumentDetailsEndpoint
         return endpoints
             .MapGet(
                 "/{uuid}/details",
-                async (ISender mediator, string uuid) =>
+                async (ISender mediator, string uuid, HttpContext context) =>
                 {
-                    var response = await mediator.Send(new GetDocumentDetails(uuid));
+                    if (context.User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
+                    {
+                        return Results.BadRequest();
+                    }
+
+                    var response = await mediator.Send(new GetDocumentDetails(uuid, userId));
                     return Results.Ok(response);
                 }
             )

@@ -8,4 +8,4 @@ using NexKoala.Framework.Core.Wrappers;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GenerateInvoice.v1;
 
-public record GenerateInvoiceCommand(string Uuid) : IRequest<Response<byte[]>>;
+public record GenerateInvoiceCommand(string Uuid, string UserId) : IRequest<Response<byte[]>>;

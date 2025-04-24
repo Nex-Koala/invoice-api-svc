@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using NexKoala.Framework.Core.Wrappers;
 using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GetRawDocument.v1;
 using NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Document;
+using NexKoala.Framework.Infrastructure.Identity.Users;
 
 namespace NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.InvoiceApi;
 
@@ -15,9 +16,13 @@ public static class GetRawDocumentEndpoint
         return endpoints
             .MapGet(
                 "/{uuid}/raw",
-                async (ISender mediator, string uuid) =>
+                async (ISender mediator, string uuid, HttpContext context) =>
                 {
-                    var response = await mediator.Send(new GetRawDocument(uuid));
+                    if (context.User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
+                    {
+                        return Results.BadRequest();
+                    }
+                    var response = await mediator.Send(new GetRawDocument(uuid, userId));
                     return Results.Ok(response);
                 }
             )

@@ -16,7 +16,7 @@ public sealed class GetDocumentDetailsHandler(
     )
     {
         ArgumentNullException.ThrowIfNull(request);
-        var item = await lhdnApi.GetDocumentDetailsAsync(request.Uuid);
+        var item = await lhdnApi.GetDocumentDetailsAsync(request.Uuid, request.OnBehalfOf);
 
         if (item == null)
             throw new GenericException("Failed to get document details.");
