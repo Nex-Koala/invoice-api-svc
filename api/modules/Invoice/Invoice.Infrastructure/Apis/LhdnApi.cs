@@ -36,10 +36,11 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
 
         public async Task<SubmitInvoiceResponse> SubmitInvoiceAsync(UblDocumentRequest payload, string onBehalfOf)
         {
-            var token = await GetTokenAsync(onBehalfOf); // Get token from LHDN API
+            var token = await GetTokenAsync(); // Get token from LHDN API
 
             var client = _httpClientFactory.CreateClient("LhdnApi");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //client.DefaultRequestHeaders.Add("onbehalfof", onBehalfOf); need register an intermediary company!
 
             var requestContent = new StringContent(
                 JsonConvert.SerializeObject(payload),
@@ -65,10 +66,11 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
         {
             try
             {
-                var token = await GetTokenAsync(onBehalfOf);
+                var token = await GetTokenAsync();
 
                 var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                //client.DefaultRequestHeaders.Add("onbehalfof", onBehalfOf); need register an intermediary company!
 
                 var response = await client.GetAsync($"/api/v1.0/documents/{uuid}/raw");
 
@@ -99,10 +101,11 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
         {
             try
             {
-                var token = await GetTokenAsync(onBehalfOf); // Get token from LHDN API
+                var token = await GetTokenAsync(); // Get token from LHDN API
 
                 var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                //client.DefaultRequestHeaders.Add("onbehalfof", onBehalfOf); need register an intermediary company!
 
                 var response = await client.GetAsync($"/api/v1.0/documents/{uuid}/details");
 
@@ -147,10 +150,11 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
                 { "issuerId", request.IssuerId },
             };
 
-                var token = await GetTokenAsync(onBehalfOf); // Get token from LHDN API
+                var token = await GetTokenAsync(); // Get token from LHDN API
 
                 var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                //client.DefaultRequestHeaders.Add("onbehalfof", onBehalfOf); need register an intermediary company!
 
                 var queryString = QueryHelpers.AddQueryString("/api/v1.0/documents/recent", queryDictionary
                    .Where(p => !string.IsNullOrEmpty(p.Value))
@@ -174,48 +178,46 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
             }
         }
 
-        private async Task<string> GetTokenAsync(string onBehalfOf)
+        private async Task<string> GetTokenAsync()
         {
-            var token = string.Empty;
-
             var client = _httpClientFactory.CreateClient("LhdnApi");
-            var requestContent = new StringContent(
-                new FormUrlEncodedContent(
-                    new[]
-                    {
-                            new KeyValuePair<string, string>("client_id", _settings.ClientId), // Replace with your actual client_id
-                            new KeyValuePair<string, string>(
-                                "client_secret",
-                                _settings.ClientSecret
-                            ), // Replace with your actual client_secret
-                            new KeyValuePair<string, string>("grant_type", "client_credentials"),
-                            new KeyValuePair<string, string>("scope", "InvoicingAPI"),
-                            new KeyValuePair<string, string>("onbehalfof", onBehalfOf ?? _settings.OnBehalfOf),
-                    }
-                )
-                    .ReadAsStringAsync()
-                    .Result,
-                Encoding.UTF8,
-                "application/x-www-form-urlencoded"
-            );
 
-            var response = await client.PostAsync("/connect/token", requestContent);
-
-            if (response.IsSuccessStatusCode)
+            var requestContent = new FormUrlEncodedContent(new[]
             {
+                new KeyValuePair<string, string>("client_id", _settings.ClientId),
+                new KeyValuePair<string, string>("client_secret", _settings.ClientSecret),
+                new KeyValuePair<string, string>("grant_type", "client_credentials"),
+                new KeyValuePair<string, string>("scope", "InvoicingAPI"),
+            });
+
+            try
+            {
+                var response = await client.PostAsync("/connect/token", requestContent);
+
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(
-                    responseContent
-                );
-                token = tokenResponse.AccessToken;
-            }
 
-            if (string.IsNullOrEmpty(token))
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Failed to generate token from LHDN. StatusCode: {StatusCode}, Response: {Response}",
+                        response.StatusCode, responseContent);
+                    throw new GenericException($"Failed to generate token: {response.StatusCode}");
+                }
+
+                var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
+
+                if (tokenResponse == null || string.IsNullOrWhiteSpace(tokenResponse.AccessToken))
+                {
+                    _logger.LogError("Token response is null or missing access token. Response content: {Response}", responseContent);
+                    throw new GenericException("Token generation failed: Access token is missing.");
+                }
+
+                return tokenResponse.AccessToken;
+            }
+            catch (Exception ex)
             {
-                throw new GenericException("Failed to generate token");
+                _logger.LogError(ex, "Exception occurred while generating LHDN token.");
+                throw new GenericException("An error occurred while generating token.");
             }
-
-            return token;
         }
     }
 }

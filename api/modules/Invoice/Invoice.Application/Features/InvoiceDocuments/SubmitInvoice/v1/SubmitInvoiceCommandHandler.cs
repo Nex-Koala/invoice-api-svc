@@ -55,9 +55,16 @@ public sealed class SubmitInvoiceComamndHandler
         // get user TIN
         var partner = await _partnerRepository.FirstOrDefaultAsync(new PartnerByUserIdSpec(request.UserId), cancellationToken);
         string partnerTin = partner!.Tin;
-        if(partnerTin == null)
+
+        if (string.IsNullOrWhiteSpace(partnerTin))
         {
-            return new Response<object>($"The TIN (Tax Identification Number) for {partner.Name} is not set.");
+            return new Response<object>($"The TIN (Taxpayer Identification Number) for {partner.Name} is not set.");
+        }
+
+        if (!string.Equals(partner.Tin, request.SupplierTIN, StringComparison.OrdinalIgnoreCase))
+        {
+            _logger.LogWarning($"Request supplier TIN ({request.SupplierTIN}) not match the taxpayer TIN for the client ({partner.Tin}). Overriding Supplier TIN with {partner.Tin}.");
+            request.SupplierTIN = partner.Tin;
         }
 
         // check submission is exist
@@ -204,24 +211,24 @@ public sealed class SubmitInvoiceComamndHandler
                                                 new()
                                                 {
                                                     _ = request.SupplierBRN,
-                                                    SchemeId = "NRIC",
+                                                    SchemeId = "NRIC", //TODO: need switch between NRIC, BRN, PASSPORT, OR ARMY
                                                 },
                                             ],
                                         },
-                                        new()
-                                        {
-                                            Id =
-                                            [
-                                                new() { _ = request.SupplierSST, SchemeId = "SST" },
-                                            ],
-                                        },
-                                        new()
-                                        {
-                                            Id =
-                                            [
-                                                new() { _ = request.SupplierTTX, SchemeId = "TTX" },
-                                            ],
-                                        },
+                                        //new()
+                                        //{
+                                        //    Id =
+                                        //    [
+                                        //        new() { _ = "", SchemeId = "SST" },
+                                        //    ],
+                                        //},
+                                        //new()
+                                        //{
+                                        //    Id =
+                                        //    [
+                                        //        new() { _ = "", SchemeId = "TTX" },
+                                        //    ],
+                                        //},
                                     ],
                                     PostalAddress =
                                     [
@@ -384,7 +391,7 @@ public sealed class SubmitInvoiceComamndHandler
                                     [
                                         new()
                                         {
-                                            Telephone = [new() { _ = request.CustomerTelephone }],
+                                            Telephone = [new() { _ = FormatPhoneNumber(request.CustomerTelephone) }],
                                             ElectronicMail = [new() { _ = request.CustomerEmail }],
                                         },
                                     ],
@@ -935,5 +942,17 @@ public sealed class SubmitInvoiceComamndHandler
         };
 
         return string.Join(", ", addressParts.Where(part => !string.IsNullOrWhiteSpace(part)));
+    }
+
+    private static string FormatPhoneNumber(string inputPhone)
+    {
+        if (string.IsNullOrWhiteSpace(inputPhone))
+            return "+60187912826"; 
+
+        if (inputPhone.Trim().StartsWith("+"))
+            return inputPhone.Trim().Replace(" ", "").Replace("-", "");
+
+        var cleanedPhone = new string(inputPhone.Where(char.IsDigit).ToArray());
+        return "+" + cleanedPhone;
     }
 }

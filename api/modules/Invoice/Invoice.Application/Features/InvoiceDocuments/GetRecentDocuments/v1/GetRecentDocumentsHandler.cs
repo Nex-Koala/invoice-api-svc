@@ -24,16 +24,24 @@ public sealed class GetRecentDocumentsHandler(
 
         // get user TIN
         var partner = await partnerRepository.FirstOrDefaultAsync(new PartnerByUserIdSpec(request.UserId), cancellationToken);
-        string partnerTin = partner!.Tin;
-        if (partnerTin == null)
+
+        if (partner == null)
+        {
+            return new Response<RecentDocuments>("Partner not found.");
+        }
+
+        if (string.IsNullOrWhiteSpace(partner.Tin))
         {
             return new Response<RecentDocuments>($"The TIN (Tax Identification Number) for {partner.Name} is not set.");
         }
 
+        string partnerTin = partner!.Tin;
         var item = await lhdnApi.GetRecentDocumentsAsync(request, partnerTin);
 
         if (item == null)
+        {
             throw new GenericException("Failed to get document.");
+        }
 
         return new Response<RecentDocuments>(item);
     }

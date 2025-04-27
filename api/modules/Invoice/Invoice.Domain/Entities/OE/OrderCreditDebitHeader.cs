@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace NexKoala.WebApi.Invoice.Domain.Entities.OE
 {
@@ -41,7 +42,9 @@ namespace NexKoala.WebApi.Invoice.Domain.Entities.OE
         public string SHPADDR4 { get; set; } // Shipping Address Line 4
         public string CRSOURCURR { get; set; } // Invoice Currency Code
         public string CustomerBRN { get; set; }
-        public string CustomerTIN { get; set; } = "EI00000000010";
+        //public string CustomerTIN { get; set; } = "EI00000000010"; //ERR237 Buyer's details cannot be general TIN (010) for issuance of individual e-Invoice
+        public string CustomerTIN { get; set; } = "C10285856100";
+        //random TIN no. need verify with client where to get client TIN
         public ICollection<OrderCreditDebitDetail> OrderCreditDebitDetails { get; set; }
     }
 }
