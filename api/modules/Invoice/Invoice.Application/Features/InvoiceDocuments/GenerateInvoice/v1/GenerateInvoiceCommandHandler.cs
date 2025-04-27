@@ -2,12 +2,17 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Xsl;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NexKoala.Framework.Core.Exceptions;
+using NexKoala.Framework.Core.Persistence;
 using NexKoala.Framework.Core.Wrappers;
 using NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Document;
+using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specifications;
+using NexKoala.WebApi.Invoice.Application.Features.Partners.Specifications;
 using NexKoala.WebApi.Invoice.Application.Interfaces;
+using NexKoala.WebApi.Invoice.Domain.Entities;
 using NexKoala.WebApi.Invoice.Domain.Settings;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GenerateInvoice.v1;
@@ -16,7 +21,9 @@ public sealed class GenerateInvoiceCommandHandler(
     ILhdnApi lhdnApi,
     ILogger<GenerateInvoiceCommandHandler> logger,
     IOptions<EInvoiceSettings> options,
-    IInvoiceService invoiceService
+    IInvoiceService invoiceService,
+    [FromKeyedServices("invoice:invoiceDocuments")] IRepository<InvoiceDocument> invoiceDocumentRepository,
+    [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository
 ) : IRequestHandler<GenerateInvoiceCommand, Response<byte[]>>
 {
     public async Task<Response<byte[]>> Handle(
@@ -32,9 +39,23 @@ public sealed class GenerateInvoiceCommandHandler(
             templatePath = Path.GetFullPath(Path.Combine(basePath, templatePath));
         }
 
-        var rawDocument = await lhdnApi.GetDocumentAsync(request.Uuid);
+        var invoiceDocument = await invoiceDocumentRepository.FirstOrDefaultAsync(new GetInvoiceDocumentByUuid(request.Uuid), cancellationToken);
+        if (invoiceDocument == null)
+        {
+            throw new GenericException("Invoice not found");
+        }
+
+        // get user TIN
+        var partner = await partnerRepository.FirstOrDefaultAsync(new PartnerByUserIdSpec(request.UserId), cancellationToken);
+        string partnerTin = partner!.Tin;
+        if (partnerTin == null)
+        {
+            return new Response<byte[]>($"The TIN (Tax Identification Number) for {partner.Name} is not set.");
+        }
+
+        var rawDocument = await lhdnApi.GetDocumentAsync(request.Uuid, partnerTin);
         var baseUrl = options.Value.ApiBaseUrl;
-        string invoiceXmlTree = GenerateInvoiceXml(rawDocument, baseUrl, invoiceService);
+        string invoiceXmlTree = GenerateInvoiceXml(invoiceDocument, rawDocument, baseUrl, invoiceService);
 
         byte[] pdfBytes = invoiceService.GenerateInvoice(invoiceXmlTree, templatePath);
 
@@ -66,6 +87,7 @@ public sealed class GenerateInvoiceCommandHandler(
     }
 
     public static string GenerateInvoiceXml(
+        InvoiceDocument invoiceDocument,
         RawDocument invoice,
         string baseUrl,
         IInvoiceService invoiceService

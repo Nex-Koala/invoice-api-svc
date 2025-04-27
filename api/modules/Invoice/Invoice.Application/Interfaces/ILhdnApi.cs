@@ -12,8 +12,8 @@ using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GetRecentDoc
 namespace NexKoala.WebApi.Invoice.Application.Interfaces;
 public interface ILhdnApi
 {
-    Task<DocumentDetails> GetDocumentDetailsAsync(string uuid);
-    Task<RecentDocuments> GetRecentDocumentsAsync(GetRecentDocuments request);
-    Task<SubmitInvoiceResponse> SubmitInvoiceAsync(UblDocumentRequest payload);
-    Task<RawDocument> GetDocumentAsync(string uuid);
+    Task<DocumentDetails> GetDocumentDetailsAsync(string uuid, string onBehalfOf);
+    Task<RecentDocuments> GetRecentDocumentsAsync(GetRecentDocuments request, string onBehalfOf);
+    Task<SubmitInvoiceResponse> SubmitInvoiceAsync(UblDocumentRequest payload, string onBehalfOf);
+    Task<RawDocument> GetDocumentAsync(string uuid, string onBehalfOf);
 }

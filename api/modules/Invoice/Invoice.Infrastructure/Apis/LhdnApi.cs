@@ -34,9 +34,9 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
             _settings = options.Value;
         }
 
-        public async Task<SubmitInvoiceResponse> SubmitInvoiceAsync(UblDocumentRequest payload)
+        public async Task<SubmitInvoiceResponse> SubmitInvoiceAsync(UblDocumentRequest payload, string onBehalfOf)
         {
-            var token = await GetTokenAsync(); // Get token from LHDN API
+            var token = await GetTokenAsync(onBehalfOf); // Get token from LHDN API
 
             var client = _httpClientFactory.CreateClient("LhdnApi");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -61,11 +61,11 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
             }
         }
 
-        public async Task<RawDocument> GetDocumentAsync(string uuid)
+        public async Task<RawDocument> GetDocumentAsync(string uuid, string onBehalfOf)
         {
             try
             {
-                var token = await GetTokenAsync();
+                var token = await GetTokenAsync(onBehalfOf);
 
                 var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -95,11 +95,11 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
             }
         }
 
-        public async Task<DocumentDetails> GetDocumentDetailsAsync(string uuid)
+        public async Task<DocumentDetails> GetDocumentDetailsAsync(string uuid, string onBehalfOf)
         {
             try
             {
-                var token = await GetTokenAsync(); // Get token from LHDN API
+                var token = await GetTokenAsync(onBehalfOf); // Get token from LHDN API
 
                 var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -124,7 +124,7 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
             }
         }
 
-        public async Task<RecentDocuments> GetRecentDocumentsAsync(GetRecentDocuments request)
+        public async Task<RecentDocuments> GetRecentDocumentsAsync(GetRecentDocuments request, string onBehalfOf)
         {
             try
             {
@@ -147,7 +147,7 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
                 { "issuerId", request.IssuerId },
             };
 
-                var token = await GetTokenAsync(); // Get token from LHDN API
+                var token = await GetTokenAsync(onBehalfOf); // Get token from LHDN API
 
                 var client = _httpClientFactory.CreateClient("LhdnApi");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -174,7 +174,7 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
             }
         }
 
-        private async Task<string> GetTokenAsync()
+        private async Task<string> GetTokenAsync(string onBehalfOf)
         {
             var token = string.Empty;
 
@@ -190,7 +190,7 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
                             ), // Replace with your actual client_secret
                             new KeyValuePair<string, string>("grant_type", "client_credentials"),
                             new KeyValuePair<string, string>("scope", "InvoicingAPI"),
-                            new KeyValuePair<string, string>("onbehalfof", _settings.OnBehalfOf),
+                            new KeyValuePair<string, string>("onbehalfof", onBehalfOf ?? _settings.OnBehalfOf),
                     }
                 )
                     .ReadAsStringAsync()

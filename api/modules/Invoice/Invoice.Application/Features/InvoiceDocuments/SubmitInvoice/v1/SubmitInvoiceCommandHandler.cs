@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specifications;
 using Microsoft.Extensions.Logging;
 using NexKoala.WebApi.Invoice.Application.Features.UomMappings.Specifications;
+using NexKoala.WebApi.Invoice.Application.Features.Partners.Specifications;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.SubmitInvoice.v1;
 
@@ -26,14 +27,16 @@ public sealed class SubmitInvoiceComamndHandler
     private readonly ILhdnApi _lhdnApi;
     private readonly IRepository<InvoiceDocument> _invoiceDocumentRepository;
     private readonly IRepository<UomMapping> _uomMappingRepository;
+    private readonly IRepository<Partner> _partnerRepository;
     private readonly ILogger<SubmitInvoiceComamndHandler> _logger;
 
     public SubmitInvoiceComamndHandler(ILhdnApi lhdnApi, [FromKeyedServices("invoice:invoiceDocuments")] IRepository<InvoiceDocument> invoiceDocumentRepository,
-        [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, ILogger<SubmitInvoiceComamndHandler> logger)
+        [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository, ILogger<SubmitInvoiceComamndHandler> logger)
     {
         _lhdnApi = lhdnApi;
         _invoiceDocumentRepository = invoiceDocumentRepository;
         _uomMappingRepository = uomMappingRepository;
+        _partnerRepository = partnerRepository;
         _logger = logger;
     }
 
@@ -47,6 +50,14 @@ public sealed class SubmitInvoiceComamndHandler
         if (!Guid.TryParse(request.UserId, out Guid userId))
         {
             return new Response<object>("Invalid or missing user ID");
+        }
+
+        // get user TIN
+        var partner = await _partnerRepository.FirstOrDefaultAsync(new PartnerByUserIdSpec(request.UserId), cancellationToken);
+        string partnerTin = partner!.Tin;
+        if(partnerTin == null)
+        {
+            return new Response<object>($"The TIN (Tax Identification Number) for {partner.Name} is not set.");
         }
 
         // check submission is exist
@@ -821,7 +832,7 @@ public sealed class SubmitInvoiceComamndHandler
             };
         }
 
-        var response = await _lhdnApi.SubmitInvoiceAsync(payload);
+        var response = await _lhdnApi.SubmitInvoiceAsync(payload, partnerTin);
 
         // submission success
         if (response.AcceptedDocuments.Count > 0)

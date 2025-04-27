@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using NexKoala.Framework.Core.Wrappers;
 using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GetRecentDocuments.v1;
 using NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.RecentDocument;
+using NexKoala.Framework.Infrastructure.Identity.Users;
 
 namespace NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.InvoiceApi;
 
@@ -15,8 +16,13 @@ public static class GetRecentDocumentsEndpoint
         return endpoints
             .MapGet(
                 "/recent",
-                async (ISender mediator, [AsParameters] GetRecentDocuments request) =>
+                async (ISender mediator, [AsParameters] GetRecentDocuments request, HttpContext context) =>
                 {
+                    if (context.User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
+                    {
+                        return Results.BadRequest();
+                    }
+                    request.UserId = userId;
                     var response = await mediator.Send(request);
                     return Results.Ok(response);
                 }
