@@ -39,7 +39,7 @@ public class ClientDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
+        modelBuilder.HasDefaultSchema("dbo");
         // Configure Sales Invoice Tables
         modelBuilder.Entity<OrderEntryHeader>()
             .ToTable("OEINVH")
