@@ -16,6 +16,7 @@ using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.ClassificationMapping;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.InvoiceApi;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Partner;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Profile;
+using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Statistic;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Uom;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.UomMapping;
 using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
@@ -88,6 +89,9 @@ public static class InvoiceModule
             var profileGroup = app.MapGroup("profile").WithTags("Profile");
             profileGroup.MapUpdateProfileEndpoint();
             profileGroup.MapGetProfileEndpoint();
+
+            var dashboardGroup = app.MapGroup("dashboard").WithTags("Dashboard");
+            dashboardGroup.MapGetSageSubmissionRateEndpoint();
         }
     }
 

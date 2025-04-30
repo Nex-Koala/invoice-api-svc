@@ -22,6 +22,7 @@ internal class InvoiceDocumentConfiguration : IEntityTypeConfiguration<InvoiceDo
         builder.Property(x => x.TaxCurrencyCode).HasMaxLength(3);
         builder.Property(x => x.TotalAmount).IsRequired().HasColumnType("decimal(18,2)");
         builder.Property(x => x.TaxAmount).IsRequired().HasColumnType("decimal(18,2)");
+        builder.Property(x => x.SubmissionStatus).IsRequired();
 
         builder
             .HasOne(x => x.Supplier)

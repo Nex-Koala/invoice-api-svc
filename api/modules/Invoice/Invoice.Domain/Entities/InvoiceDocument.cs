@@ -19,4 +19,5 @@ public class InvoiceDocument : BaseEntity, IAggregateRoot
     public Guid CustomerId { get; set; }
     public Customer Customer { get; set; } // Customer Info
     public ICollection<InvoiceLine> InvoiceLines { get; set; } // Invoice Line Items
+    public bool SubmissionStatus { get; set; } = false; // Submission status
 }

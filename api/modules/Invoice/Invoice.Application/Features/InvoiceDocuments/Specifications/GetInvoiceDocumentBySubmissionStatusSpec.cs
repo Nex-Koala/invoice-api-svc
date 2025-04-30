@@ -1,0 +1,24 @@
+﻿using System;
+using Ardalis.Specification;
+using NexKoala.WebApi.Invoice.Domain.Entities;
+
+namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specifications
+{
+    internal class GetInvoiceDocumentBySubmissionStatusSpec : Specification<InvoiceDocument>
+    {
+        public GetInvoiceDocumentBySubmissionStatusSpec(bool status, DateTime? startDate = null, DateTime? endDate = null)
+        {
+            Query.Where(i => i.SubmissionStatus == status);
+
+            if (startDate.HasValue)
+            {
+                Query.Where(i => i.IssueDate >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                Query.Where(i => i.IssueDate <= endDate.Value);
+            }
+        }
+    }
+}

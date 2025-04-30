@@ -67,9 +67,9 @@ public sealed class SubmitInvoiceComamndHandler
             request.SupplierTIN = partner.Tin;
         }
 
-        // check submission is exist
+        // check submission is exist and submitted sucessfully
         var existingInvoiceDocument = await _invoiceDocumentRepository
-            .FirstOrDefaultAsync(new GetInvoiceDocumentByInvoiceNumber(request.Irn), cancellationToken);
+            .FirstOrDefaultAsync(new GetInvoiceDocumentByInvoiceNumber(request.Irn, true), cancellationToken);
 
         if (existingInvoiceDocument != null)
         {
@@ -108,6 +108,18 @@ public sealed class SubmitInvoiceComamndHandler
             m => m.LhdnUomCode,
             StringComparer.OrdinalIgnoreCase
         );
+
+        // if tax amount is 0, sum the tax amount of item in itemlist
+        if(request.TaxAmount <= 0)
+        {
+            decimal taxAmt = 0;
+            foreach(var item in request.ItemList)
+            {
+                taxAmt += item.TaxAmount;
+            }
+
+            request.TaxAmount = taxAmt;
+        }
 
         // Step 1: Construct the Invoice JSON document
         var ublInvoice = new UblInvoiceDocument()
@@ -841,64 +853,68 @@ public sealed class SubmitInvoiceComamndHandler
 
         var response = await _lhdnApi.SubmitInvoiceAsync(payload, partnerTin);
 
+        // store data to db
+        var supplier = new Supplier
+        {
+            Name = request.SupplierName,
+            Tin = request.SupplierTIN,
+            Brn = request.SupplierBRN,
+            Address = FormatAddress(request.SupplierAddressLine1, request.SupplierAddressLine2, request.SupplierAddressLine3),
+            City = request.SupplierCity,
+            PostalCode = request.SupplierPostalCode,
+            CountryCode = request.SupplierCountryCode
+        };
+
+        var customer = new Customer
+        {
+            Name = request.CustomerName,
+            Tin = request.CustomerTIN,
+            Brn = request.CustomerBRN,
+            Address = FormatAddress(request.CustomerAddressLine1, request.CustomerAddressLine2, request.CustomerAddressLine3),
+            City = request.CustomerCity,
+            PostalCode = request.CustomerPostalCode,
+            CountryCode = request.CustomerCountryCode
+        };
+
+        var invoiceLine = request.ItemList.ConvertAll(item => new InvoiceLine()
+        {
+            LineNumber = item.Id,
+            Quantity = item.Qty,
+            UnitPrice = item.UnitPrice,
+            LineAmount = item.TotItemVal,
+            Description = item.Description,
+            UnitCode = uomMappingDictionary[item.Unit],
+            CurrencyCode = request.CurrencyCode
+        });
+
+        var invoiceDocument = new InvoiceDocument()
+        {
+            InvoiceNumber = request.BillingReferenceID,
+            IssueDate = now,
+            DocumentCurrencyCode = request.CurrencyCode,
+            TaxCurrencyCode = request.CurrencyCode,
+            TotalAmount = request.TotalAmount,
+            TaxAmount = request.TaxAmount,
+            Supplier = supplier,
+            SupplierId = supplier.Id,
+            Customer = customer,
+            CustomerId = customer.Id,
+            InvoiceLines = invoiceLine
+        };
+
         // submission success
         if (response.AcceptedDocuments.Count > 0)
         {
-            // store data to db
-            var supplier = new Supplier
-            {
-                Name = request.SupplierName,
-                Tin = request.SupplierTIN,
-                Brn = request.SupplierBRN,
-                Address = FormatAddress(request.SupplierAddressLine1, request.SupplierAddressLine2, request.SupplierAddressLine3),
-                City = request.SupplierCity,
-                PostalCode = request.SupplierPostalCode,
-                CountryCode = request.SupplierCountryCode
-            };
-
-            var customer = new Customer
-            {
-                Name = request.CustomerName,
-                Tin = request.CustomerTIN,
-                Brn = request.CustomerBRN,
-                Address = FormatAddress(request.CustomerAddressLine1, request.CustomerAddressLine2, request.CustomerAddressLine3),
-                City = request.CustomerCity,
-                PostalCode = request.CustomerPostalCode,
-                CountryCode = request.CustomerCountryCode
-            };
-
-            var invoiceLine = request.ItemList.ConvertAll(item => new InvoiceLine()
-            {
-                LineNumber = item.Id,
-                Quantity = item.Qty,
-                UnitPrice = item.UnitPrice,
-                LineAmount = item.TotItemVal,
-                Description = item.Description,
-                UnitCode = uomMappingDictionary[item.Unit],
-                CurrencyCode = request.CurrencyCode
-            });
-
-            var invoiceDocument = new InvoiceDocument()
-            {
-                Uuid = response.AcceptedDocuments.FirstOrDefault()?.Uuid,
-                InvoiceNumber = request.BillingReferenceID,
-                IssueDate = now,
-                DocumentCurrencyCode = request.CurrencyCode,
-                TaxCurrencyCode = request.CurrencyCode,
-                TotalAmount = request.TotalAmount,
-                TaxAmount = request.TaxAmount,
-                Supplier = supplier,
-                SupplierId = supplier.Id,
-                Customer = customer,
-                CustomerId = customer.Id,
-                InvoiceLines = invoiceLine
-            };
-
+            invoiceDocument.Uuid = response.AcceptedDocuments.FirstOrDefault()?.Uuid;
+            invoiceDocument.SubmissionStatus = true;
             await _invoiceDocumentRepository.AddAsync(invoiceDocument, cancellationToken);
             return new Response<SubmitInvoiceResponse>(response, "Successfully submit invoice");
         }
         else
         {
+            invoiceDocument.SubmissionStatus = false;
+            await _invoiceDocumentRepository.AddAsync(invoiceDocument, cancellationToken);
+
             var errorMessages = new List<string>();
             if (response.RejectedDocuments != null)
             {
