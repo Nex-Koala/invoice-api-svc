@@ -18,6 +18,7 @@ using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specificatio
 using Microsoft.Extensions.Logging;
 using NexKoala.WebApi.Invoice.Application.Features.UomMappings.Specifications;
 using NexKoala.WebApi.Invoice.Application.Features.Partners.Specifications;
+using NexKoala.WebApi.Invoice.Domain.Events;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.SubmitInvoice.v1;
 
@@ -29,15 +30,18 @@ public sealed class SubmitInvoiceComamndHandler
     private readonly IRepository<UomMapping> _uomMappingRepository;
     private readonly IRepository<Partner> _partnerRepository;
     private readonly ILogger<SubmitInvoiceComamndHandler> _logger;
+    private readonly IPublisher _publisher;
 
     public SubmitInvoiceComamndHandler(ILhdnApi lhdnApi, [FromKeyedServices("invoice:invoiceDocuments")] IRepository<InvoiceDocument> invoiceDocumentRepository,
-        [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository, ILogger<SubmitInvoiceComamndHandler> logger)
+        [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository, 
+        ILogger<SubmitInvoiceComamndHandler> logger, IPublisher publisher)
     {
         _lhdnApi = lhdnApi;
         _invoiceDocumentRepository = invoiceDocumentRepository;
         _uomMappingRepository = uomMappingRepository;
         _partnerRepository = partnerRepository;
         _logger = logger;
+        _publisher = publisher;
     }
 
     public async Task<object> Handle(
@@ -119,6 +123,18 @@ public sealed class SubmitInvoiceComamndHandler
             }
 
             request.TaxAmount = taxAmt;
+
+            await _publisher.Publish(new InvoiceAuditPublishedEvent(new()
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Operation = "Tax Amount Update From Items",
+                    Entity = "InvoiceDocument",
+                    UserId = userId,
+                    DateTime = DateTime.UtcNow,
+                }
+            }));
         }
 
         // Step 1: Construct the Invoice JSON document
@@ -903,7 +919,7 @@ public sealed class SubmitInvoiceComamndHandler
         };
 
         // submission success
-        if (response.AcceptedDocuments.Count > 0)
+        if (response?.AcceptedDocuments?.Count > 0)
         {
             invoiceDocument.Uuid = response.AcceptedDocuments.FirstOrDefault()?.Uuid;
             invoiceDocument.SubmissionStatus = true;
@@ -916,7 +932,7 @@ public sealed class SubmitInvoiceComamndHandler
             await _invoiceDocumentRepository.AddAsync(invoiceDocument, cancellationToken);
 
             var errorMessages = new List<string>();
-            if (response.RejectedDocuments != null)
+            if (response?.RejectedDocuments != null)
             {
                 foreach (var rejectedDoc in response.RejectedDocuments)
                 {
