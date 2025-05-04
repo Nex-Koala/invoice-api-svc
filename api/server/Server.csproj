@@ -34,8 +34,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="scripts\**\*.sql">
+    <None Include="scripts\**\*.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
 </Project>
