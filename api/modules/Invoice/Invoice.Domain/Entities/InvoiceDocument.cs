@@ -5,7 +5,7 @@ using NexKoala.Framework.Core.Domain.Contracts;
 
 namespace NexKoala.WebApi.Invoice.Domain.Entities;
 
-public class InvoiceDocument : BaseEntity, IAggregateRoot
+public class InvoiceDocument : AuditableEntity, IAggregateRoot
 {
     public string? Uuid { get; set; }
     public string InvoiceNumber { get; set; } // "JSON-INV12345"
