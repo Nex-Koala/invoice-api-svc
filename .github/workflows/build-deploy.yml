@@ -98,19 +98,19 @@ jobs:
             rm app.zip
 
             # Run SQL scripts if the folder exists
-            if [ -d /nex-koala/api/scripts ]; then
-              echo "📂 Found scripts directory. Executing all .sql files..."
+            if [ -d /nex-koala/api/publish/scripts ]; then
+              echo "📂 Found scripts directory. Executing SQL files..."
 
-              for file in /nex-koala/api/scripts/*.sql; do
-                echo "🚀 Executing: $file"
+              for script in /nex-koala/api/publish/scripts/*.sql; do
+                echo "🚀 Executing: $script"
                 PGPASSWORD="${{ secrets.DB_PASSWORD }}" \
                 psql -U ${{ secrets.DB_USERNAME }} \
                     -h ${{ secrets.DB_HOST }} \
                     -d ${{ secrets.DB_NAME }} \
-                    -p 5432 -f "$file"
+                    -p 5432 -f "$script"
               done
             else
-              echo "⚠️ No scripts directory found at /nex-koala/api/scripts"
+              echo "⚠️ No scripts directory found at /nex-koala/api/publish/scripts"
             fi
 
             # Restart the service
