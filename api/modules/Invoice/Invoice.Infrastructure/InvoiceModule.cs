@@ -102,7 +102,7 @@ public static class InvoiceModule
         builder.Services.AddScoped<IDbInitializer, InvoiceDbInitializer>();
 
         builder.Services.AddDbContext<ClientDbContext>(options =>
-        options.UseNpgsql(
+        options.UseSqlServer(
             builder.Configuration.GetConnectionString("ClientConnection"),
             b => b.MigrationsAssembly(typeof(ClientDbContext).Assembly.FullName))
         );
