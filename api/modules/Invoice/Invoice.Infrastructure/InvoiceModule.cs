@@ -11,16 +11,17 @@ using NexKoala.WebApi.Invoice.Application.Interfaces;
 using NexKoala.WebApi.Invoice.Domain.Entities;
 using NexKoala.WebApi.Invoice.Domain.Settings;
 using NexKoala.WebApi.Invoice.Infrastructure.Apis;
+using NexKoala.WebApi.Invoice.Infrastructure.Audit;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Classification;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.ClassificationMapping;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.InvoiceApi;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Partner;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Profile;
+using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Statistic;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Uom;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.UomMapping;
 using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
 using NexKoala.WebApi.Invoice.Infrastructure.Services;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace NexKoala.WebApi.Invoice.Infrastructure;
 
@@ -88,6 +89,9 @@ public static class InvoiceModule
             var profileGroup = app.MapGroup("profile").WithTags("Profile");
             profileGroup.MapUpdateProfileEndpoint();
             profileGroup.MapGetProfileEndpoint();
+
+            var dashboardGroup = app.MapGroup("dashboard").WithTags("Dashboard");
+            dashboardGroup.MapGetSageSubmissionRateEndpoint();
         }
     }
 
@@ -98,9 +102,10 @@ public static class InvoiceModule
         builder.Services.AddScoped<IDbInitializer, InvoiceDbInitializer>();
 
         builder.Services.AddDbContext<ClientDbContext>(options =>
-        options.UseSqlServer(
+        options.UseNpgsql(
             builder.Configuration.GetConnectionString("ClientConnection"),
-            b => b.MigrationsAssembly(typeof(ClientDbContext).Assembly.FullName)));
+            b => b.MigrationsAssembly(typeof(ClientDbContext).Assembly.FullName))
+        );
 
         builder.Services.AddKeyedScoped<IRepository<Uom>, InvoiceRepository<Uom>>("invoice:uoms");
         builder.Services.AddKeyedScoped<IReadRepository<Uom>, InvoiceRepository<Uom>>("invoice:uoms");
@@ -151,6 +156,7 @@ public static class InvoiceModule
         builder.Services.AddScoped<ILhdnSdk, LhdnSdk>();
         builder.Services.AddScoped<IQuotaService, QuotaService>();
         builder.Services.AddScoped<TrimStringService>();
+        builder.Services.AddScoped<IAuditService, AuditService>();
 
         return builder;
     }

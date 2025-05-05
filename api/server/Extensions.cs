@@ -7,6 +7,7 @@ using NexKoala.WebApi.Catalog.Application;
 using NexKoala.WebApi.Catalog.Infrastructure;
 using NexKoala.WebApi.Invoice.Application;
 using NexKoala.WebApi.Invoice.Infrastructure;
+using NexKoala.WebApi.Invoice.Infrastructure.Audit;
 using NexKoala.WebApi.Todo;
 
 namespace NexKoala.WebApi.Host;
@@ -22,7 +23,8 @@ public static class Extensions
         {
             typeof(CatalogMetadata).Assembly,
             typeof(TodoModule).Assembly,
-            typeof(InvoiceMetadata).Assembly
+            typeof(InvoiceMetadata).Assembly,
+            typeof(InvoiceAuditPublishedEventHandler).Assembly
         };
 
         //register validators

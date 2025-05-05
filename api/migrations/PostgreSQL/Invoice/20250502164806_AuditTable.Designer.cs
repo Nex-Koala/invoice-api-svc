@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
 {
     [DbContext(typeof(InvoiceDbContext))]
-    partial class InvoiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250502164806_AuditTable")]
+    partial class AuditTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,12 +180,6 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
@@ -198,12 +195,6 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
 
                     b.Property<DateTime>("IssueDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid");
 
                     b.Property<bool>("SubmissionStatus")
                         .HasColumnType("boolean");

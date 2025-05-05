@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
 {
     [DbContext(typeof(InvoiceDbContext))]
-    partial class InvoiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250429193131_Add SubmissionStatusCol")]
+    partial class AddSubmissionStatusCol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,41 +25,6 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("NexKoala.WebApi.Invoice.Domain.Entities.AuditTrail", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("DateTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Entity")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ModifiedProperties")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NewValues")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Operation")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PreviousValues")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PrimaryKey")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AuditTrails", "invoice");
-                });
 
             modelBuilder.Entity("NexKoala.WebApi.Invoice.Domain.Entities.Classification", b =>
                 {
@@ -177,12 +145,6 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
@@ -198,12 +160,6 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
 
                     b.Property<DateTime>("IssueDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("LastModifiedBy")
-                        .HasColumnType("uuid");
 
                     b.Property<bool>("SubmissionStatus")
                         .HasColumnType("boolean");

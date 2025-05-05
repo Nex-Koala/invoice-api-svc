@@ -15,7 +15,7 @@ public sealed class InvoiceDbContext : FshDbContext
         : base(multiTenantContextAccessor, options, publisher, settings)
     {
     }
-
+    public DbSet<AuditTrail> AuditTrails { get; set; }
     public DbSet<InvoiceDocument> InvoiceDocuments { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Customer> Customers { get; set; }

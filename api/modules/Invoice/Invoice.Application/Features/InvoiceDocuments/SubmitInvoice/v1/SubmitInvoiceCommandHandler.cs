@@ -18,6 +18,7 @@ using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specificatio
 using Microsoft.Extensions.Logging;
 using NexKoala.WebApi.Invoice.Application.Features.UomMappings.Specifications;
 using NexKoala.WebApi.Invoice.Application.Features.Partners.Specifications;
+using NexKoala.WebApi.Invoice.Domain.Events;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.SubmitInvoice.v1;
 
@@ -29,15 +30,18 @@ public sealed class SubmitInvoiceComamndHandler
     private readonly IRepository<UomMapping> _uomMappingRepository;
     private readonly IRepository<Partner> _partnerRepository;
     private readonly ILogger<SubmitInvoiceComamndHandler> _logger;
+    private readonly IPublisher _publisher;
 
     public SubmitInvoiceComamndHandler(ILhdnApi lhdnApi, [FromKeyedServices("invoice:invoiceDocuments")] IRepository<InvoiceDocument> invoiceDocumentRepository,
-        [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository, ILogger<SubmitInvoiceComamndHandler> logger)
+        [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository, 
+        ILogger<SubmitInvoiceComamndHandler> logger, IPublisher publisher)
     {
         _lhdnApi = lhdnApi;
         _invoiceDocumentRepository = invoiceDocumentRepository;
         _uomMappingRepository = uomMappingRepository;
         _partnerRepository = partnerRepository;
         _logger = logger;
+        _publisher = publisher;
     }
 
     public async Task<object> Handle(
@@ -67,9 +71,9 @@ public sealed class SubmitInvoiceComamndHandler
             request.SupplierTIN = partner.Tin;
         }
 
-        // check submission is exist
+        // check submission is exist and submitted sucessfully
         var existingInvoiceDocument = await _invoiceDocumentRepository
-            .FirstOrDefaultAsync(new GetInvoiceDocumentByInvoiceNumber(request.Irn), cancellationToken);
+            .FirstOrDefaultAsync(new GetInvoiceDocumentByInvoiceNumber(request.Irn, true), cancellationToken);
 
         if (existingInvoiceDocument != null)
         {
@@ -108,6 +112,30 @@ public sealed class SubmitInvoiceComamndHandler
             m => m.LhdnUomCode,
             StringComparer.OrdinalIgnoreCase
         );
+
+        // if tax amount is 0, sum the tax amount of item in itemlist
+        if(request.TaxAmount <= 0)
+        {
+            decimal taxAmt = 0;
+            foreach(var item in request.ItemList)
+            {
+                taxAmt += item.TaxAmount;
+            }
+
+            request.TaxAmount = taxAmt;
+
+            await _publisher.Publish(new InvoiceAuditPublishedEvent(new()
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    Operation = "Tax Amount Update From Items",
+                    Entity = "InvoiceDocument",
+                    UserId = userId,
+                    DateTime = DateTime.UtcNow,
+                }
+            }));
+        }
 
         // Step 1: Construct the Invoice JSON document
         var ublInvoice = new UblInvoiceDocument()
@@ -841,66 +869,70 @@ public sealed class SubmitInvoiceComamndHandler
 
         var response = await _lhdnApi.SubmitInvoiceAsync(payload, partnerTin);
 
-        // submission success
-        if (response.AcceptedDocuments.Count > 0)
+        // store data to db
+        var supplier = new Supplier
         {
-            // store data to db
-            var supplier = new Supplier
-            {
-                Name = request.SupplierName,
-                Tin = request.SupplierTIN,
-                Brn = request.SupplierBRN,
-                Address = FormatAddress(request.SupplierAddressLine1, request.SupplierAddressLine2, request.SupplierAddressLine3),
-                City = request.SupplierCity,
-                PostalCode = request.SupplierPostalCode,
-                CountryCode = request.SupplierCountryCode
-            };
+            Name = request.SupplierName,
+            Tin = request.SupplierTIN,
+            Brn = request.SupplierBRN,
+            Address = FormatAddress(request.SupplierAddressLine1, request.SupplierAddressLine2, request.SupplierAddressLine3),
+            City = request.SupplierCity,
+            PostalCode = request.SupplierPostalCode,
+            CountryCode = request.SupplierCountryCode
+        };
 
-            var customer = new Customer
-            {
-                Name = request.CustomerName,
-                Tin = request.CustomerTIN,
-                Brn = request.CustomerBRN,
-                Address = FormatAddress(request.CustomerAddressLine1, request.CustomerAddressLine2, request.CustomerAddressLine3),
-                City = request.CustomerCity,
-                PostalCode = request.CustomerPostalCode,
-                CountryCode = request.CustomerCountryCode
-            };
+        var customer = new Customer
+        {
+            Name = request.CustomerName,
+            Tin = request.CustomerTIN,
+            Brn = request.CustomerBRN,
+            Address = FormatAddress(request.CustomerAddressLine1, request.CustomerAddressLine2, request.CustomerAddressLine3),
+            City = request.CustomerCity,
+            PostalCode = request.CustomerPostalCode,
+            CountryCode = request.CustomerCountryCode
+        };
 
-            var invoiceLine = request.ItemList.ConvertAll(item => new InvoiceLine()
-            {
-                LineNumber = item.Id,
-                Quantity = item.Qty,
-                UnitPrice = item.UnitPrice,
-                LineAmount = item.TotItemVal,
-                Description = item.Description,
-                UnitCode = uomMappingDictionary[item.Unit],
-                CurrencyCode = request.CurrencyCode
-            });
+        var invoiceLine = request.ItemList.ConvertAll(item => new InvoiceLine()
+        {
+            LineNumber = item.Id,
+            Quantity = item.Qty,
+            UnitPrice = item.UnitPrice,
+            LineAmount = item.TotItemVal,
+            Description = item.Description,
+            UnitCode = uomMappingDictionary[item.Unit],
+            CurrencyCode = request.CurrencyCode
+        });
 
-            var invoiceDocument = new InvoiceDocument()
-            {
-                Uuid = response.AcceptedDocuments.FirstOrDefault()?.Uuid,
-                InvoiceNumber = request.BillingReferenceID,
-                IssueDate = now,
-                DocumentCurrencyCode = request.CurrencyCode,
-                TaxCurrencyCode = request.CurrencyCode,
-                TotalAmount = request.TotalAmount,
-                TaxAmount = request.TaxAmount,
-                Supplier = supplier,
-                SupplierId = supplier.Id,
-                Customer = customer,
-                CustomerId = customer.Id,
-                InvoiceLines = invoiceLine
-            };
+        var invoiceDocument = new InvoiceDocument()
+        {
+            InvoiceNumber = request.BillingReferenceID,
+            IssueDate = now,
+            DocumentCurrencyCode = request.CurrencyCode,
+            TaxCurrencyCode = request.CurrencyCode,
+            TotalAmount = request.TotalAmount,
+            TaxAmount = request.TaxAmount,
+            Supplier = supplier,
+            SupplierId = supplier.Id,
+            Customer = customer,
+            CustomerId = customer.Id,
+            InvoiceLines = invoiceLine
+        };
 
+        // submission success
+        if (response?.AcceptedDocuments?.Count > 0)
+        {
+            invoiceDocument.Uuid = response.AcceptedDocuments.FirstOrDefault()?.Uuid;
+            invoiceDocument.SubmissionStatus = true;
             await _invoiceDocumentRepository.AddAsync(invoiceDocument, cancellationToken);
             return new Response<SubmitInvoiceResponse>(response, "Successfully submit invoice");
         }
         else
         {
+            invoiceDocument.SubmissionStatus = false;
+            await _invoiceDocumentRepository.AddAsync(invoiceDocument, cancellationToken);
+
             var errorMessages = new List<string>();
-            if (response.RejectedDocuments != null)
+            if (response?.RejectedDocuments != null)
             {
                 foreach (var rejectedDoc in response.RejectedDocuments)
                 {
