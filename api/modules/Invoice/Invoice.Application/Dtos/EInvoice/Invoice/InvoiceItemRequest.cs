@@ -11,7 +11,7 @@ namespace NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Invoice
         public string Id { get; set; }
         public decimal Qty { get; set; }
         public string Unit { get; set; }
-        public decimal TotItemVal { get; set; }
+        public decimal Subtotal { get; set; }
         public string Description { get; set; }
         public decimal UnitPrice { get; set; }
 

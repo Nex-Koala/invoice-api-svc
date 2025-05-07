@@ -14,10 +14,21 @@ public class InvoiceDocument : AuditableEntity, IAggregateRoot
     public string? TaxCurrencyCode { get; set; } // "MYR"
     public decimal TotalAmount { get; set; } // Total Payable Amount
     public decimal TaxAmount { get; set; } // Tax Total
+    public decimal TotalExcludingTax { get; set; }
+    public decimal TotalIncludingTax { get; set; }
     public Guid SupplierId { get; set; }
     public Supplier Supplier { get; set; } // Supplier Info
     public Guid CustomerId { get; set; }
     public Customer Customer { get; set; } // Customer Info
     public ICollection<InvoiceLine> InvoiceLines { get; set; } // Invoice Line Items
     public bool SubmissionStatus { get; set; } = false; // Submission status
+    public DocumentStatus? DocumentStatus { get; set; }
+}
+
+public enum DocumentStatus
+{
+    Submitted,
+    Valid,
+    Invalid,
+    Cancelled
 }

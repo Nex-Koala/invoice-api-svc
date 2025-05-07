@@ -18,4 +18,6 @@ public class Customer : BaseEntity, IAggregateRoot
     public string? PostalCode { get; set; } // "50480"
 
     public string? CountryCode { get; set; } // "MYS"
+    public string? Email { get; set; }
+    public string? ContactNumber { get; set; }
 }

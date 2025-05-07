@@ -25,9 +25,11 @@ namespace NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Invoice
         public string SupplierAdditionalAccountID { get; set; }
         public string SupplierIndustryCode { get; set; }
         public string SupplierTIN { get; set; }
+        public string SupplierIdType { get; set; }
         public string SupplierBRN { get; set; }
         public string SupplierSST { get; set; }
         public string SupplierTTX { get; set; }
+        public string SupplierBusinessActivityDescription { get; set; }
         public string SupplierCity { get; set; }
         public string SupplierPostalCode { get; set; }
         public string SupplierCountrySubentityCode { get; set; }
@@ -54,9 +56,11 @@ namespace NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Invoice
         public string CustomerEmail { get; set; }
 
         // Invoice Line Items
-        public decimal TotalAmount { get; set; }
+        public decimal TotalPayableAmount { get; set; }
         public List<InvoiceItemRequest> ItemList { get; set; }
         public decimal TaxableAmount { get; set; }
         public decimal TaxAmount { get; set; }
+        public decimal TotalIncludingTax { get; set; }
+        public decimal TotalExcludingTax { get; set; }
     }
 }

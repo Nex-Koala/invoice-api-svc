@@ -9,6 +9,7 @@ public class InvoiceLine : BaseEntity, IAggregateRoot
     public decimal Quantity { get; set; } // Invoiced Quantity
     public decimal UnitPrice { get; set; } // Price per unit
     public decimal LineAmount { get; set; } // LineExtensionAmount
+    public decimal TaxAmount { get; set; }
     public string? Description { get; set; } // Item description
     public string? UnitCode { get; set; } // "C62" - Unit code for invoiced quantity
     public string? CurrencyCode { get; set; } // "MYR"

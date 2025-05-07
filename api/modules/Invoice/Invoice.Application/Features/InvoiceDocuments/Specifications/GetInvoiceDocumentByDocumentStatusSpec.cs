@@ -4,11 +4,11 @@ using NexKoala.WebApi.Invoice.Domain.Entities;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specifications
 {
-    internal class GetInvoiceDocumentBySubmissionStatusSpec : Specification<InvoiceDocument>
+    internal class GetInvoiceDocumentByDocumentStatusSpec : Specification<InvoiceDocument>
     {
-        public GetInvoiceDocumentBySubmissionStatusSpec(bool status, DateTime? startDate = null, DateTime? endDate = null, Guid? userId = null)
+        public GetInvoiceDocumentByDocumentStatusSpec(DocumentStatus status, DateTime? startDate = null, DateTime? endDate = null, Guid? userId = null)
         {
-            Query.Where(i => i.SubmissionStatus == status);
+            Query.Where(i => i.DocumentStatus != null && i.DocumentStatus == status);
 
             if (startDate.HasValue)
             {

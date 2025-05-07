@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
 {
     [DbContext(typeof(InvoiceDbContext))]
-    partial class InvoiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506190927_Add Invoice Document Related Cols")]
+    partial class AddInvoiceDocumentRelatedCols
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,9 +201,6 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .IsRequired()
                         .HasMaxLength(3)
                         .HasColumnType("character varying(3)");
-
-                    b.Property<string>("DocumentStatus")
-                        .HasColumnType("text");
 
                     b.Property<string>("InvoiceNumber")
                         .IsRequired()

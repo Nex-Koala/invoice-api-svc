@@ -17,5 +17,9 @@ public class GeneralMappingConfig : IRegister
             .Map(dest => dest.Supplier, src => new Supplier { Name = src.SupplierName });
 
         config.NewConfig<InvoiceLineDto, InvoiceLine>();
-    }
+
+        config
+            .NewConfig<InvoiceDocument, Features.InvoiceDocuments.Get.v1.InvoiceDocumentResponse>()
+            .Map(dest => dest.DocumentStatus, src => src.DocumentStatus.HasValue ? src.DocumentStatus.Value.ToString() : null);
+        }
 }

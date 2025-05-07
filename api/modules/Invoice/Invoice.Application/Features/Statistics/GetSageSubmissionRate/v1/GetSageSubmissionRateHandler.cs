@@ -17,8 +17,9 @@ public sealed class GetSageSubmissionRateHandler(
     )
     {
         ArgumentNullException.ThrowIfNull(request);
-        var successSpec = new GetInvoiceDocumentBySubmissionStatusSpec(true, request.StartDate, request.EndDate);
-        var failedSpec = new GetInvoiceDocumentBySubmissionStatusSpec(false, request.StartDate, request.EndDate);
+        Guid.TryParse(request.UserId, out var parsedUserId);
+        var successSpec = new GetInvoiceDocumentBySubmissionStatusSpec(true, request.StartDate, request.EndDate, parsedUserId);
+        var failedSpec = new GetInvoiceDocumentBySubmissionStatusSpec(false, request.StartDate, request.EndDate, parsedUserId);
         var successCount = await repository.CountAsync(successSpec, cancellationToken).ConfigureAwait(false);
         var failedCount = await repository.CountAsync(failedSpec, cancellationToken).ConfigureAwait(false);
 

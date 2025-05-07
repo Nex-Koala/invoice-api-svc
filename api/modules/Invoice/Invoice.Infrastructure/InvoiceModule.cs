@@ -78,6 +78,8 @@ public static class InvoiceModule
             invoiceApiGroup.MapGetPurchaseInvoicesEndpoint();
             invoiceApiGroup.MapGetCreditDebitNotesEndpoint();
             invoiceApiGroup.MapGetPurchaseCreditDebitNotesEndpoint();
+            invoiceApiGroup.MapGetInvoiceDocumentEndpoint();
+            invoiceApiGroup.MapGetInvoiceDocumentListEndpoint();
 
             var partnerGroup = app.MapGroup("partners").WithTags("Partners");
             partnerGroup.MapPartnerCreationEndpoint();
@@ -92,6 +94,7 @@ public static class InvoiceModule
 
             var dashboardGroup = app.MapGroup("dashboard").WithTags("Dashboard");
             dashboardGroup.MapGetSageSubmissionRateEndpoint();
+            dashboardGroup.MapGetLhdnSubmissionRateEndpoint();
         }
     }
 
