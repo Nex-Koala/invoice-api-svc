@@ -20,6 +20,7 @@ using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Profile;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Statistic;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Uom;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.UomMapping;
+using NexKoala.WebApi.Invoice.Infrastructure.Jobs;
 using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
 using NexKoala.WebApi.Invoice.Infrastructure.Services;
 
@@ -160,6 +161,8 @@ public static class InvoiceModule
         builder.Services.AddScoped<IQuotaService, QuotaService>();
         builder.Services.AddScoped<TrimStringService>();
         builder.Services.AddScoped<IAuditService, AuditService>();
+
+        builder.Services.AddInvoiceJobs(builder.Configuration);
 
         return builder;
     }

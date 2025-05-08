@@ -12,6 +12,7 @@
     <PackageReference Include="itext7.bouncy-castle-adapter" />
     <PackageReference Include="itext7.pdfhtml" />
     <PackageReference Include="QRCoder" />
+    <PackageReference Include="TimeZoneConverter" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\framework\Infrastructure\Infrastructure.csproj" />

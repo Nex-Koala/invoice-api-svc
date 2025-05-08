@@ -26,14 +26,31 @@ public class JobFilter : IClientFilter
         using var scope = _services.CreateScope();
 
         var httpContext = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>()?.HttpContext;
-        _ = httpContext ?? throw new InvalidOperationException("Can't create a TenantJob without HttpContext.");
 
-        var tenantInfo = scope.ServiceProvider.GetRequiredService<IMultiTenantContextAccessor>().MultiTenantContext.TenantInfo;
-        context.SetJobParameter(TenantConstants.Identifier, tenantInfo);
+        // Safe fallback: Only set UserId if HttpContext is available
+        if (httpContext != null)
+        {
+            string? userId = httpContext.User.GetUserId();
+            context.SetJobParameter(QueryStringKeys.UserId, userId);
+        }
+        else
+        {
+            Logger.Warn("HttpContext is null. Skipping setting UserId.");
+        }
 
-        string? userId = httpContext.User.GetUserId();
-        context.SetJobParameter(QueryStringKeys.UserId, userId);
+        // TenantInfo should not depend on HttpContext if MultiTenantContext is available
+        var tenantContext = scope.ServiceProvider.GetRequiredService<IMultiTenantContextAccessor>().MultiTenantContext;
+
+        if (tenantContext?.TenantInfo != null)
+        {
+            context.SetJobParameter(TenantConstants.Identifier, tenantContext.TenantInfo);
+        }
+        else
+        {
+            Logger.Warn("TenantInfo is null. Skipping setting TenantId.");
+        }
     }
+
 
     public void OnCreated(CreatedContext context) =>
         Logger.InfoFormat(
