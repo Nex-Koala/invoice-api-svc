@@ -22,7 +22,7 @@ public static class SubmitInvoiceEndpoint
                 {
                     if (context.User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
                     {
-                        return Results.BadRequest();
+                        return Results.Unauthorized();
                     }
 
                     if (!await quotaService.TryAcquireQuota(userId))

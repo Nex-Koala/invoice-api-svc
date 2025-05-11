@@ -9,4 +9,4 @@ using NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Document;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GetDocumentDetails.v1;
 
-public record GetDocumentDetails(string Uuid, string OnBehalfOf) : IRequest<Response<DocumentDetails>>;
+public record GetDocumentDetails(string Uuid, string UserId, bool? IsAdmin = false) : IRequest<Response<DocumentDetails>>;

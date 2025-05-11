@@ -20,9 +20,14 @@ public static class GetRecentDocumentsEndpoint
                 {
                     if (context.User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
                     {
-                        return Results.BadRequest();
+                        return Results.Unauthorized();
                     }
                     request.UserId = userId;
+
+                    if (context.User.IsInRole("Admin"))
+                    {
+                        request.IsAdmin = true;
+                    }
                     var response = await mediator.Send(request);
                     return Results.Ok(response);
                 }

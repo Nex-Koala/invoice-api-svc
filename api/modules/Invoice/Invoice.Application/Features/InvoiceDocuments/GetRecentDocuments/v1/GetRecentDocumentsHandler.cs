@@ -7,12 +7,15 @@ using NexKoala.WebApi.Invoice.Application.Features.Partners.Specifications;
 using NexKoala.Framework.Core.Persistence;
 using NexKoala.WebApi.Invoice.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using NexKoala.WebApi.Invoice.Domain.Settings;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GetRecentDocuments.v1;
 
 public sealed class GetRecentDocumentsHandler(
     ILhdnApi lhdnApi,
-    [FromKeyedServices("invoice:partners")]IRepository<Partner> partnerRepository
+    [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository,
+    IOptions<EInvoiceSettings> options
 ) : IRequestHandler<GetRecentDocuments, Response<RecentDocuments>>
 {
     public async Task<Response<RecentDocuments>> Handle(
@@ -22,20 +25,32 @@ public sealed class GetRecentDocumentsHandler(
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        // get user TIN
-        var partner = await partnerRepository.FirstOrDefaultAsync(new PartnerByUserIdSpec(request.UserId), cancellationToken);
+        string partnerTin;
 
-        if (partner == null)
+        if (request.IsAdmin ?? false)
         {
-            return new Response<RecentDocuments>("Partner not found.");
+            partnerTin = options.Value.AdminTin;
+        }
+        else
+        {
+            var partner = await partnerRepository.FirstOrDefaultAsync(
+                new PartnerByUserIdSpec(request.UserId),
+                cancellationToken
+            );
+
+            if (partner == null)
+            {
+                return new Response<RecentDocuments>("Partner not found.");
+            }
+
+            if (string.IsNullOrWhiteSpace(partner.Tin))
+            {
+                return new Response<RecentDocuments>($"The TIN (Tax Identification Number) for {partner.Name} is not set.");
+            }
+
+            partnerTin = partner.Tin;
         }
 
-        if (string.IsNullOrWhiteSpace(partner.Tin))
-        {
-            return new Response<RecentDocuments>($"The TIN (Tax Identification Number) for {partner.Name} is not set.");
-        }
-
-        string partnerTin = partner!.Tin;
         var item = await lhdnApi.GetRecentDocumentsAsync(request, partnerTin);
 
         if (item == null)
