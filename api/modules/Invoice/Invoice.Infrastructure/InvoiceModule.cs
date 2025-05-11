@@ -64,6 +64,8 @@ public static class InvoiceModule
             classificationMappingGroup.MapGetClassificationMappingListEndpoint();
 
             var invoiceApiGroup = app.MapGroup("invoiceApi").WithTags("Invoice Api");
+            invoiceApiGroup.MapGetMsicCodesEndpoint();
+            invoiceApiGroup.MapGetStateCodesEndpoint();
             invoiceApiGroup.MapGetClassificationCodesEndpoint();
             invoiceApiGroup.MapGetTaxTypesEndpoint();
             invoiceApiGroup.MapGetCurrencyCodesEndpoint();
