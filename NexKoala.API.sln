@@ -51,10 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invoice.Domain", "api\modul
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invoice.Infrastructure", "api\modules\Invoice\Invoice.Infrastructure\Invoice.Infrastructure.csproj", "{DD643628-175D-4F9E-A371-A13F5C1A4692}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefaults", "aspire\service-defaults\ServiceDefaults.csproj", "{2C87B70B-DC08-4177-A678-6B545B5741DE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "aspire\Host\Host.csproj", "{5B0081FA-8457-476E-A260-B3C4789019DA}"
-EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
