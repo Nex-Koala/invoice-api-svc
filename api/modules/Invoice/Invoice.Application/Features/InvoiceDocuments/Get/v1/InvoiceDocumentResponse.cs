@@ -11,7 +11,7 @@ public class InvoiceDocumentResponse
     public Guid Id { get; set; }
     public string? Uuid { get; set; }
     public string InvoiceNumber { get; set; }
-    public DateTime IssueDate { get; set; }
+    public DateTimeOffset IssueDate { get; set; }
     public string DocumentCurrencyCode { get; set; }
     public string? TaxCurrencyCode { get; set; }
     public decimal TotalAmount { get; set; }

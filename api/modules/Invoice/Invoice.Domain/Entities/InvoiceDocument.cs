@@ -9,7 +9,7 @@ public class InvoiceDocument : AuditableEntity, IAggregateRoot
 {
     public string? Uuid { get; set; }
     public string InvoiceNumber { get; set; } // "JSON-INV12345"
-    public DateTime IssueDate { get; set; } // "2024-07-23"
+    public DateTimeOffset IssueDate { get; set; } // "2024-07-23"
     public string DocumentCurrencyCode { get; set; } // "MYR"
     public string? TaxCurrencyCode { get; set; } // "MYR"
     public decimal TotalAmount { get; set; } // Total Payable Amount
