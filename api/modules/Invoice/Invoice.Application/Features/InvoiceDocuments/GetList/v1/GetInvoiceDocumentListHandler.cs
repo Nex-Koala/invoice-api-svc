@@ -26,6 +26,7 @@ public class GetInvoiceDocumentListHandler(
             request.PageSize,
             request.Uuid,
             request.Status,
+            request.DocumentStatus,
             request.IssueDateFrom,
             request.IssueDateTo,
             parsedUserId

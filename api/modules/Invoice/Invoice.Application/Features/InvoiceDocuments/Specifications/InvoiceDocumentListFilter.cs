@@ -20,6 +20,7 @@ internal class InvoiceDocumentListFilterSpec
         int pageSize,
         string? uuid = null,
         bool? status = null,
+        DocumentStatus? documentStatus = null,
         DateTime? issueDateFrom = null,
         DateTime? issueDateTo = null,
         Guid? userId = null
@@ -29,6 +30,7 @@ internal class InvoiceDocumentListFilterSpec
         Query.Where(i =>
             (uuid == null || (i.Uuid != null && i.Uuid.Contains(uuid)))
             && (status == null || i.SubmissionStatus == status)
+            && (documentStatus == null || i.DocumentStatus == documentStatus)
             && (issueDateFrom == null || i.IssueDate >= issueDateFrom)
             && (issueDateTo == null || i.IssueDate <= issueDateTo)
             && (userId == null || userId == Guid.Empty || i.CreatedBy == userId)
