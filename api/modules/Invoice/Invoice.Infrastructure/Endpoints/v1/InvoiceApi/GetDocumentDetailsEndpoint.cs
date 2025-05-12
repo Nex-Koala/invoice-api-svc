@@ -20,10 +20,16 @@ public static class GetDocumentDetailsEndpoint
                 {
                     if (context.User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
                     {
-                        return Results.BadRequest();
+                        return Results.Unauthorized();
                     }
 
-                    var response = await mediator.Send(new GetDocumentDetails(uuid, userId));
+                    bool isAdmin = false;
+                    if (context.User.IsInRole("Admin"))
+                    {
+                        isAdmin = true;
+                    }
+
+                    var response = await mediator.Send(new GetDocumentDetails(uuid, userId, isAdmin));
                     return Results.Ok(response);
                 }
             )

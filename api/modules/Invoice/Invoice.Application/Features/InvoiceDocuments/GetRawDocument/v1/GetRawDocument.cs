@@ -9,4 +9,4 @@ using NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Document;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GetRawDocument.v1;
 
-public record GetRawDocument(string Uuid, string UserId) : IRequest<Response<RawDocument>>;
+public record GetRawDocument(string Uuid, string UserId, bool? IsAdmin = false) : IRequest<Response<RawDocument>>;

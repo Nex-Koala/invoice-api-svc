@@ -20,6 +20,7 @@ using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Profile;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Statistic;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Uom;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.UomMapping;
+using NexKoala.WebApi.Invoice.Infrastructure.Jobs;
 using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
 using NexKoala.WebApi.Invoice.Infrastructure.Services;
 
@@ -63,6 +64,8 @@ public static class InvoiceModule
             classificationMappingGroup.MapGetClassificationMappingListEndpoint();
 
             var invoiceApiGroup = app.MapGroup("invoiceApi").WithTags("Invoice Api");
+            invoiceApiGroup.MapGetMsicCodesEndpoint();
+            invoiceApiGroup.MapGetStateCodesEndpoint();
             invoiceApiGroup.MapGetClassificationCodesEndpoint();
             invoiceApiGroup.MapGetTaxTypesEndpoint();
             invoiceApiGroup.MapGetCurrencyCodesEndpoint();
@@ -78,6 +81,8 @@ public static class InvoiceModule
             invoiceApiGroup.MapGetPurchaseInvoicesEndpoint();
             invoiceApiGroup.MapGetCreditDebitNotesEndpoint();
             invoiceApiGroup.MapGetPurchaseCreditDebitNotesEndpoint();
+            invoiceApiGroup.MapGetInvoiceDocumentEndpoint();
+            invoiceApiGroup.MapGetInvoiceDocumentListEndpoint();
 
             var partnerGroup = app.MapGroup("partners").WithTags("Partners");
             partnerGroup.MapPartnerCreationEndpoint();
@@ -92,6 +97,7 @@ public static class InvoiceModule
 
             var dashboardGroup = app.MapGroup("dashboard").WithTags("Dashboard");
             dashboardGroup.MapGetSageSubmissionRateEndpoint();
+            dashboardGroup.MapGetLhdnSubmissionRateEndpoint();
         }
     }
 
@@ -102,7 +108,7 @@ public static class InvoiceModule
         builder.Services.AddScoped<IDbInitializer, InvoiceDbInitializer>();
 
         builder.Services.AddDbContext<ClientDbContext>(options =>
-        options.UseNpgsql(
+        options.UseSqlServer(
             builder.Configuration.GetConnectionString("ClientConnection"),
             b => b.MigrationsAssembly(typeof(ClientDbContext).Assembly.FullName))
         );
@@ -157,6 +163,8 @@ public static class InvoiceModule
         builder.Services.AddScoped<IQuotaService, QuotaService>();
         builder.Services.AddScoped<TrimStringService>();
         builder.Services.AddScoped<IAuditService, AuditService>();
+
+        builder.Services.AddInvoiceJobs(builder.Configuration);
 
         return builder;
     }

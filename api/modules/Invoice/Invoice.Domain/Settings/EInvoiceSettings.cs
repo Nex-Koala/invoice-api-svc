@@ -13,4 +13,5 @@ public class EInvoiceSettings
     public string ClientSecret { get; set; }
     public string OnBehalfOf { get; set; }
     public string TemplatePath { get; set; }
+    public string AdminTin { get; set; }
 }

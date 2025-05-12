@@ -8,4 +8,7 @@ using NexKoala.Framework.Core.Wrappers;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.Statistics.GetSageSubmissionRate.v1;
 
-public record GetSageSubmissionRate(DateTime? StartDate, DateTime? EndDate) : IRequest<Response<List<SubmissionRateResponse>>>;
+public record GetSageSubmissionRate(DateTime? StartDate, DateTime? EndDate) : IRequest<Response<List<SubmissionRateResponse>>>
+{
+    public string? UserId { get; init; }
+};

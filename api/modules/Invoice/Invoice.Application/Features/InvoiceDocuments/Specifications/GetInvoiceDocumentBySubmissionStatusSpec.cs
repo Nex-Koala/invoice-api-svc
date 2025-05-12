@@ -6,7 +6,7 @@ namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specific
 {
     internal class GetInvoiceDocumentBySubmissionStatusSpec : Specification<InvoiceDocument>
     {
-        public GetInvoiceDocumentBySubmissionStatusSpec(bool status, DateTime? startDate = null, DateTime? endDate = null)
+        public GetInvoiceDocumentBySubmissionStatusSpec(bool status, DateTime? startDate = null, DateTime? endDate = null, Guid? userId = null)
         {
             Query.Where(i => i.SubmissionStatus == status);
 
@@ -18,6 +18,11 @@ namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specific
             if (endDate.HasValue)
             {
                 Query.Where(i => i.IssueDate <= endDate.Value);
+            }
+
+            if (userId.HasValue && userId != Guid.Empty)
+            {
+                Query.Where(i => i.CreatedBy == userId.Value);
             }
         }
     }

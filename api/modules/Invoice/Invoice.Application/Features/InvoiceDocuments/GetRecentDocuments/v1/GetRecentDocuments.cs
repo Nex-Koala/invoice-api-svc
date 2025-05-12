@@ -28,4 +28,5 @@ public partial class GetRecentDocuments : IRequest<Response<RecentDocuments>>
     public string? IssuerIdType { get; set; }
     public string? IssuerId { get; set; }
     public string? UserId { get; set; } = default!;
+    public bool? IsAdmin { get; set; } = false;
 }

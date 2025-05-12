@@ -150,9 +150,17 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<string>("ContactNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<string>("CountryCode")
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(100)
@@ -191,12 +199,15 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .HasMaxLength(3)
                         .HasColumnType("character varying(3)");
 
+                    b.Property<string>("DocumentStatus")
+                        .HasColumnType("text");
+
                     b.Property<string>("InvoiceNumber")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<DateTime>("IssueDate")
+                    b.Property<DateTimeOffset>("IssueDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset>("LastModified")
@@ -219,6 +230,12 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .HasColumnType("character varying(3)");
 
                     b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalExcludingTax")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalIncludingTax")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Uuid")
@@ -259,6 +276,9 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .HasColumnType("character varying(50)");
 
                     b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TaxAmount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UnitCode")
@@ -408,13 +428,33 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
+                    b.Property<string>("BusinessActivityDescription")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
                     b.Property<string>("City")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("ContactNumber")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("CountryCode")
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("IdType")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("MsicCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(100)
@@ -423,6 +463,14 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                     b.Property<string>("PostalCode")
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
+
+                    b.Property<string>("SstRegistrationNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("TaxTourismRegistrationNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Tin")
                         .HasMaxLength(20)

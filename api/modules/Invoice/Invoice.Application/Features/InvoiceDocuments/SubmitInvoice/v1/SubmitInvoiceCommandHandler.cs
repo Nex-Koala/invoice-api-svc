@@ -239,7 +239,7 @@ public sealed class SubmitInvoiceComamndHandler
                                                 new()
                                                 {
                                                     _ = request.SupplierBRN,
-                                                    SchemeId = "NRIC", //TODO: need switch between NRIC, BRN, PASSPORT, OR ARMY
+                                                    SchemeId = IsValidIdType(request.SupplierIdType) ? request.SupplierIdType : "NRIC", //TODO: need switch between NRIC, BRN, PASSPORT, OR ARMY
                                                 },
                                             ],
                                         },
@@ -435,17 +435,17 @@ public sealed class SubmitInvoiceComamndHandler
                             [
                                 new()
                                 {
-                                    _ = request.TotalAmount,
+                                    _ = request.TotalPayableAmount,
                                     CurrencyId = request.CurrencyCode,
                                 },
                             ],
                             TaxExclusiveAmount =
                             [
-                                new() { _ = 0, CurrencyId = request.CurrencyCode },
+                                new() { _ = request.TotalExcludingTax, CurrencyId = request.CurrencyCode },
                             ],
                             TaxInclusiveAmount =
                             [
-                                new() { _ = 0, CurrencyId = request.CurrencyCode },
+                                new() { _ = request.TotalIncludingTax, CurrencyId = request.CurrencyCode },
                             ],
                         },
                     ],
@@ -457,7 +457,7 @@ public sealed class SubmitInvoiceComamndHandler
                             InvoicedQuantity = [new() { _ = item.Qty, UnitCode = uomMappingDictionary[item.Unit] }],
                             LineExtensionAmount =
                             [
-                                new() { _ = item.TotItemVal, CurrencyId = request.CurrencyCode },
+                                new() { _ = item.Subtotal, CurrencyId = request.CurrencyCode },
                             ],
                             Item =
                             [
@@ -575,7 +575,7 @@ public sealed class SubmitInvoiceComamndHandler
                                     [
                                         new()
                                         {
-                                            _ = item.TotItemVal,
+                                            _ = item.Subtotal,
                                             CurrencyId = request.CurrencyCode,
                                         }
                                     ]
@@ -878,7 +878,14 @@ public sealed class SubmitInvoiceComamndHandler
             Address = FormatAddress(request.SupplierAddressLine1, request.SupplierAddressLine2, request.SupplierAddressLine3),
             City = request.SupplierCity,
             PostalCode = request.SupplierPostalCode,
-            CountryCode = request.SupplierCountryCode
+            CountryCode = request.SupplierCountryCode,
+            IdType = request.SupplierIdType,
+            SstRegistrationNumber = request.SupplierSST,
+            TaxTourismRegistrationNumber = request.SupplierTTX,
+            MsicCode = request.SupplierIndustryCode,
+            BusinessActivityDescription = request.SupplierBusinessActivityDescription,
+            Email = request.SupplierEmail,
+            ContactNumber = request.SupplierTelephone
         };
 
         var customer = new Customer
@@ -889,7 +896,9 @@ public sealed class SubmitInvoiceComamndHandler
             Address = FormatAddress(request.CustomerAddressLine1, request.CustomerAddressLine2, request.CustomerAddressLine3),
             City = request.CustomerCity,
             PostalCode = request.CustomerPostalCode,
-            CountryCode = request.CustomerCountryCode
+            CountryCode = request.CustomerCountryCode,
+            Email = request.CustomerEmail,
+            ContactNumber = request.CustomerTelephone
         };
 
         var invoiceLine = request.ItemList.ConvertAll(item => new InvoiceLine()
@@ -897,7 +906,8 @@ public sealed class SubmitInvoiceComamndHandler
             LineNumber = item.Id,
             Quantity = item.Qty,
             UnitPrice = item.UnitPrice,
-            LineAmount = item.TotItemVal,
+            LineAmount = item.Subtotal,
+            TaxAmount = item.TaxAmount,
             Description = item.Description,
             UnitCode = uomMappingDictionary[item.Unit],
             CurrencyCode = request.CurrencyCode
@@ -909,13 +919,15 @@ public sealed class SubmitInvoiceComamndHandler
             IssueDate = now,
             DocumentCurrencyCode = request.CurrencyCode,
             TaxCurrencyCode = request.CurrencyCode,
-            TotalAmount = request.TotalAmount,
+            TotalAmount = request.TotalPayableAmount,
             TaxAmount = request.TaxAmount,
             Supplier = supplier,
             SupplierId = supplier.Id,
             Customer = customer,
             CustomerId = customer.Id,
-            InvoiceLines = invoiceLine
+            InvoiceLines = invoiceLine,
+            TotalExcludingTax = request.TotalExcludingTax,
+            TotalIncludingTax = request.TotalIncludingTax,
         };
 
         // submission success
@@ -923,6 +935,7 @@ public sealed class SubmitInvoiceComamndHandler
         {
             invoiceDocument.Uuid = response.AcceptedDocuments.FirstOrDefault()?.Uuid;
             invoiceDocument.SubmissionStatus = true;
+            invoiceDocument.DocumentStatus = DocumentStatus.Submitted;
             await _invoiceDocumentRepository.AddAsync(invoiceDocument, cancellationToken);
             return new Response<SubmitInvoiceResponse>(response, "Successfully submit invoice");
         }
@@ -986,5 +999,15 @@ public sealed class SubmitInvoiceComamndHandler
 
         var cleanedPhone = new string(inputPhone.Where(char.IsDigit).ToArray());
         return "+" + cleanedPhone;
+    }
+
+    public static bool IsValidIdType(string? idType)
+    {
+        var validTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "NRIC", "BRN", "PASSPORT", "ARMY"
+    };
+
+        return !string.IsNullOrWhiteSpace(idType) && validTypes.Contains(idType.Trim());
     }
 }

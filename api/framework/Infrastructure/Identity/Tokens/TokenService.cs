@@ -86,7 +86,7 @@ public sealed class TokenService : ITokenService
     }
     private async Task<TokenResponse> GenerateTokensAndUpdateUser(User user, string ipAddress)
     {
-        string token = GenerateJwt(user, ipAddress);
+        string token = await GenerateJwt(user, ipAddress);
 
         user.RefreshToken = GenerateRefreshToken();
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtOptions.RefreshTokenExpirationInDays);
@@ -109,8 +109,12 @@ public sealed class TokenService : ITokenService
         return new TokenResponse(user.Id, user.UserName, user.Email, roles, token, user.RefreshToken, user.RefreshTokenExpiryTime);
     }
 
-    private string GenerateJwt(User user, string ipAddress) =>
-    GenerateEncryptedToken(GetSigningCredentials(), GetClaims(user, ipAddress));
+    private async Task<string> GenerateJwt(User user, string ipAddress)
+    {
+        var claims = await GetClaims(user, ipAddress);
+
+        return GenerateEncryptedToken(GetSigningCredentials(), claims);
+    }
 
     private SigningCredentials GetSigningCredentials()
     {
@@ -131,8 +135,11 @@ public sealed class TokenService : ITokenService
         return tokenHandler.WriteToken(token);
     }
 
-    private List<Claim> GetClaims(User user, string ipAddress) =>
-        new List<Claim>
+    private async Task<List<Claim>> GetClaims(User user, string ipAddress)
+    {
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Email, user.Email!),
@@ -144,6 +151,15 @@ public sealed class TokenService : ITokenService
             new(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty),
             new(IdentityConstants.Claims.ImageUrl, user.ImageUrl == null ? string.Empty : user.ImageUrl.ToString())
         };
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        return claims;
+    }
+        
     private static string GenerateRefreshToken()
     {
         byte[] randomNumber = new byte[32];
