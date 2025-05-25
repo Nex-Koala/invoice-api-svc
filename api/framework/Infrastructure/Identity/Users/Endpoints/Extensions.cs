@@ -21,6 +21,7 @@ internal static class Extensions
         app.MapAssignRolesToUserEndpoint();
         app.MapGetUserRolesEndpoint();
         app.MapGetUserAuditTrailEndpoint();
+        app.MapGetIdentityAuditTrailsEndpoint();
         return app;
     }
 }
