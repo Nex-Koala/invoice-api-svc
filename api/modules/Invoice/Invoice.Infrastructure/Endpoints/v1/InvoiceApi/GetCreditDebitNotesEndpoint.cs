@@ -16,7 +16,7 @@ public static class GetCreditDebitNotesEndpoint
         return endpoints
             .MapGet(
                 "/credit-debit-notes",
-                async (IInvoiceService service, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] decimal? sequenceNumber = null) =>
+                async (IInvoiceService service, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? sequenceNumber = null) =>
                 {
                     var response = await service.GetCreditDebitNotes(page, pageSize, sequenceNumber);
                     return Results.Ok(response);

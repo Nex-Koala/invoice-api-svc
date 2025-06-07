@@ -16,7 +16,7 @@ public static class GetSalesInvoicesEndpoint
         return endpoints
             .MapGet(
                 "/sales-invoices",
-                async (IInvoiceService service, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] decimal? invoiceNumber = null) =>
+                async (IInvoiceService service, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? invoiceNumber = null) =>
                 {
                     var response = await service.GetSalesInvoices(page, pageSize, invoiceNumber);
                     return Results.Ok(response);

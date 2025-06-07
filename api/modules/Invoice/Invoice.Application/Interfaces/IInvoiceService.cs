@@ -18,13 +18,13 @@ public interface IInvoiceService
     Task<PaginatedResult<OrderEntryHeader>> GetSalesInvoices(
         int page = 1,
         int pageSize = 10,
-        decimal? invoiceNumber = null
+        string? invoiceNumber = null
     );
 
     Task<PaginatedResult<OrderCreditDebitHeader>> GetCreditDebitNotes(
         int page = 1,
         int pageSize = 10,
-        decimal? sequenceNumber = null
+        string? sequenceNumber = null
     );
 
     Task<PaginatedResult<PurchaseInvoiceHeader>> GetPurchaseInvoices(
