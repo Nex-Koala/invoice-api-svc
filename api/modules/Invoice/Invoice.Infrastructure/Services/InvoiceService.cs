@@ -76,13 +76,13 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// </summary>
     public async Task<PaginatedResult<OrderEntryHeader>> GetSalesInvoices(int page = 1,
             int pageSize = 10,
-            decimal? invoiceNumber = null)
+            string? invoiceNumber = null)
     {
         var query = dbContext.OrderEntryHeaders
                     .Include(h => h.OrderEntryDetails)
                     .AsQueryable();
 
-        if (invoiceNumber.HasValue)
+        if (!string.IsNullOrEmpty(invoiceNumber))
         {
             query = query.Where(h => EF.Functions.Like(h.INVNUMBER, $"%{invoiceNumber}%"));
         }
@@ -114,13 +114,13 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// </summary>
     public async Task<PaginatedResult<OrderCreditDebitHeader>> GetCreditDebitNotes(int page = 1,
             int pageSize = 10,
-            decimal? sequenceNumber = null)
+            string? sequenceNumber = null)
     {
         var query = dbContext.OrderCreditDebitHeaders
                 .Include(h => h.OrderCreditDebitDetails)
                 .AsQueryable();
 
-        if (sequenceNumber.HasValue)
+        if (!string.IsNullOrEmpty(sequenceNumber))
         {
             query = query.Where(h => EF.Functions.Like(h.INVNUMBER, $"%{sequenceNumber}%"));
         }
