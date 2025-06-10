@@ -46,13 +46,27 @@ public sealed class GenerateInvoiceCommandHandler(
         }
 
         // get user TIN
-        var partner = await partnerRepository.FirstOrDefaultAsync(new PartnerByUserIdSpec(request.UserId), cancellationToken);
-        string partnerTin = partner!.Tin;
-        if (partnerTin == null)
+        string partnerTin;
+        if (request.IsAdmin ?? false)
         {
-            return new Response<byte[]>($"The TIN (Tax Identification Number) for {partner.Name} is not set.");
+            partnerTin = options.Value.AdminTin;
         }
+        else
+        {
+            var partner = await partnerRepository.FirstOrDefaultAsync(new PartnerByUserIdSpec(request.UserId), cancellationToken);
 
+            if (partner == null)
+            {
+                return new Response<byte[]>($"Partner not found for user ID {request.UserId}.");
+            }
+
+            if (string.IsNullOrWhiteSpace(partner.Tin))
+            {
+                return new Response<byte[]>($"The TIN (Tax Identification Number) for {partner.Name} is not set.");
+            }
+
+            partnerTin = partner.Tin;
+        }
         var rawDocument = await lhdnApi.GetDocumentAsync(request.Uuid, partnerTin);
         var baseUrl = options.Value.ApiBaseUrl;
         string invoiceXmlTree = GenerateInvoiceXml(invoiceDocument, rawDocument, baseUrl, invoiceService);
