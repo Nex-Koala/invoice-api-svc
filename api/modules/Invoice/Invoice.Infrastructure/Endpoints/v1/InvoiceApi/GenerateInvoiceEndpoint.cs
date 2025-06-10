@@ -20,12 +20,18 @@ public static class GenerateInvoiceEndpoint
                 "{uuid}/generate-invoice",
                 async (string uuid, ISender mediator, HttpContext context) =>
                 {
-            if (context.User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
-            {
-                return Results.BadRequest();
-            }
+                    if (context.User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
+                    {
+                        return Results.BadRequest();
+                    }
 
-            var response = await mediator.Send(new GenerateInvoiceCommand(uuid, userId));
+                    bool isAdmin = false;
+                    if (context.User.IsInRole("Admin"))
+                    {
+                        isAdmin = true;
+                    }
+
+                    var response = await mediator.Send(new GenerateInvoiceCommand(uuid, userId, isAdmin));
                     return Results.File(response.Data, "application/pdf", $"invoice_{uuid}.pdf");
                 }
             )
