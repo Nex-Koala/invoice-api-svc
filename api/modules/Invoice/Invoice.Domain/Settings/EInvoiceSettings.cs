@@ -14,4 +14,5 @@ public class EInvoiceSettings
     public string OnBehalfOf { get; set; }
     public string TemplatePath { get; set; }
     public string AdminTin { get; set; }
+    public string MyInvoiceBaseUrl { get; set; }
 }
