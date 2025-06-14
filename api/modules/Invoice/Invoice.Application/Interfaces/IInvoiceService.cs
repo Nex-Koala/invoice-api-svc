@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NexKoala.WebApi.Invoice.Application.Dtos;
+using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Get.v1;
 using NexKoala.WebApi.Invoice.Domain.Entities.OE;
 using NexKoala.WebApi.Invoice.Domain.Entities.PO;
 
@@ -22,4 +23,6 @@ public interface IInvoiceService
     Task<PaginatedResult<PurchaseInvoiceHeader>> GetPurchaseInvoices(InvoiceFilterParams filter);
 
     Task<PaginatedResult<PurchaseCreditDebitNoteHeader>> GetPurchaseCreditDebitNotes(InvoiceFilterParams filter);
+
+    byte[] ExportInvoiceSubmissionExcel(IEnumerable<InvoiceDocumentResponse> documents);
 }

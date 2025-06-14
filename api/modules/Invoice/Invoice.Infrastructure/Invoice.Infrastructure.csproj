@@ -9,6 +9,7 @@
     <None Remove="Persistence\Repositories\**" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ClosedXML" />
     <PackageReference Include="itext7.bouncy-castle-adapter" />
     <PackageReference Include="itext7.pdfhtml" />
     <PackageReference Include="QRCoder" />

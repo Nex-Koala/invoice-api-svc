@@ -83,6 +83,7 @@ public static class InvoiceModule
             invoiceApiGroup.MapGetPurchaseCreditDebitNotesEndpoint();
             invoiceApiGroup.MapGetInvoiceDocumentEndpoint();
             invoiceApiGroup.MapGetInvoiceDocumentListEndpoint();
+            invoiceApiGroup.MapExportInvoiceSubmissionExcelEndpoint();
 
             var partnerGroup = app.MapGroup("partners").WithTags("Partners");
             partnerGroup.MapPartnerCreationEndpoint();

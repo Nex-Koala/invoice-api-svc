@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Xsl;
 using System.Xml;
-using NexKoala.WebApi.Invoice.Application.Interfaces;
+using System.Xml.Xsl;
+using ClosedXML.Excel;
 using iText.Html2pdf;
-using QRCoder;
-using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
-using NexKoala.WebApi.Invoice.Infrastructure.Helpers;
-using NexKoala.WebApi.Invoice.Domain.Entities.OE;
 using Microsoft.EntityFrameworkCore;
-using NexKoala.WebApi.Invoice.Domain.Entities.PO;
 using NexKoala.WebApi.Invoice.Application.Dtos;
+using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Get.v1;
+using NexKoala.WebApi.Invoice.Application.Interfaces;
+using NexKoala.WebApi.Invoice.Domain.Entities.OE;
+using NexKoala.WebApi.Invoice.Domain.Entities.PO;
+using NexKoala.WebApi.Invoice.Infrastructure.Helpers;
+using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
+using QRCoder;
 
 namespace NexKoala.WebApi.Invoice.Infrastructure.Services;
 public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStringService) : IInvoiceService
@@ -255,5 +257,51 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
         }
 
         return paginatedResult;
+    }
+
+    public byte[] ExportInvoiceSubmissionExcel(IEnumerable<InvoiceDocumentResponse> documents)
+    {
+        using var workbook = new XLWorkbook();
+        var worksheet = workbook.Worksheets.Add("Invoice Submissions");
+
+        // Header
+        var headers = new[]
+        {
+            "Invoice No", "Issue Date", "Supplier Name", "Supplier TIN", "Customer Name", "Customer TIN",
+            "Total Payable Amount", "Tax Amount", "Total Excl. Tax", "Total Incl. Tax",
+            "Currency", "Status"
+        };
+
+        for (int i = 0; i < headers.Length; i++)
+            worksheet.Cell(1, i + 1).Value = headers[i];
+
+        // Data
+        int row = 2;
+        foreach (var doc in documents)
+        {
+            worksheet.Cell(row, 1).Value = doc.InvoiceNumber;
+            worksheet.Cell(row, 2).Value = doc.IssueDate.ToString("yyyy-MM-dd");
+            worksheet.Cell(row, 3).Value = doc.Supplier?.Name ?? "-";
+            worksheet.Cell(row, 4).Value = doc.Supplier?.Tin ?? "-";
+            worksheet.Cell(row, 5).Value = doc.Customer?.Name ?? "-";
+            worksheet.Cell(row, 6).Value = doc.Customer?.Tin ?? "-";
+            worksheet.Cell(row, 7).Value = doc.TotalAmount;
+            worksheet.Cell(row, 8).Value = doc.TaxAmount;
+            worksheet.Cell(row, 9).Value = doc.TotalExcludingTax;
+            worksheet.Cell(row, 10).Value = doc.TotalIncludingTax;
+            worksheet.Cell(row, 11).Value = doc.DocumentCurrencyCode ?? "-";
+            worksheet.Cell(row, 12).Value = doc.DocumentStatus?.ToString() ?? "-";
+            row++;
+        }
+
+        // Optional: Auto adjust column widths
+        worksheet.Columns().AdjustToContents();
+
+        // Save to byte array
+        using var stream = new MemoryStream();
+        workbook.SaveAs(stream);
+        var excelData = stream.ToArray();
+
+        return excelData;
     }
 }

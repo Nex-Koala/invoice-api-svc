@@ -6,15 +6,11 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using MediatR;
 using NexKoala.Framework.Core.Wrappers;
-using NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Get.v1;
 using NexKoala.WebApi.Invoice.Domain.Entities;
 
-namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.GetList.v1;
-
-public record GetInvoiceDocumentList : IRequest<PagedResponse<InvoiceDocumentResponse>>
+namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.ExportExcel.v1;
+public record ExportInvoiceSubmissionExcelCommand : IRequest<Response<byte[]>>
 {
-    public int PageNumber { get; init; } = 1;
-    public int PageSize { get; init; } = 20;
     public string? Uuid { get; init; }
     public bool? Status { get; init; }
     public DateTimeOffset? IssueDateFrom { get; init; }
