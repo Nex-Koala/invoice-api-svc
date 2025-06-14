@@ -74,20 +74,28 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// AP => APIBH (Payable Invoice Header) and APIBD (Payable Invoice Detail)
     ///       NA??
     /// </summary>
-    public async Task<PaginatedResult<OrderEntryHeader>> GetSalesInvoices(int page = 1,
-            int pageSize = 10,
-            decimal? invoiceNumber = null)
+    public async Task<PaginatedResult<OrderEntryHeader>> GetSalesInvoices(InvoiceFilterParams filter)
     {
         var query = dbContext.OrderEntryHeaders
                     .Include(h => h.OrderEntryDetails)
                     .AsQueryable();
 
-        if (invoiceNumber.HasValue)
+        if (!string.IsNullOrEmpty(filter.InvoiceNumber))
         {
-            query = query.Where(h => EF.Functions.Like(h.INVNUMBER, $"%{invoiceNumber}%"));
+            query = query.Where(h => EF.Functions.Like(h.INVNUMBER, $"%{filter.InvoiceNumber}%"));
         }
 
-        var paginatedResult = await PaginationHelper.PaginateAsync(query, page, pageSize);
+        if (!string.IsNullOrWhiteSpace(filter.BuyerName))
+        {
+            query = query.Where(h => EF.Functions.Like(h.BILNAME, $"%{filter.BuyerName}%"));
+        }
+
+        if (filter.InvoiceDate.HasValue)
+        {
+            query = query.Where(h => h.INVDATE == filter.InvoiceDate.Value);
+        }
+
+        var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
 
         foreach (var header in paginatedResult.Data)
         {
@@ -112,20 +120,28 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// AP => APIBH (Payable Invoice Header) and APIBD (Payable Invoice Detail)
     ///       Fields: Description (TEXTDESC), Tax (AMTTAX1)
     /// </summary>
-    public async Task<PaginatedResult<OrderCreditDebitHeader>> GetCreditDebitNotes(int page = 1,
-            int pageSize = 10,
-            decimal? sequenceNumber = null)
+    public async Task<PaginatedResult<OrderCreditDebitHeader>> GetCreditDebitNotes(InvoiceFilterParams filter)
     {
         var query = dbContext.OrderCreditDebitHeaders
                 .Include(h => h.OrderCreditDebitDetails)
                 .AsQueryable();
 
-        if (sequenceNumber.HasValue)
+        if (!string.IsNullOrEmpty(filter.InvoiceNumber))
         {
-            query = query.Where(h => EF.Functions.Like(h.INVNUMBER, $"%{sequenceNumber}%"));
+            query = query.Where(h => EF.Functions.Like(h.INVNUMBER, $"%{filter.InvoiceNumber}%"));
         }
 
-        var paginatedResult = await PaginationHelper.PaginateAsync(query, page, pageSize);
+        if (!string.IsNullOrWhiteSpace(filter.BuyerName))
+        {
+            query = query.Where(h => EF.Functions.Like(h.BILNAME, $"%{filter.BuyerName}%"));
+        }
+
+        if (filter.InvoiceDate.HasValue)
+        {
+            query = query.Where(h => h.CRDDATE == filter.InvoiceDate.Value);
+        }
+
+        var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
 
         foreach (var note in paginatedResult.Data)
         {
@@ -146,21 +162,28 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// PO => POINVH1 (Purchase Invoice Header) and POINVL (Purchase Invoice Line)
     /// AP => APIBH (Accounts Payable Invoice Header) and APIBD (Accounts Payable Invoice Detail)
     /// </summary>
-    public async Task<PaginatedResult<PurchaseInvoiceHeader>> GetPurchaseInvoices(
-        int page = 1,
-        int pageSize = 10,
-        string? invoiceNumber = null)
+    public async Task<PaginatedResult<PurchaseInvoiceHeader>> GetPurchaseInvoices(InvoiceFilterParams filter)
     {
         var query = dbContext.PurchaseInvoiceHeaders
                 .Include(h => h.PurchaseInvoiceDetails)
                 .AsQueryable();
 
-        if (!string.IsNullOrEmpty(invoiceNumber))
+        if (!string.IsNullOrEmpty(filter.InvoiceNumber))
         {
-            query = query.Where(h => EF.Functions.Like(h.INVNUMBER, $"%{invoiceNumber}%"));
+            query = query.Where(h => EF.Functions.Like(h.INVNUMBER, $"%{filter.InvoiceNumber}%"));
         }
 
-        var paginatedResult = await PaginationHelper.PaginateAsync(query, page, pageSize);
+        if (!string.IsNullOrWhiteSpace(filter.SupplierName))
+        {
+            query = query.Where(h => EF.Functions.Like(h.VDNAME, $"%{filter.SupplierName}%"));
+        }
+
+        if (filter.InvoiceDate.HasValue)
+        {
+            query = query.Where(h => h.DATE == filter.InvoiceDate.Value);
+        }
+
+        var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
 
         foreach (var invoice in paginatedResult.Data)
         {
@@ -182,21 +205,33 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// PO => POCRNH1 (Purchase Credit/Debit Note Header) and POCRNL (Purchase Credit/Debit Note Line)
     /// AP => APIBH (Accounts Payable Invoice Header) and APIBD (Accounts Payable Invoice Detail)
     /// </summary>
-    public async Task<PaginatedResult<PurchaseCreditDebitNoteHeader>> GetPurchaseCreditDebitNotes(
-        int page = 1,
-        int pageSize = 10,
-        string? noteNumber = null)
+    public async Task<PaginatedResult<PurchaseCreditDebitNoteHeader>> GetPurchaseCreditDebitNotes(InvoiceFilterParams filter)
     {
         var query = dbContext.PurchaseCreditNoteHeaders
                 .Include(h => h.PurchaseCreditDebitNoteDetails)
                 .AsQueryable();
 
-        if (!string.IsNullOrEmpty(noteNumber))
+        if (!string.IsNullOrEmpty(filter.NoteNumber))
         {
-            query = query.Where(h => EF.Functions.Like(h.CRNNUMBER, $"%{noteNumber}%"));
+            query = query.Where(h => EF.Functions.Like(h.CRNNUMBER, $"%{filter.NoteNumber}%"));
         }
 
-        var paginatedResult = await PaginationHelper.PaginateAsync(query, page, pageSize);
+        if (!string.IsNullOrEmpty(filter.InvoiceNumber))
+        {
+            query = query.Where(h => EF.Functions.Like(h.INVNUMBER, $"%{filter.InvoiceNumber}%"));
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.SupplierName))
+        {
+            query = query.Where(h => EF.Functions.Like(h.VDNAME, $"%{filter.SupplierName}%"));
+        }
+
+        if (filter.InvoiceDate.HasValue)
+        {
+            query = query.Where(h => h.DATE == filter.InvoiceDate.Value);
+        }
+
+        var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
 
         foreach (var note in paginatedResult.Data)
         {

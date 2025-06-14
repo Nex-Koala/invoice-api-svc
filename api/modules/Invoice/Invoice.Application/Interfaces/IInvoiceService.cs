@@ -15,27 +15,11 @@ public interface IInvoiceService
 
     string GenerateQRCode(string data);
 
-    Task<PaginatedResult<OrderEntryHeader>> GetSalesInvoices(
-        int page = 1,
-        int pageSize = 10,
-        decimal? invoiceNumber = null
-    );
+    Task<PaginatedResult<OrderEntryHeader>> GetSalesInvoices(InvoiceFilterParams filter);
 
-    Task<PaginatedResult<OrderCreditDebitHeader>> GetCreditDebitNotes(
-        int page = 1,
-        int pageSize = 10,
-        decimal? sequenceNumber = null
-    );
+    Task<PaginatedResult<OrderCreditDebitHeader>> GetCreditDebitNotes(InvoiceFilterParams filter);
 
-    Task<PaginatedResult<PurchaseInvoiceHeader>> GetPurchaseInvoices(
-        int page = 1,
-        int pageSize = 10,
-        string? invoiceNumber = null
-    );
+    Task<PaginatedResult<PurchaseInvoiceHeader>> GetPurchaseInvoices(InvoiceFilterParams filter);
 
-    Task<PaginatedResult<PurchaseCreditDebitNoteHeader>> GetPurchaseCreditDebitNotes(
-        int page = 1,
-        int pageSize = 10,
-        string? noteNumber = null
-    );
+    Task<PaginatedResult<PurchaseCreditDebitNoteHeader>> GetPurchaseCreditDebitNotes(InvoiceFilterParams filter);
 }

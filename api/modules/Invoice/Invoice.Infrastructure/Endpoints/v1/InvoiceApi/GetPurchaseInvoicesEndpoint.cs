@@ -16,9 +16,9 @@ public static class GetPurchaseInvoicesEndpoint
         return endpoints
             .MapGet(
                 "/purchase-invoices",
-                async (IInvoiceService service, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string invoiceNumber = null) =>
+                async (IInvoiceService service, [AsParameters] InvoiceFilterParams filter) =>
                 {
-                    var response = await service.GetPurchaseInvoices(page, pageSize, invoiceNumber);
+                    var response = await service.GetPurchaseInvoices(filter);
                     return Results.Ok(response);
                 }
             )
