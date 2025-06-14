@@ -132,8 +132,6 @@ public static class InvoiceModule
         builder.Services.AddKeyedScoped<IRepository<Partner>, InvoiceRepository<Partner>>("invoice:partners");
         builder.Services.AddKeyedScoped<IReadRepository<Partner>, InvoiceRepository<Partner>>("invoice:partners");
 
-        builder.Services.AddKeyedScoped<IRepository<InvoiceDocument>, InvoiceRepository<InvoiceDocument>>("invoice:invoiceDocuments");
-        builder.Services.AddKeyedScoped<IReadRepository<InvoiceDocument>, InvoiceRepository<InvoiceDocument>>("invoice:invoiceDocuments");
 
         builder.Services.AddKeyedScoped<IRepository<InvoiceLine>, InvoiceRepository<InvoiceLine>>("invoice:invoiceLines");
         builder.Services.AddKeyedScoped<IReadRepository<InvoiceLine>, InvoiceRepository<InvoiceLine>>("invoice:invoiceLines");
