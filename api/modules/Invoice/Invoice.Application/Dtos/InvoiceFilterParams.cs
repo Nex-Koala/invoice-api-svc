@@ -13,6 +13,7 @@ public class InvoiceFilterParams
     public string? InvoiceNumber { get; set; }
     public string? BuyerName { get; set; }
     public string? SupplierName { get; set; }
-    public decimal? InvoiceDate { get; set; }
+    public decimal? InvoiceDateFrom { get; set; }
+    public decimal? InvoiceDateTo { get; set; }
     public string? NoteNumber { get; set; }
 }

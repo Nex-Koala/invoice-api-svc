@@ -90,9 +90,11 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
             query = query.Where(h => EF.Functions.Like(h.BILNAME, $"%{filter.BuyerName}%"));
         }
 
-        if (filter.InvoiceDate.HasValue)
+        if (filter.InvoiceDateFrom.HasValue && filter.InvoiceDateTo.HasValue)
         {
-            query = query.Where(h => h.INVDATE == filter.InvoiceDate.Value);
+            query = query.Where(h =>
+                h.INVDATE >= filter.InvoiceDateFrom.Value &&
+                h.INVDATE <= filter.InvoiceDateTo.Value);
         }
 
         var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
@@ -136,9 +138,11 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
             query = query.Where(h => EF.Functions.Like(h.BILNAME, $"%{filter.BuyerName}%"));
         }
 
-        if (filter.InvoiceDate.HasValue)
+        if (filter.InvoiceDateFrom.HasValue && filter.InvoiceDateTo.HasValue)
         {
-            query = query.Where(h => h.CRDDATE == filter.InvoiceDate.Value);
+            query = query.Where(h =>
+                h.CRDDATE >= filter.InvoiceDateFrom.Value &&
+                h.CRDDATE <= filter.InvoiceDateTo.Value);
         }
 
         var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
@@ -178,9 +182,11 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
             query = query.Where(h => EF.Functions.Like(h.VDNAME, $"%{filter.SupplierName}%"));
         }
 
-        if (filter.InvoiceDate.HasValue)
+        if (filter.InvoiceDateFrom.HasValue && filter.InvoiceDateTo.HasValue)
         {
-            query = query.Where(h => h.DATE == filter.InvoiceDate.Value);
+            query = query.Where(h =>
+                h.DATE >= filter.InvoiceDateFrom.Value &&
+                h.DATE <= filter.InvoiceDateTo.Value);
         }
 
         var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
@@ -226,9 +232,11 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
             query = query.Where(h => EF.Functions.Like(h.VDNAME, $"%{filter.SupplierName}%"));
         }
 
-        if (filter.InvoiceDate.HasValue)
+        if (filter.InvoiceDateFrom.HasValue && filter.InvoiceDateTo.HasValue)
         {
-            query = query.Where(h => h.DATE == filter.InvoiceDate.Value);
+            query = query.Where(h =>
+                h.DATE >= filter.InvoiceDateFrom.Value &&
+                h.DATE <= filter.InvoiceDateTo.Value);
         }
 
         var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
