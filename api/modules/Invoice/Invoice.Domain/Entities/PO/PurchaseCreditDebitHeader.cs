@@ -23,6 +23,7 @@ namespace NexKoala.WebApi.Invoice.Domain.Entities.PO
         public string VDCOUNTRY { get; set; }
         public string VDPHONE { get; set; } // Supplier Phone
         public string CRNNUMBER { get; set; } // Credit Note Number
+        public string INVNUMBER { get; set; } // Invoice Number
         public decimal DATE { get; set; } // Document Date
         public decimal AUDTTIME { get; set; } // Audit Time
         public string CURRENCY { get; set; } // Currency Code

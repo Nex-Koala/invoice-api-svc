@@ -68,7 +68,7 @@ public sealed class GenerateInvoiceCommandHandler(
             partnerTin = partner.Tin;
         }
         var rawDocument = await lhdnApi.GetDocumentAsync(request.Uuid, partnerTin);
-        var baseUrl = options.Value.ApiBaseUrl;
+        var baseUrl = options.Value.MyInvoiceBaseUrl;
         string invoiceXmlTree = GenerateInvoiceXml(invoiceDocument, rawDocument, baseUrl, invoiceService);
 
         byte[] pdfBytes = invoiceService.GenerateInvoice(invoiceXmlTree, templatePath);
