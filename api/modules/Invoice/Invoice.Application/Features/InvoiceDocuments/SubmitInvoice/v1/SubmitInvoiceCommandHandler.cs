@@ -71,7 +71,7 @@ public sealed class SubmitInvoiceComamndHandler
             request.SupplierTIN = partner.Tin;
         }
 
-        // check submission is exist and submitted sucessfully
+        // check submission is exist and submitted successfully
         var existingInvoiceDocument = await _invoiceDocumentRepository
             .FirstOrDefaultAsync(new GetInvoiceDocumentByInvoiceNumber(request.Irn, true), cancellationToken);
 
