@@ -915,6 +915,7 @@ public sealed class SubmitInvoiceComamndHandler
 
         var invoiceDocument = new InvoiceDocument()
         {
+            InvoiceTypeCode = request.InvoiceTypeCode,
             InvoiceNumber = request.BillingReferenceID,
             IssueDate = now,
             DocumentCurrencyCode = request.CurrencyCode,
@@ -977,16 +978,16 @@ public sealed class SubmitInvoiceComamndHandler
         }
     }
 
-    public static string FormatAddress(string line1, string line2, string line3)
+    public static string FormatAddress(string? line1, string? line2, string? line3)
     {
-        var addressParts = new[]
-        {
-            line1,
-            line2,
-            line3
-        };
+        var addressParts = new[] { line1, line2, line3 }
+            .Where(part => !string.IsNullOrWhiteSpace(part))
+            .Select(part => part!
+                .Trim()
+                .Trim(',')
+            );
 
-        return string.Join(", ", addressParts.Where(part => !string.IsNullOrWhiteSpace(part)));
+        return string.Join(", ", addressParts);
     }
 
     private static string FormatPhoneNumber(string inputPhone)

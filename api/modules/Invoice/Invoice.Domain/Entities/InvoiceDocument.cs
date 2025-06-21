@@ -8,6 +8,7 @@ namespace NexKoala.WebApi.Invoice.Domain.Entities;
 public class InvoiceDocument : AuditableEntity, IAggregateRoot
 {
     public string? Uuid { get; set; }
+    public string InvoiceTypeCode { get; set; }
     public string InvoiceNumber { get; set; } // "JSON-INV12345"
     public DateTimeOffset IssueDate { get; set; } // "2024-07-23"
     public string DocumentCurrencyCode { get; set; } // "MYR"
@@ -23,6 +24,8 @@ public class InvoiceDocument : AuditableEntity, IAggregateRoot
     public ICollection<InvoiceLine> InvoiceLines { get; set; } // Invoice Line Items
     public bool SubmissionStatus { get; set; } = false; // Submission status
     public DocumentStatus? DocumentStatus { get; set; }
+    public string? LongId { get; set; } // Long ID for the document
+    public DateTimeOffset? DateTimeValidated { get; set; }
 }
 
 public enum DocumentStatus
