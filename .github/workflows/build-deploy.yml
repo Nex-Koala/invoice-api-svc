@@ -61,7 +61,7 @@ jobs:
           docker run -d \
             --name ${{ env.CONTAINER_NAME }} \
             --add-host=host.docker.internal:host-gateway \
-            -p ${{ env.TARGET_PORT }}:80 \
+            -p ${{ env.TARGET_PORT }}:${{ env.TARGET_PORT }}  \
             --restart always \
             -e "DatabaseOptions__ConnectionString=Host=host.docker.internal;Port=5432;Database=einvoice;Username=postgres;Password=Nex@123" \
             -e "ConnectionStrings__ClientConnection=Server=host.docker.internal,1433;Database=U1STMC;User Id=sa;Password=Nex@1234;MultipleActiveResultSets=true;TrustServerCertificate=True" \
