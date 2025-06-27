@@ -48,6 +48,8 @@ public class LhdnStatusJob
 
                 if (response != null)
                 {
+                    doc.LongId = response.LongId; // Update LongId
+                    doc.DateTimeValidated = response.DateTimeValidated; // Update DateTimeValidated
                     if (response.Status == "Valid")
                     {
                         doc.DocumentStatus = Domain.Entities.DocumentStatus.Valid;

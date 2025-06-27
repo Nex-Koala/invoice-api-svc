@@ -77,6 +77,7 @@ public static class InvoiceModule
             invoiceApiGroup.MapCreateInvoiceEndpoint();
             invoiceApiGroup.MapSubmitInvoiceEndpoint();
             invoiceApiGroup.MapGenerateInvoiceEndpoint();
+            invoiceApiGroup.MapGenerateInvoiceFromDbEndpoint();
             invoiceApiGroup.MapGetSalesInvoicesEndpoint();
             invoiceApiGroup.MapGetPurchaseInvoicesEndpoint();
             invoiceApiGroup.MapGetCreditDebitNotesEndpoint();

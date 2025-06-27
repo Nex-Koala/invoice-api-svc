@@ -16,6 +16,7 @@ internal class InvoiceDocumentConfiguration : IEntityTypeConfiguration<InvoiceDo
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Uuid).HasMaxLength(50);
+        builder.Property(x => x.InvoiceTypeCode).IsRequired().HasMaxLength(30);
         builder.Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
         builder.Property(x => x.IssueDate).IsRequired();
         builder.Property(x => x.DocumentCurrencyCode).IsRequired().HasMaxLength(3);
@@ -26,6 +27,7 @@ internal class InvoiceDocumentConfiguration : IEntityTypeConfiguration<InvoiceDo
         builder.Property(x => x.TotalIncludingTax).IsRequired().HasColumnType("decimal(18,2)");
         builder.Property(x => x.SubmissionStatus).IsRequired();
         builder.Property(x => x.DocumentStatus).HasConversion<string>();
+        builder.Property(x => x.LongId).HasMaxLength(50);
 
         builder
             .HasOne(x => x.Supplier)
