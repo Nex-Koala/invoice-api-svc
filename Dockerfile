@@ -1,18 +1,15 @@
-# 1. Build stage
+# STAGE 1 - Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy everything
+# Copy everything and restore
 COPY . .
-
-# Set working directory to the project folder and restore/build/publish
 WORKDIR /src/api/server
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish
 
-# 2. Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+# STAGE 2 - Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
-
-ENTRYPOINT ["dotnet", "Server.dll"]
+ENTRYPOINT ["dotnet", "NexKoala.WebApi.Host.dll"]
