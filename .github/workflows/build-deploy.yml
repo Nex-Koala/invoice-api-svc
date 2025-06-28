@@ -7,9 +7,9 @@ on:
 
 env:
   IMAGE_NAME: nex-koala-api
-  TARBALL_NAME: nex-koala-api.tar
   CONTAINER_NAME: nex-koala-api
   TARGET_PORT: 8082
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USER }}/nex-koala-api:latest
 
 jobs:
   build-and-deploy:
@@ -22,28 +22,16 @@ jobs:
     - name: 🛠 Build Docker Image
       run: docker build -t ${{ env.IMAGE_NAME }} .
 
-    - name: 📦 Save Docker Image as Tarball
-      run: |
-        echo "Saving Docker image to tarball: ${{ env.TARBALL_NAME }}"
-        docker save ${{ env.IMAGE_NAME }} -o ${{ env.TARBALL_NAME }}
+    - name: 🏷️ Tag Image for Docker Hub
+      run: docker tag ${{ env.IMAGE_NAME }} ${{ env.DOCKER_IMAGE }}
 
-    - name: 🔐 Set Appropriate Permissions for SCP
-      run: |
-        echo "Adjusting file permissions for tarball"
-        chmod 644 ${{ env.TARBALL_NAME }}
+    - name: 🔐 Login to Docker Hub
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
 
-    - name: 🚀 Transfer Image to Remote Server
-      uses: appleboy/scp-action@v0.1.6
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        source: ${{ env.TARBALL_NAME }}
-        target: /tmp/
-        overwrite: true
+    - name: 🚀 Push to Docker Hub
+      run: docker push ${{ env.DOCKER_IMAGE }}
 
-    - name: 🔄 Load and Run Docker Container on Remote Host
+    - name: 🚀 Deploy on Remote Host
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -51,20 +39,13 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          echo "Cleaning up existing container (if any)..."
           docker rm -f ${{ env.CONTAINER_NAME }} || true
-
-          echo "Loading Docker image..."
-          docker load -i /tmp/${{ env.TARBALL_NAME }}
-
-          echo "Starting new container: ${{ env.CONTAINER_NAME }}"
+          docker pull ${{ env.DOCKER_IMAGE }}
           docker run -d \
             --name ${{ env.CONTAINER_NAME }} \
             --add-host=host.docker.internal:host-gateway \
-            -p ${{ env.TARGET_PORT }}:${{ env.TARGET_PORT }}  \
+            -p ${{ env.TARGET_PORT }}:8080 \
             --restart always \
             -e "DatabaseOptions__ConnectionString=Host=host.docker.internal;Port=5432;Database=einvoice;Username=postgres;Password=Nex@123" \
             -e "ConnectionStrings__ClientConnection=Server=host.docker.internal,1433;Database=U1STMC;User Id=sa;Password=Nex@1234;MultipleActiveResultSets=true;TrustServerCertificate=True" \
-            ${{ env.IMAGE_NAME }}
-
-          echo "✅ API deployment completed on $(hostname) at $(date)"
+            ${{ env.DOCKER_IMAGE }}
