@@ -25,10 +25,22 @@ public class ExportInvoiceSubmissionExcelCommandHandler(
     public async Task<Response<byte[]>> Handle(ExportInvoiceSubmissionExcelCommand request, CancellationToken cancellationToken)
     {
         Guid.TryParse(request.UserId, out var parsedUserId);
+
+        var parsedStatuses = request.DocumentStatus?
+        .Select(status =>
+        {
+            return Enum.TryParse<DocumentStatus>(status, ignoreCase: true, out var result)
+                ? result
+                : (DocumentStatus?)null;
+        })
+        .Where(x => x.HasValue)
+        .Select(x => x!.Value)
+        .ToList();
+
         var spec = new InvoiceDocumentListFilterWithoutPaginationSpec(
             request.Uuid,
             true,
-            request.DocumentStatus,
+            parsedStatuses,
             request.IssueDateFrom,
             request.IssueDateTo,
             parsedUserId

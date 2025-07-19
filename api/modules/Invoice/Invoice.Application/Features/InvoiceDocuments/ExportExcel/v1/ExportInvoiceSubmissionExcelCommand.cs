@@ -16,7 +16,5 @@ public record ExportInvoiceSubmissionExcelCommand : IRequest<Response<byte[]>>
     public DateTimeOffset? IssueDateFrom { get; init; }
     public DateTimeOffset? IssueDateTo { get; init; }
     public string? UserId { get; init; }
-
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public DocumentStatus? DocumentStatus { get; init; }
+    public List<string>? DocumentStatus { get; init; }
 }

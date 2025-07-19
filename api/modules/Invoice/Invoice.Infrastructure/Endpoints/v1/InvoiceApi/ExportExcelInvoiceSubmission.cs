@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using NexKoala.Framework.Infrastructure.Auth.Policy;
 using NexKoala.Framework.Infrastructure.Identity.Users;
@@ -19,12 +20,12 @@ public static class ExportInvoiceSubmissionExcelEndpoint
     )
     {
         return endpoints
-            .MapGet(
+            .MapPost(
                 "/export-submission-history",
                 async (
                     ISender mediator,
                     HttpContext context,
-                    [AsParameters] ExportInvoiceSubmissionExcelCommand request
+                    [FromBody] ExportInvoiceSubmissionExcelCommand request
                 ) =>
                 {
                     var userId = context.User.GetUserId();

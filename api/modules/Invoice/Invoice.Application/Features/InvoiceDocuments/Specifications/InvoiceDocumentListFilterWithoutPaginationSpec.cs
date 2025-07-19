@@ -14,16 +14,16 @@ internal class InvoiceDocumentListFilterWithoutPaginationSpec : Specification<In
     public InvoiceDocumentListFilterWithoutPaginationSpec(
         string? uuid = null,
         bool? status = null,
-        DocumentStatus? documentStatus = null,
+        List<DocumentStatus>? documentStatuses = null,
         DateTimeOffset? issueDateFrom = null,
         DateTimeOffset? issueDateTo = null,
         Guid? userId = null
-    )
+)
     {
         Query.Where(i =>
             (uuid == null || (i.Uuid != null && i.Uuid.Contains(uuid)))
             && (status == null || i.SubmissionStatus == status)
-            && (documentStatus == null || i.DocumentStatus == documentStatus)
+            && (documentStatuses == null || documentStatuses.Contains(i.DocumentStatus.Value))
             && (issueDateFrom == null || i.IssueDate >= issueDateFrom)
             && (issueDateTo == null || i.IssueDate <= issueDateTo)
             && (userId == null || userId == Guid.Empty || i.CreatedBy == userId)
