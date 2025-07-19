@@ -71,7 +71,6 @@ public class Partner : AuditableEntity, IAggregateRoot
         string? email,
         string? phone,
         string? licenseKey,
-        bool? status,
         int? maxSubmissions
     )
     {
@@ -99,13 +98,18 @@ public class Partner : AuditableEntity, IAggregateRoot
         if (licenseKey is not null && LicenseKey?.Equals(licenseKey, StringComparison.OrdinalIgnoreCase) is not true)
             LicenseKey = licenseKey;
 
-        if (status is not null && Status != status.Value)
-            Status = status.Value;
-
         if (maxSubmissions is not null && MaxSubmissions != maxSubmissions.Value)
             MaxSubmissions = maxSubmissions.Value;
 
         return this;
+    }
+
+    public void SyncStatus(bool isActive)
+    {
+        if (Status != isActive)
+        {
+            Status = isActive;
+        }
     }
 
     public Partner ProfileUpdate(

@@ -47,7 +47,7 @@ public sealed class TokenService : ITokenService
 
         if (!user.IsActive)
         {
-            throw new UnauthorizedException("user is deactivated");
+            throw new UnauthorizedException("Your account is deactivated. Please reach out to support for assistance.");
         }
 
         if (currentTenant.Id != IdentityConstants.RootTenant)
