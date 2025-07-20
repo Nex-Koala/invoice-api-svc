@@ -18,7 +18,7 @@ using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
 using QRCoder;
 
 namespace NexKoala.WebApi.Invoice.Infrastructure.Services;
-public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStringService) : IInvoiceService
+public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStringService, InvoiceDbContext invoiceDbContext) : IInvoiceService
 {
     public byte[] GenerateInvoice(string xmlContent, string xsltTemplatePath)
     {
@@ -78,6 +78,15 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// </summary>
     public async Task<PaginatedResult<OrderEntryHeader>> GetSalesInvoices(InvoiceFilterParams filter)
     {
+        var submittedInvoiceNumbers = new HashSet<string>(
+            await invoiceDbContext.InvoiceDocuments
+                .Where(x => x.DocumentStatus == Domain.Entities.DocumentStatus.Submitted
+                            || x.DocumentStatus == Domain.Entities.DocumentStatus.Valid)
+                .Select(x => x.InvoiceNumber)
+                .Distinct()
+                .ToListAsync()
+        );
+
         var query = dbContext.OrderEntryHeaders
                     .Include(h => h.OrderEntryDetails)
                     .AsQueryable();
@@ -98,6 +107,8 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
                 h.INVDATE >= filter.InvoiceDateFrom.Value &&
                 h.INVDATE <= filter.InvoiceDateTo.Value);
         }
+
+        query = query.Where(h => !submittedInvoiceNumbers.Contains(h.INVNUMBER));
 
         var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
 
@@ -126,6 +137,15 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// </summary>
     public async Task<PaginatedResult<OrderCreditDebitHeader>> GetCreditDebitNotes(InvoiceFilterParams filter)
     {
+        var submittedInvoiceNumbers = new HashSet<string>(
+            await invoiceDbContext.InvoiceDocuments
+                .Where(x => x.DocumentStatus == Domain.Entities.DocumentStatus.Submitted
+                            || x.DocumentStatus == Domain.Entities.DocumentStatus.Valid)
+                .Select(x => x.InvoiceNumber)
+                .Distinct()
+                .ToListAsync()
+        );
+
         var query = dbContext.OrderCreditDebitHeaders
                 .Include(h => h.OrderCreditDebitDetails)
                 .AsQueryable();
@@ -146,6 +166,8 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
                 h.CRDDATE >= filter.InvoiceDateFrom.Value &&
                 h.CRDDATE <= filter.InvoiceDateTo.Value);
         }
+
+        query = query.Where(h => !submittedInvoiceNumbers.Contains(h.INVNUMBER));
 
         var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
 
@@ -170,6 +192,15 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// </summary>
     public async Task<PaginatedResult<PurchaseInvoiceHeader>> GetPurchaseInvoices(InvoiceFilterParams filter)
     {
+        var submittedInvoiceNumbers = new HashSet<string>(
+            await invoiceDbContext.InvoiceDocuments
+                .Where(x => x.DocumentStatus == Domain.Entities.DocumentStatus.Submitted
+                            || x.DocumentStatus == Domain.Entities.DocumentStatus.Valid)
+                .Select(x => x.InvoiceNumber)
+                .Distinct()
+                .ToListAsync()
+        );
+
         var query = dbContext.PurchaseInvoiceHeaders
                 .Include(h => h.PurchaseInvoiceDetails)
                 .AsQueryable();
@@ -190,6 +221,8 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
                 h.DATE >= filter.InvoiceDateFrom.Value &&
                 h.DATE <= filter.InvoiceDateTo.Value);
         }
+
+        query = query.Where(h => !submittedInvoiceNumbers.Contains(h.INVNUMBER));
 
         var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
 
@@ -215,6 +248,15 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
     /// </summary>
     public async Task<PaginatedResult<PurchaseCreditDebitNoteHeader>> GetPurchaseCreditDebitNotes(InvoiceFilterParams filter)
     {
+        var submittedInvoiceNumbers = new HashSet<string>(
+            await invoiceDbContext.InvoiceDocuments
+                .Where(x => x.DocumentStatus == Domain.Entities.DocumentStatus.Submitted
+                            || x.DocumentStatus == Domain.Entities.DocumentStatus.Valid)
+                .Select(x => x.InvoiceNumber)
+                .Distinct()
+                .ToListAsync()
+        );
+
         var query = dbContext.PurchaseCreditNoteHeaders
                 .Include(h => h.PurchaseCreditDebitNoteDetails)
                 .AsQueryable();
@@ -240,6 +282,8 @@ public class InvoiceService(ClientDbContext dbContext, TrimStringService trimStr
                 h.DATE >= filter.InvoiceDateFrom.Value &&
                 h.DATE <= filter.InvoiceDateTo.Value);
         }
+
+        query = query.Where(h => !submittedInvoiceNumbers.Contains(h.INVNUMBER));
 
         var paginatedResult = await PaginationHelper.PaginateAsync(query, filter.Page, filter.PageSize);
 
