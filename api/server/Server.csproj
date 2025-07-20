@@ -29,6 +29,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\modules\Invoice\Invoice.Infrastructure\Resources\msic.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="appsettings.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

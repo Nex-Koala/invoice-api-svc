@@ -13,7 +13,9 @@ public class Supplier : BaseEntity, IAggregateRoot
     public string? TaxTourismRegistrationNumber { get; set; }
     public string? MsicCode { get; set; }
     public string? BusinessActivityDescription { get; set; }
-    public string? Address { get; set; } // Supplier's Address
+    public string? Address1 { get; set; } // Supplier's Address line 1
+    public string? Address2 { get; set; } // Supplier's Address line 2
+    public string? Address3 { get; set; } // Supplier's Address line 3
     public string? Email { get; set; }
     public string? ContactNumber { get; set; }
     public string? City { get; set; } // "Kuala Lumpur"

@@ -119,7 +119,13 @@ public sealed class GenerateInvoiceCommandHandler(
         var supplierInfo = new Dictionary<string, string>
         {
             ["supplierName"] = GetValueOrDash(supplier.Name),
-            ["supplierAddress"] = GetValueOrDash(FormatAddress(supplier.Address, supplier.PostalCode, supplier.City)),
+            ["supplierAddress"] = GetValueOrDash(FormatAddress(supplier.Address1, supplier.Address2, supplier.Address3, supplier.PostalCode, supplier.City)),
+            ["supplierAddress1"] = GetValueOrDash(supplier.Address1),
+            ["supplierAddress2"] = GetValueOrDash(supplier.Address2),
+            ["supplierAddress3"] = GetValueOrDash(supplier.Address3),
+            ["supplierCity"] = GetValueOrDash(supplier.City),
+            ["supplierPostalCode"] = GetValueOrDash(supplier.PostalCode),
+            ["supplierCountryCode"] = GetValueOrDash(supplier.CountryCode),
             ["supplierContact"] = GetValueOrDash(supplier.ContactNumber),
             ["supplierEmail"] = GetValueOrDash(supplier.Email),
             ["supplierTIN"] = GetValueOrDash(supplier.Tin),
@@ -136,7 +142,13 @@ public sealed class GenerateInvoiceCommandHandler(
             ["buyerTIN"] = GetValueOrDash(customer.Tin),
             ["buyerName"] = GetValueOrDash(customer.Name),
             ["buyerRegNo"] = GetValueOrDash(customer.Brn),
-            ["buyerAddress"] = GetValueOrDash(FormatAddress(customer.Address, customer.PostalCode, customer.City)),
+            ["buyerAddress"] = GetValueOrDash(FormatAddress(customer.Address1, customer.Address2, customer.Address3, customer.PostalCode, customer.City)),
+            ["buyerAddress1"] = GetValueOrDash(customer.Address1),
+            ["buyerAddress2"] = GetValueOrDash(customer.Address2),
+            ["buyerAddress3"] = GetValueOrDash(customer.Address3),
+            ["buyerCity"] = GetValueOrDash(customer.City),
+            ["buyerPostalCode"] = GetValueOrDash(customer.PostalCode),
+            ["buyerCountryCode"] = GetValueOrDash(customer.CountryCode),
             ["buyerContactNumber"] = GetValueOrDash(customer.ContactNumber),
             ["buyerEmail"] = GetValueOrDash(customer.Email)
         };
@@ -204,9 +216,9 @@ public sealed class GenerateInvoiceCommandHandler(
         return xDoc.ToString();
     }
 
-    private static string FormatAddress(string? address, string? postalCode, string? city)
+    private static string FormatAddress(string? address1, string? address2, string? address3, string? postalCode, string? city)
     {
-        var parts = new[] { address, postalCode, city }
+        var parts = new[] { address1, address2, address3, postalCode, city }
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .Select(p => p!.Trim().TrimEnd(','));
 

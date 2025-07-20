@@ -11,7 +11,9 @@ public class Customer : BaseEntity, IAggregateRoot
 
     public string? Brn { get; set; } // Buyer's BRN
 
-    public string? Address { get; set; } // Buyer's Address
+    public string? Address1 { get; set; } // Buyer's Address line 1
+    public string? Address2 { get; set; } // Buyer's Address line 2
+    public string? Address3 { get; set; } // Buyer's Address line 3
 
     public string? City { get; set; } // "Kuala Lumpur"
 

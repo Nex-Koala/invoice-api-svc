@@ -25,7 +25,9 @@ internal class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
         builder.Property(x => x.BusinessActivityDescription).HasMaxLength(300);
         builder.Property(x => x.Email).HasMaxLength(50);
         builder.Property(x => x.ContactNumber).HasMaxLength(50);
-        builder.Property(x => x.Address).HasMaxLength(100);
+        builder.Property(x => x.Address1).HasMaxLength(100);
+        builder.Property(x => x.Address2).HasMaxLength(100);
+        builder.Property(x => x.Address3).HasMaxLength(100);
         builder.Property(x => x.City).HasMaxLength(50);
         builder.Property(x => x.PostalCode).HasMaxLength(10);
         builder.Property(x => x.CountryCode).HasMaxLength(10);

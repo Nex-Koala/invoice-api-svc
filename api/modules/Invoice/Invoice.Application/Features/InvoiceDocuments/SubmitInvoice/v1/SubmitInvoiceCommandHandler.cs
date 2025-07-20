@@ -31,10 +31,11 @@ public sealed class SubmitInvoiceComamndHandler
     private readonly IRepository<Partner> _partnerRepository;
     private readonly ILogger<SubmitInvoiceComamndHandler> _logger;
     private readonly IPublisher _publisher;
+    private readonly IMsicService _msicService;
 
     public SubmitInvoiceComamndHandler(ILhdnApi lhdnApi, [FromKeyedServices("invoice:invoiceDocuments")] IRepository<InvoiceDocument> invoiceDocumentRepository,
         [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository, 
-        ILogger<SubmitInvoiceComamndHandler> logger, IPublisher publisher)
+        ILogger<SubmitInvoiceComamndHandler> logger, IPublisher publisher, IMsicService msicService)
     {
         _lhdnApi = lhdnApi;
         _invoiceDocumentRepository = invoiceDocumentRepository;
@@ -42,6 +43,7 @@ public sealed class SubmitInvoiceComamndHandler
         _partnerRepository = partnerRepository;
         _logger = logger;
         _publisher = publisher;
+        _msicService = msicService;
     }
 
     public async Task<object> Handle(
@@ -220,7 +222,7 @@ public sealed class SubmitInvoiceComamndHandler
                                         new()
                                         {
                                             _ = request.SupplierIndustryCode,
-                                            Name = "Provision of telecommunications services",
+                                            Name = _msicService.GetDescription(request.SupplierIndustryCode),
                                         },
                                     ],
                                     PartyIdentification =
@@ -875,7 +877,9 @@ public sealed class SubmitInvoiceComamndHandler
             Name = request.SupplierName,
             Tin = request.SupplierTIN,
             Brn = request.SupplierBRN,
-            Address = FormatAddress(request.SupplierAddressLine1, request.SupplierAddressLine2, request.SupplierAddressLine3),
+            Address1 = request.SupplierAddressLine1,
+            Address2 = request.SupplierAddressLine2,
+            Address3 = request.SupplierAddressLine3,
             City = request.SupplierCity,
             PostalCode = request.SupplierPostalCode,
             CountryCode = request.SupplierCountryCode,
@@ -893,7 +897,9 @@ public sealed class SubmitInvoiceComamndHandler
             Name = request.CustomerName,
             Tin = request.CustomerTIN,
             Brn = request.CustomerBRN,
-            Address = FormatAddress(request.CustomerAddressLine1, request.CustomerAddressLine2, request.CustomerAddressLine3),
+            Address1 = request.CustomerAddressLine1,
+            Address2 = request.CustomerAddressLine2,
+            Address3 = request.CustomerAddressLine3,
             City = request.CustomerCity,
             PostalCode = request.CustomerPostalCode,
             CountryCode = request.CustomerCountryCode,

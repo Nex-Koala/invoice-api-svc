@@ -163,6 +163,7 @@ public static class InvoiceModule
         builder.Services.AddScoped<IQuotaService, QuotaService>();
         builder.Services.AddScoped<TrimStringService>();
         builder.Services.AddScoped<IAuditService, AuditService>();
+        builder.Services.AddSingleton<IMsicService, MsicService>();
 
         builder.Services.AddInvoiceJobs(builder.Configuration);
 
