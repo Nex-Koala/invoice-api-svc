@@ -12,6 +12,7 @@ public class InvoiceLine : BaseEntity, IAggregateRoot
     public decimal TaxAmount { get; set; }
     public string? Description { get; set; } // Item description
     public string? UnitCode { get; set; } // "C62" - Unit code for invoiced quantity
+    public string? ClassificationCode { get; set; } // Classification code for the item
     public string? CurrencyCode { get; set; } // "MYR"
     public Guid InvoiceDocumentId { get; set; }
     public InvoiceDocument InvoiceDocument { get; set; }

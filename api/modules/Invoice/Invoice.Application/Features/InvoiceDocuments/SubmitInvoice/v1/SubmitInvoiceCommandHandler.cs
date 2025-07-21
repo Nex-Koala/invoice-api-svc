@@ -474,7 +474,7 @@ public sealed class SubmitInvoiceComamndHandler
                                         {
                                             ItemClassificationCode =
                                             [
-                                                new() { _ = "001", ListId = "CLASS" },
+                                                new() { _ = item.ClassificationCode, ListId = "CLASS" },
                                             ],
                                         },
                                     ],
@@ -916,7 +916,8 @@ public sealed class SubmitInvoiceComamndHandler
             TaxAmount = item.TaxAmount,
             Description = item.Description,
             UnitCode = uomMappingDictionary[item.Unit],
-            CurrencyCode = request.CurrencyCode
+            ClassificationCode = item.ClassificationCode,
+            CurrencyCode = request.CurrencyCode,
         });
 
         var invoiceDocument = new InvoiceDocument()
