@@ -139,6 +139,12 @@ public sealed class SubmitInvoiceComamndHandler
             }));
         }
 
+        var supplierIdType = IsValidIdType(request.SupplierIdType) ? request.SupplierIdType : "NRIC";
+        var supplierSst = request.SupplierSST ?? "NA";
+
+        var customerIdType = IsValidIdType(request.CustomerIdType) ? request.CustomerIdType : "NRIC";
+        var customerSst = request.CustomerSST ?? "NA";
+
         // Step 1: Construct the Invoice JSON document
         var ublInvoice = new UblInvoiceDocument()
         {
@@ -241,17 +247,17 @@ public sealed class SubmitInvoiceComamndHandler
                                                 new()
                                                 {
                                                     _ = request.SupplierBRN,
-                                                    SchemeId = IsValidIdType(request.SupplierIdType) ? request.SupplierIdType : "NRIC", //TODO: need switch between NRIC, BRN, PASSPORT, OR ARMY
+                                                    SchemeId = supplierIdType,
                                                 },
                                             ],
                                         },
-                                        //new()
-                                        //{
-                                        //    Id =
-                                        //    [
-                                        //        new() { _ = "", SchemeId = "SST" },
-                                        //    ],
-                                        //},
+                                        new()
+                                        {
+                                            Id =
+                                            [
+                                                new() { _ = supplierSst, SchemeId = "SST" },
+                                            ],
+                                        },
                                         //new()
                                         //{
                                         //    Id =
@@ -354,7 +360,18 @@ public sealed class SubmitInvoiceComamndHandler
                                                 new()
                                                 {
                                                     _ = request.CustomerBRN ?? "",
-                                                    SchemeId = "BRN",
+                                                    SchemeId = customerIdType,
+                                                },
+                                            ],
+                                        },
+                                        new()
+                                        {
+                                            Id =
+                                            [
+                                                new()
+                                                {
+                                                    _ = customerSst,
+                                                    SchemeId = "SST",
                                                 },
                                             ],
                                         },
@@ -883,8 +900,8 @@ public sealed class SubmitInvoiceComamndHandler
             City = request.SupplierCity,
             PostalCode = request.SupplierPostalCode,
             CountryCode = request.SupplierCountryCode,
-            IdType = request.SupplierIdType,
-            SstRegistrationNumber = request.SupplierSST,
+            IdType = supplierIdType,
+            SstRegistrationNumber = supplierSst,
             TaxTourismRegistrationNumber = request.SupplierTTX,
             MsicCode = request.SupplierIndustryCode,
             BusinessActivityDescription = request.SupplierBusinessActivityDescription,
@@ -904,7 +921,9 @@ public sealed class SubmitInvoiceComamndHandler
             PostalCode = request.CustomerPostalCode,
             CountryCode = request.CustomerCountryCode,
             Email = request.CustomerEmail,
-            ContactNumber = request.CustomerTelephone
+            ContactNumber = request.CustomerTelephone,
+            IdType = customerIdType,
+            SstRegistrationNumber = customerSst,
         };
 
         var invoiceLine = request.ItemList.ConvertAll(item => new InvoiceLine()
@@ -1012,9 +1031,9 @@ public sealed class SubmitInvoiceComamndHandler
     public static bool IsValidIdType(string? idType)
     {
         var validTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-    {
-        "NRIC", "BRN", "PASSPORT", "ARMY"
-    };
+        {
+            "NRIC", "BRN", "PASSPORT", "ARMY"
+        };
 
         return !string.IsNullOrWhiteSpace(idType) && validTypes.Contains(idType.Trim());
     }

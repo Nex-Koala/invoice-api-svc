@@ -43,7 +43,9 @@ namespace NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Invoice
 
         // Customer (AccountingCustomerParty) Fields
         public string CustomerTIN { get; set; }
+        public string CustomerIdType { get; set; }
         public string CustomerBRN { get; set; }
+        public string CustomerSST { get; set; }
         public string CustomerCity { get; set; }
         public string CustomerPostalCode { get; set; }
         public string CustomerCountrySubentityCode { get; set; }
