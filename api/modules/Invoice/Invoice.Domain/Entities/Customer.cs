@@ -18,7 +18,7 @@ public class Customer : AuditableEntity, IAggregateRoot
     public string? City { get; set; } // "Kuala Lumpur"
 
     public string? PostalCode { get; set; } // "50480"
-
+    public string? State { get; set; }
     public string? CountryCode { get; set; } // "MYS"
     public string? Email { get; set; }
     public string? ContactNumber { get; set; }

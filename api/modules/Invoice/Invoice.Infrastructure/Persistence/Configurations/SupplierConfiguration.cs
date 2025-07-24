@@ -30,6 +30,7 @@ internal class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
         builder.Property(x => x.Address3).HasMaxLength(100);
         builder.Property(x => x.City).HasMaxLength(50);
         builder.Property(x => x.PostalCode).HasMaxLength(10);
+        builder.Property(x => x.State).HasMaxLength(50);
         builder.Property(x => x.CountryCode).HasMaxLength(10);
     }
 }

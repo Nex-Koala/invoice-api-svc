@@ -20,5 +20,6 @@ public class Supplier : AuditableEntity, IAggregateRoot
     public string? ContactNumber { get; set; }
     public string? City { get; set; } // "Kuala Lumpur"
     public string? PostalCode { get; set; } // "50480"
+    public string? State { get; set; }
     public string? CountryCode { get; set; } // "MYS"
 }
