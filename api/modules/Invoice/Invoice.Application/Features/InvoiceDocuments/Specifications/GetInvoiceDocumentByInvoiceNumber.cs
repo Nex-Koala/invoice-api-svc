@@ -10,15 +10,15 @@ using NexKoala.WebApi.Invoice.Domain.Entities;
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.Specifications;
 internal class GetInvoiceDocumentByInvoiceNumber: Specification<InvoiceDocument, InvoiceDocument>
 {
-    public GetInvoiceDocumentByInvoiceNumber(string invoiceNum, bool getSuccessSubmit = false)
+    public GetInvoiceDocumentByInvoiceNumber(List<string> invoiceNums, bool getSuccessSubmit = false)
     {
-        Query.Where(i => i.InvoiceNumber.ToLower() == invoiceNum.ToLower());
+        var loweredInvoiceNums = invoiceNums.Select(x => x.ToLower()).ToList();
+
+        Query.Where(i => loweredInvoiceNums.Contains(i.InvoiceNumber.ToLower()));
 
         if (getSuccessSubmit)
         {
             Query.Where(i => i.SubmissionStatus);
         }
-        
     }
-    
 }
