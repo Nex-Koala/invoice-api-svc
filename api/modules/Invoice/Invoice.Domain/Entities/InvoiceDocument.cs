@@ -17,6 +17,8 @@ public class InvoiceDocument : AuditableEntity, IAggregateRoot
     public decimal TaxAmount { get; set; } // Tax Total
     public decimal TotalExcludingTax { get; set; }
     public decimal TotalIncludingTax { get; set; }
+    public string? BillingReferenceId { get; set; }
+    public string? AdditionalDocumentReferenceID { get; set; } // Reference Number of Customs Form No.1, 9, etc.
     public Guid SupplierId { get; set; }
     public Supplier Supplier { get; set; } // Supplier Info
     public Guid CustomerId { get; set; }

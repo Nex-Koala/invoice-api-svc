@@ -1,12 +1,14 @@
+using DocumentFormat.OpenXml.InkML;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using NexKoala.Framework.Infrastructure.Auth.Policy;
-using NexKoala.WebApi.Invoice.Application.Features.Classifications.GetList.v1;
-using NexKoala.WebApi.Invoice.Application.Features.Classifications.Get.v1;
 using NexKoala.Framework.Core.Paging;
+using NexKoala.Framework.Infrastructure.Auth.Policy;
+using NexKoala.Framework.Infrastructure.Identity.Users;
+using NexKoala.WebApi.Invoice.Application.Features.Classifications.Get.v1;
+using NexKoala.WebApi.Invoice.Application.Features.Classifications.GetList.v1;
 
 namespace NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Classification;
 
@@ -17,9 +19,12 @@ public static class GetClassificationListEndpoint
         return endpoints
             .MapGet(
                 "/",
-                async (ISender mediator, [FromQuery] Guid userId, [FromQuery] int? pageNumber, [FromQuery] int? pageSize) =>
+                async (ISender mediator, HttpContext context, [FromQuery] int? pageNumber, [FromQuery] int? pageSize) =>
                 {
-                    var response = await mediator.Send(new GetClassificationList(userId, pageNumber ?? 1, pageSize ?? int.MaxValue));
+                    var userId = context.User.GetUserId();
+                    Guid.TryParse(userId, out Guid parsedUserId);
+
+                    var response = await mediator.Send(new GetClassificationList(parsedUserId, pageNumber ?? 1, pageSize ?? int.MaxValue));
                     return Results.Ok(response);
                 }
             )

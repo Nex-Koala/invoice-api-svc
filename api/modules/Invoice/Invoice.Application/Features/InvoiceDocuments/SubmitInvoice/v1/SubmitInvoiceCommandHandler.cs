@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using NexKoala.WebApi.Invoice.Application.Features.UomMappings.Specifications;
 using NexKoala.WebApi.Invoice.Application.Features.Partners.Specifications;
 using NexKoala.WebApi.Invoice.Domain.Events;
+using NexKoala.WebApi.Invoice.Application.Features.Classifications.Specifications;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.InvoiceDocuments.SubmitInvoice.v1;
 
@@ -29,18 +30,21 @@ public sealed class SubmitInvoiceComamndHandler
     private readonly IRepository<InvoiceDocument> _invoiceDocumentRepository;
     private readonly IRepository<UomMapping> _uomMappingRepository;
     private readonly IRepository<Partner> _partnerRepository;
+    private readonly IRepository<ClassificationMapping> _classificationMappingRepository;
     private readonly ILogger<SubmitInvoiceComamndHandler> _logger;
     private readonly IPublisher _publisher;
     private readonly IMsicService _msicService;
 
     public SubmitInvoiceComamndHandler(ILhdnApi lhdnApi, [FromKeyedServices("invoice:invoiceDocuments")] IRepository<InvoiceDocument> invoiceDocumentRepository,
-        [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository, 
+        [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository,
+        [FromKeyedServices("invoice:classificationMappings")] IRepository<ClassificationMapping> classificationMappingRepository,
         ILogger<SubmitInvoiceComamndHandler> logger, IPublisher publisher, IMsicService msicService)
     {
         _lhdnApi = lhdnApi;
         _invoiceDocumentRepository = invoiceDocumentRepository;
         _uomMappingRepository = uomMappingRepository;
         _partnerRepository = partnerRepository;
+        _classificationMappingRepository = classificationMappingRepository;
         _logger = logger;
         _publisher = publisher;
         _msicService = msicService;
@@ -115,8 +119,40 @@ public sealed class SubmitInvoiceComamndHandler
             StringComparer.OrdinalIgnoreCase
         );
 
+        // get user classification mapping
+        var userRequestClassificationCodes = request.ItemList
+            .Select(i => i.ClassificationCode)
+            .Distinct()
+            .ToList();
+
+        var userClassificationMappings = await _classificationMappingRepository
+            .ListAsync(new ClassificationMappingWithClassification(userId, userRequestClassificationCodes), cancellationToken);
+
+        var mappedClassificationCodes = userClassificationMappings
+            .Select(m => m.Classification.Code)
+            .Distinct()
+            .ToList();
+
+        // find missing codes
+        var missingClassificationCodes = userRequestClassificationCodes
+            .Except(mappedClassificationCodes, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        // check if any are missing
+        if (missingClassificationCodes.Count != 0)
+        {
+            _logger.LogError($"User with ID {userId} is missing classification mappings for: {string.Join(", ", missingClassificationCodes)}");
+            return new Response<object>($"Missing classification mapping for: {string.Join(", ", missingClassificationCodes)}");
+        }
+
+        var classificationMappingDictionary = userClassificationMappings.ToDictionary(
+            m => m.Classification.Code,
+            m => m.LhdnClassificationCode,
+            StringComparer.OrdinalIgnoreCase
+        );
+
         // if tax amount is 0, sum the tax amount of item in itemlist
-        if(request.TaxAmount <= 0)
+        if (request.TaxAmount <= 0)
         {
             decimal taxAmt = 0;
             foreach(var item in request.ItemList)
@@ -140,10 +176,10 @@ public sealed class SubmitInvoiceComamndHandler
         }
 
         var supplierIdType = IsValidIdType(request.SupplierIdType) ? request.SupplierIdType : "NRIC";
-        var supplierSst = request.SupplierSST ?? "NA";
+        var supplierSst = !string.IsNullOrWhiteSpace(request.SupplierSST) ? request.SupplierSST : "NA";
 
         var customerIdType = IsValidIdType(request.CustomerIdType) ? request.CustomerIdType : "NRIC";
-        var customerSst = request.CustomerSST ?? "NA";
+        var customerSst = !string.IsNullOrWhiteSpace(request.CustomerSST) ? request.CustomerSST : "NA";
 
         // Step 1: Construct the Invoice JSON document
         var ublInvoice = new UblInvoiceDocument()
@@ -491,7 +527,7 @@ public sealed class SubmitInvoiceComamndHandler
                                         {
                                             ItemClassificationCode =
                                             [
-                                                new() { _ = item.ClassificationCode, ListId = "CLASS" },
+                                                new() { _ = classificationMappingDictionary[item.ClassificationCode], ListId = "CLASS" },
                                             ],
                                         },
                                     ],
@@ -935,14 +971,14 @@ public sealed class SubmitInvoiceComamndHandler
             TaxAmount = item.TaxAmount,
             Description = item.Description,
             UnitCode = uomMappingDictionary[item.Unit],
-            ClassificationCode = item.ClassificationCode,
+            ClassificationCode = classificationMappingDictionary[item.ClassificationCode],
             CurrencyCode = request.CurrencyCode,
         });
 
         var invoiceDocument = new InvoiceDocument()
         {
             InvoiceTypeCode = request.InvoiceTypeCode,
-            InvoiceNumber = request.BillingReferenceID,
+            InvoiceNumber = request.Irn,
             IssueDate = now,
             DocumentCurrencyCode = request.CurrencyCode,
             TaxCurrencyCode = request.CurrencyCode,
@@ -955,6 +991,8 @@ public sealed class SubmitInvoiceComamndHandler
             InvoiceLines = invoiceLine,
             TotalExcludingTax = request.TotalExcludingTax,
             TotalIncludingTax = request.TotalIncludingTax,
+            BillingReferenceId = request.BillingReferenceID,
+            AdditionalDocumentReferenceID = request.AdditionalDocumentReferenceID,
         };
 
         // submission success
