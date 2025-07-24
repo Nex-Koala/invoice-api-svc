@@ -18,6 +18,7 @@ using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.InvoiceApi;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Partner;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Profile;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Statistic;
+using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Supplier;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Uom;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.UomMapping;
 using NexKoala.WebApi.Invoice.Infrastructure.Jobs;
@@ -100,6 +101,9 @@ public static class InvoiceModule
             var dashboardGroup = app.MapGroup("dashboard").WithTags("Dashboard");
             dashboardGroup.MapGetSageSubmissionRateEndpoint();
             dashboardGroup.MapGetLhdnSubmissionRateEndpoint();
+
+            var supplierGroup = app.MapGroup("suppliers").WithTags("Suppliers");
+            supplierGroup.MapGetAllSupplierEndpoint();
         }
     }
 

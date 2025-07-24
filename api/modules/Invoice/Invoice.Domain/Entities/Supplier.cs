@@ -3,7 +3,7 @@ using NexKoala.Framework.Core.Domain.Contracts;
 
 namespace NexKoala.WebApi.Invoice.Domain.Entities;
 
-public class Supplier : BaseEntity, IAggregateRoot
+public class Supplier : AuditableEntity, IAggregateRoot
 {
     public string? Name { get; set; } // "Supplier's Name"
     public string? Tin { get; set; } // Supplier's TIN
