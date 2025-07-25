@@ -170,7 +170,7 @@ public sealed class GenerateInvoiceCommandHandler(
                     new XElement("taxRate", ""),   // Add real tax rate if applicable
                     new XElement("taxAmount", FormatDecimal(item.TaxAmount)),
                     new XElement("totalPrice", FormatDecimal(item.LineAmount)),
-                    new XElement("currencyCode", item.CurrencyCode)
+                    new XElement("currencyCode", CurrencyHelper.GetCurrencySymbol(item.CurrencyCode))
                 )
             )
         );
@@ -201,7 +201,7 @@ public sealed class GenerateInvoiceCommandHandler(
 
         // Append totals
         invoiceElement.Add(
-            new XElement("currencyCode", invoiceDocument.DocumentCurrencyCode),
+            new XElement("currencyCode", CurrencyHelper.GetCurrencySymbol(invoiceDocument.DocumentCurrencyCode)),
             new XElement("subtotal", FormatDecimal(invoiceDocument.TotalAmount)),
             new XElement("totalExcludingTax", FormatDecimal(invoiceDocument.TotalExcludingTax)),
             new XElement("taxAmount", FormatDecimal(invoiceDocument.TaxAmount)),
