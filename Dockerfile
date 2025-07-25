@@ -5,6 +5,7 @@ WORKDIR /src
 # Copy everything and restore
 COPY . .
 WORKDIR /src/api/server
+RUN dotnet clean
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish
 
