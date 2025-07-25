@@ -35,6 +35,20 @@ public sealed class CreatePartnerCommandHandler(
             Password = "123Pa$$word!",
         }, "Admin register", cancellationToken);
 
+        if (request.LicenseKey == null)
+        {
+            return new Response<Guid>(
+                Guid.Empty,
+                "Expiry Date and MaxSubmissions is required to create a partner."
+            );
+        }
+
+        var licenseKey = new LicenseKey
+        {
+            ExpiryDate = request.LicenseKey.ExpiryDate,
+            MaxSubmissions = request.LicenseKey.MaxSubmissions
+        };
+
         var newPartner = Partner.Create(
             userRegisterResponse.UserId,
             request.Name,
@@ -44,9 +58,8 @@ public sealed class CreatePartnerCommandHandler(
             request.Address3,
             request.Email,
             request.Phone,
-            request.LicenseKey,
-            request.Status,
-            request.MaxSubmissions
+            licenseKey,
+            request.Status
         );
         await repository.AddAsync(newPartner, cancellationToken);
         logger.LogInformation("Partner created {PartnerId}", newPartner.Id);

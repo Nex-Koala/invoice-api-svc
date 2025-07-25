@@ -137,7 +137,6 @@ public static class InvoiceModule
         builder.Services.AddKeyedScoped<IRepository<Partner>, InvoiceRepository<Partner>>("invoice:partners");
         builder.Services.AddKeyedScoped<IReadRepository<Partner>, InvoiceRepository<Partner>>("invoice:partners");
 
-
         builder.Services.AddKeyedScoped<IRepository<InvoiceLine>, InvoiceRepository<InvoiceLine>>("invoice:invoiceLines");
         builder.Services.AddKeyedScoped<IReadRepository<InvoiceLine>, InvoiceRepository<InvoiceLine>>("invoice:invoiceLines");
 
@@ -146,6 +145,9 @@ public static class InvoiceModule
 
         builder.Services.AddKeyedScoped<IRepository<Customer>, InvoiceRepository<Customer>>("invoice:customers");
         builder.Services.AddKeyedScoped<IReadRepository<Customer>, InvoiceRepository<Customer>>("invoice:customers");
+
+        builder.Services.AddKeyedScoped<IRepository<LicenseKey>, InvoiceRepository<LicenseKey>>("invoice:licenseKeys");
+        builder.Services.AddKeyedScoped<IReadRepository<LicenseKey>, InvoiceRepository<LicenseKey>>("invoice:licenseKeys");
 
         builder.Services.AddHttpClient("LhdnApi", client =>
         {

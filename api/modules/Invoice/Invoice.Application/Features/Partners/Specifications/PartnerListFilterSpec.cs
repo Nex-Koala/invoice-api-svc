@@ -23,7 +23,7 @@ public class PartnerListFilterSpec : EntitiesByPaginationFilterSpec<Partner, Par
         string? companyName = null,
         string? email = null,
         string? phone = null,
-        string? licenseKey = null,
+        Guid? licenseKey = null,
         bool? status = null
     )
         : base(new PaginationFilter { PageNumber = pageNumber, PageSize = pageSize })
@@ -33,7 +33,7 @@ public class PartnerListFilterSpec : EntitiesByPaginationFilterSpec<Partner, Par
             (companyName == null || p.CompanyName.ToLower().Contains(companyName.ToLower())) &&
             (email == null || p.Email.ToLower().Contains(email.ToLower())) &&
             (phone == null || p.Phone.ToLower().Contains(phone.ToLower())) &&
-            (licenseKey == null || p.LicenseKey.ToLower().Contains(licenseKey.ToLower())) &&
+            (licenseKey == null || (p.LicenseKey != null && p.LicenseKey.Key == licenseKey.Value)) &&
             (status == null || p.Status == status)
         );
     }

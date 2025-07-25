@@ -27,10 +27,8 @@ public class Partner : AuditableEntity, IAggregateRoot
     public string? City { get; set; }
     public string? State { get; set; }
     public string? CountryCode { get; set; }
-    public string LicenseKey { get; set; }
     public bool Status { get; set; }
-    public int SubmissionCount { get; set; }
-    public int MaxSubmissions { get; set; }
+    public LicenseKey? LicenseKey { get; set; } = default!;
 
     public static Partner Create(
         string userId,
@@ -41,9 +39,8 @@ public class Partner : AuditableEntity, IAggregateRoot
         string? address3,
         string email,
         string phone,
-        string licenseKey,
-        bool status,
-        int maxSubmissions
+        LicenseKey licenseKey,
+        bool status
     )
     {
         return new Partner
@@ -58,7 +55,6 @@ public class Partner : AuditableEntity, IAggregateRoot
             Phone = phone,
             LicenseKey = licenseKey,
             Status = status,
-            MaxSubmissions = maxSubmissions,
         };
     }
 
@@ -69,9 +65,7 @@ public class Partner : AuditableEntity, IAggregateRoot
         string? address2,
         string? address3,
         string? email,
-        string? phone,
-        string? licenseKey,
-        int? maxSubmissions
+        string? phone
     )
     {
         if (name is not null && Name?.Equals(name, StringComparison.OrdinalIgnoreCase) is not true)
@@ -95,13 +89,45 @@ public class Partner : AuditableEntity, IAggregateRoot
         if (phone is not null && Phone?.Equals(phone, StringComparison.OrdinalIgnoreCase) is not true)
             Phone = phone;
 
-        if (licenseKey is not null && LicenseKey?.Equals(licenseKey, StringComparison.OrdinalIgnoreCase) is not true)
-            LicenseKey = licenseKey;
-
-        if (maxSubmissions is not null && MaxSubmissions != maxSubmissions.Value)
-            MaxSubmissions = maxSubmissions.Value;
-
         return this;
+    }
+
+    public void UpdateLicenseKey(int? maxSubmissions, DateTimeOffset? expiryDate, bool? isRevoked, bool? generateNewKey)
+    {
+        if (LicenseKey == null)
+            throw new InvalidOperationException("Cannot update license key because it is null.");
+
+        if (generateNewKey == true)
+        {
+            LicenseKey.GenerateNewKey(
+                maxSubmissions ?? LicenseKey.MaxSubmissions,
+                expiryDate ?? LicenseKey.ExpiryDate
+            );
+            return;
+        }
+
+        if (maxSubmissions.HasValue &&
+            (LicenseKey.MaxSubmissions != maxSubmissions || LicenseKey.MaxSubmissions < LicenseKey.SubmissionCount))
+        {
+            if (maxSubmissions >= LicenseKey.SubmissionCount)
+            {
+                LicenseKey.MaxSubmissions = (int)maxSubmissions;
+            }
+            else
+            {
+                throw new InvalidOperationException("New MaxSubmissions cannot be less than current SubmissionCount.");
+            }
+        }
+
+        if (expiryDate.HasValue && LicenseKey.ExpiryDate != expiryDate)
+        {
+            LicenseKey.ExpiryDate = (DateTimeOffset)expiryDate;
+        }
+
+        if (isRevoked.HasValue && LicenseKey.IsRevoked != isRevoked)
+        {
+            LicenseKey.IsRevoked = isRevoked.Value;
+        }
     }
 
     public void SyncStatus(bool isActive)

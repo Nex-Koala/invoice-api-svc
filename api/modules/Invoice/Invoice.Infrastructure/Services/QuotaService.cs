@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NexKoala.WebApi.Invoice.Application.Interfaces;
+using NexKoala.WebApi.Invoice.Domain.Entities;
 using NexKoala.WebApi.Invoice.Infrastructure.Persistence;
 
 namespace NexKoala.WebApi.Invoice.Infrastructure.Services;
@@ -22,15 +23,22 @@ public class QuotaService: IQuotaService
         try
         {
             var user = await _context.Partners
-                .Where(u => u.UserId == userId)
-                .FirstOrDefaultAsync();
+                .Include(u => u.LicenseKey)
+                .FirstOrDefaultAsync(u => u.UserId == userId);
 
-            if (user == null || user.SubmissionCount >= user.MaxSubmissions)
+            if (user == null || user.LicenseKey == null)
             {
                 return false;
             }
 
-            user.SubmissionCount++;
+            var license = user.LicenseKey;
+
+            if (license.Status != LicenseStatus.Active)
+            {
+                return false;
+            }
+
+            license.SubmissionCount++;
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
             return true;
@@ -49,7 +57,7 @@ public class QuotaService: IQuotaService
 
         if (user != null)
         {
-            user.SubmissionCount = 0;
+            user.LicenseKey.SubmissionCount = 0;
             await _context.SaveChangesAsync();
         }
     }

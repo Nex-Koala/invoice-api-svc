@@ -5,6 +5,7 @@ using NexKoala.Framework.Core.Identity.Users.Abstractions;
 using NexKoala.Framework.Core.Identity.Users.Features.ToggleUserStatus;
 using NexKoala.Framework.Core.Persistence;
 using NexKoala.Framework.Core.Wrappers;
+using NexKoala.WebApi.Invoice.Application.Features.Partners.Specifications;
 using NexKoala.WebApi.Invoice.Domain.Entities;
 using NexKoala.WebApi.Invoice.Domain.Exceptions;
 
@@ -13,6 +14,7 @@ namespace NexKoala.WebApi.Invoice.Application.Features.Partners.Update.v1;
 public sealed class UpdatePartnerHandler(
     ILogger<UpdatePartnerHandler> logger,
     [FromKeyedServices("invoice:partners")] IRepository<Partner> repository,
+    [FromKeyedServices("invoice:licenseKeys")] IRepository<LicenseKey> licenseRepository,
     IUserService userService
 ) : IRequestHandler<UpdatePartnerCommand, Response<Guid>>
 {
@@ -22,7 +24,7 @@ public sealed class UpdatePartnerHandler(
     )
     {
         ArgumentNullException.ThrowIfNull(request);
-        var partner = await repository.GetByIdAsync(request.Id, cancellationToken);
+        var partner = await repository.FirstOrDefaultAsync(new PartnerIncludeLicenseByIdSpec(request.Id), cancellationToken);
         _ = partner ?? throw new PartnerNotFoundException(request.Id);
 
         if (request.Status != null && request.Status != partner.Status)
@@ -35,6 +37,18 @@ public sealed class UpdatePartnerHandler(
             partner.SyncStatus(request.Status.Value);
         }
 
+        var licenseKey = request.LicenseKey;
+        if(partner.LicenseKey == null && licenseKey != null)
+        {
+            var license = new LicenseKey();
+            license.GenerateNewKey(licenseKey.MaxSubmissions, licenseKey.ExpiryDate);
+            license.PartnerId = partner.Id;
+            await licenseRepository.AddAsync(license, cancellationToken);
+            partner.LicenseKey = license;
+        }
+
+        partner.UpdateLicenseKey(licenseKey?.MaxSubmissions, licenseKey?.ExpiryDate, licenseKey?.IsRevoked, licenseKey?.GenerateNewKey);
+
         var updatedPartner = partner.Update(
             request.Name,
             request.CompanyName,
@@ -42,9 +56,7 @@ public sealed class UpdatePartnerHandler(
             request.Address2,
             request.Address3,
             request.Email,
-            request.Phone,
-            request.LicenseKey,
-            request.MaxSubmissions
+            request.Phone
         );
 
         await repository.UpdateAsync(updatedPartner, cancellationToken);
