@@ -138,7 +138,15 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Address1")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Address2")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Address3")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -158,9 +166,25 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Email")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<string>("IdType")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .HasMaxLength(100)
@@ -169,6 +193,14 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                     b.Property<string>("PostalCode")
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
+
+                    b.Property<string>("SstRegistrationNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("State")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Tin")
                         .HasMaxLength(20)
@@ -184,6 +216,14 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("AdditionalDocumentReferenceID")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("BillingReferenceId")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -269,6 +309,9 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ClassificationCode")
+                        .HasColumnType("text");
+
                     b.Property<string>("CurrencyCode")
                         .HasMaxLength(3)
                         .HasColumnType("character varying(3)");
@@ -305,6 +348,54 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                     b.HasIndex("InvoiceDocumentId");
 
                     b.ToTable("InvoiceLines", "invoice");
+                });
+
+            modelBuilder.Entity("NexKoala.WebApi.Invoice.Domain.Entities.LicenseKey", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("Key")
+                        .HasMaxLength(100)
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("MaxSubmissions")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("PartnerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SubmissionCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Key")
+                        .IsUnique();
+
+                    b.HasIndex("PartnerId")
+                        .IsUnique();
+
+                    b.ToTable("LicenseKey", "invoice");
                 });
 
             modelBuilder.Entity("NexKoala.WebApi.Invoice.Domain.Entities.Partner", b =>
@@ -360,14 +451,6 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("LicenseKey")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<int>("MaxSubmissions")
-                        .HasColumnType("integer");
-
                     b.Property<string>("MsicCode")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
@@ -405,9 +488,6 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                     b.Property<bool>("Status")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("SubmissionCount")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Tin")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
@@ -432,7 +512,15 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Address1")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Address2")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Address3")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -456,6 +544,12 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Email")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
@@ -463,6 +557,12 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                     b.Property<string>("IdType")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("MsicCode")
                         .HasMaxLength(20)
@@ -477,6 +577,10 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                         .HasColumnType("character varying(10)");
 
                     b.Property<string>("SstRegistrationNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("State")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -608,6 +712,17 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
                     b.Navigation("InvoiceDocument");
                 });
 
+            modelBuilder.Entity("NexKoala.WebApi.Invoice.Domain.Entities.LicenseKey", b =>
+                {
+                    b.HasOne("NexKoala.WebApi.Invoice.Domain.Entities.Partner", "Partner")
+                        .WithOne("LicenseKey")
+                        .HasForeignKey("NexKoala.WebApi.Invoice.Domain.Entities.LicenseKey", "PartnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Partner");
+                });
+
             modelBuilder.Entity("NexKoala.WebApi.Invoice.Domain.Entities.UomMapping", b =>
                 {
                     b.HasOne("NexKoala.WebApi.Invoice.Domain.Entities.Uom", "Uom")
@@ -627,6 +742,11 @@ namespace NexKoala.WebApi.Migrations.PostgreSQL.Invoice
             modelBuilder.Entity("NexKoala.WebApi.Invoice.Domain.Entities.InvoiceDocument", b =>
                 {
                     b.Navigation("InvoiceLines");
+                });
+
+            modelBuilder.Entity("NexKoala.WebApi.Invoice.Domain.Entities.Partner", b =>
+                {
+                    b.Navigation("LicenseKey");
                 });
 
             modelBuilder.Entity("NexKoala.WebApi.Invoice.Domain.Entities.Uom", b =>

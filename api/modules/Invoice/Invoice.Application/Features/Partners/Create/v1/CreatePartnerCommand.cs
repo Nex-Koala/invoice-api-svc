@@ -12,7 +12,6 @@ public sealed record CreatePartnerCommand(
     [property: DefaultValue("Address Line 3")] string? Address3,
     [property: DefaultValue("Email Address")] string Email,
     [property: DefaultValue("Phone Number")] string Phone,
-    [property: DefaultValue("License Key")] string LicenseKey,
     [property: DefaultValue(true)] bool Status,
-    [property: DefaultValue(100)] int MaxSubmissions
+    LicenseRequestDto LicenseKey
 ) : IRequest<Response<Guid>>;

@@ -14,6 +14,7 @@ namespace NexKoala.WebApi.Invoice.Application.Dtos.EInvoice.Invoice
         public decimal Subtotal { get; set; }
         public string Description { get; set; }
         public decimal UnitPrice { get; set; }
+        public string ClassificationCode { get; set; } // Classification code for the item
 
         // New Tax Fields
         public decimal TaxAmount { get; set; }       // Total tax amount for the item

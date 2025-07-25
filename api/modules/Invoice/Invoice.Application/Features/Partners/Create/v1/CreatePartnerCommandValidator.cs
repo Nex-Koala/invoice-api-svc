@@ -34,11 +34,7 @@ public class CreatePartnerCommandValidator : AbstractValidator<CreatePartnerComm
             .Matches(@"^\+?\d{7,15}$").WithMessage("Invalid Phone Number format.")
             .MaximumLength(20).WithMessage("Phone Number must not exceed 20 characters.");
 
-        RuleFor(x => x.LicenseKey)
-            .NotEmpty().WithMessage("License Key is required.")
-            .MaximumLength(50).WithMessage("License Key must not exceed 50 characters.");
-
-        RuleFor(x => x.MaxSubmissions)
+        RuleFor(x => x.LicenseKey.MaxSubmissions)
             .GreaterThan(0).WithMessage("Max Submissions must be greater than 0.");
     }
 }

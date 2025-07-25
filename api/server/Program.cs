@@ -1,6 +1,7 @@
 using NexKoala.Framework.Infrastructure;
 using NexKoala.Framework.Infrastructure.Logging.Serilog;
 using NexKoala.WebApi.Host;
+using NexKoala.WebApi.Invoice.Application.Interfaces;
 using Serilog;
 
 StaticLogger.EnsureInitialized();
@@ -12,6 +13,12 @@ try
     builder.RegisterModules();
 
     var app = builder.Build();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var msicService = scope.ServiceProvider.GetRequiredService<IMsicService>();
+        await msicService.InitializeAsync();
+    }
 
     app.UseNexKoalaFramework();
     app.UseModules();

@@ -18,6 +18,7 @@ using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.InvoiceApi;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Partner;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Profile;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Statistic;
+using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Supplier;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.Uom;
 using NexKoala.WebApi.Invoice.Infrastructure.Endpoints.v1.UomMapping;
 using NexKoala.WebApi.Invoice.Infrastructure.Jobs;
@@ -100,6 +101,9 @@ public static class InvoiceModule
             var dashboardGroup = app.MapGroup("dashboard").WithTags("Dashboard");
             dashboardGroup.MapGetSageSubmissionRateEndpoint();
             dashboardGroup.MapGetLhdnSubmissionRateEndpoint();
+
+            var supplierGroup = app.MapGroup("suppliers").WithTags("Suppliers");
+            supplierGroup.MapGetAllSupplierEndpoint();
         }
     }
 
@@ -133,7 +137,6 @@ public static class InvoiceModule
         builder.Services.AddKeyedScoped<IRepository<Partner>, InvoiceRepository<Partner>>("invoice:partners");
         builder.Services.AddKeyedScoped<IReadRepository<Partner>, InvoiceRepository<Partner>>("invoice:partners");
 
-
         builder.Services.AddKeyedScoped<IRepository<InvoiceLine>, InvoiceRepository<InvoiceLine>>("invoice:invoiceLines");
         builder.Services.AddKeyedScoped<IReadRepository<InvoiceLine>, InvoiceRepository<InvoiceLine>>("invoice:invoiceLines");
 
@@ -142,6 +145,9 @@ public static class InvoiceModule
 
         builder.Services.AddKeyedScoped<IRepository<Customer>, InvoiceRepository<Customer>>("invoice:customers");
         builder.Services.AddKeyedScoped<IReadRepository<Customer>, InvoiceRepository<Customer>>("invoice:customers");
+
+        builder.Services.AddKeyedScoped<IRepository<LicenseKey>, InvoiceRepository<LicenseKey>>("invoice:licenseKeys");
+        builder.Services.AddKeyedScoped<IReadRepository<LicenseKey>, InvoiceRepository<LicenseKey>>("invoice:licenseKeys");
 
         builder.Services.AddHttpClient("LhdnApi", client =>
         {
@@ -163,6 +169,7 @@ public static class InvoiceModule
         builder.Services.AddScoped<IQuotaService, QuotaService>();
         builder.Services.AddScoped<TrimStringService>();
         builder.Services.AddScoped<IAuditService, AuditService>();
+        builder.Services.AddSingleton<IMsicService, MsicService>();
 
         builder.Services.AddInvoiceJobs(builder.Configuration);
 

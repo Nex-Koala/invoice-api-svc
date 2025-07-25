@@ -11,6 +11,6 @@ public sealed record GetPartnerList(
     string? CompanyName = null,
     string? Email = null,
     string? Phone = null,
-    string? LicenseKey = null,
+    Guid? LicenseKey = null,
     bool? Status = null
 ) : IRequest<PagedResponse<PartnerResponse>>;

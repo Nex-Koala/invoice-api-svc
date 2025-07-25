@@ -1,5 +1,6 @@
 using MediatR;
 using NexKoala.Framework.Core.Wrappers;
+using NexKoala.WebApi.Invoice.Application.Features.Partners.Create.v1;
 
 namespace NexKoala.WebApi.Invoice.Application.Features.Partners.Update.v1;
 
@@ -12,7 +13,6 @@ public sealed record UpdatePartnerCommand(
     string? Address3,
     string? Email,
     string? Phone,
-    string? LicenseKey,
     bool? Status,
-    int? MaxSubmissions
+    LicenseRequestDto? LicenseKey
 ) : IRequest<Response<Guid>>;

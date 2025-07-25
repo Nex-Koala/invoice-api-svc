@@ -37,6 +37,7 @@ public class InvoiceLineDto
     public decimal TaxAmount { get; set; }
     public string? Description { get; set; }
     public string? UnitCode { get; set; }
+    public string? ClassificationCode { get; set; }
     public string? CurrencyCode { get; set; }
     public Guid InvoiceDocumentId { get; set; }
 }
@@ -52,7 +53,9 @@ public class SupplierDto
     public string? TaxTourismRegistrationNumber { get; set; }
     public string? MsicCode { get; set; }
     public string? BusinessActivityDescription { get; set; }
-    public string? Address { get; set; }
+    public string? Address1 { get; set; }
+    public string? Address2 { get; set; }
+    public string? Address3 { get; set; }
     public string? Email { get; set; }
     public string? ContactNumber { get; set; }
     public string? City { get; set; }
@@ -65,8 +68,12 @@ public class CustomerDto
     public Guid Id { get; set; }
     public string? Name { get; set; }
     public string? Tin { get; set; }
+    public string? IdType { get; set; }
     public string? Brn { get; set; }
-    public string? Address { get; set; }
+    public string? SstRegistrationNumber { get; set; }
+    public string? Address1 { get; set; }
+    public string? Address2 { get; set; }
+    public string? Address3 { get; set; }
     public string? City { get; set; }
     public string? PostalCode { get; set; }
     public string? CountryCode { get; set; }

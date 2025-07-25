@@ -23,8 +23,6 @@ public sealed record PartnerResponse(
     string City,
     string State,
     string CountryCode,
-    string LicenseKey,
     bool Status,
-    int SubmissionCount,
-    int MaxSubmissions
+    LicenseKeyResponseDto? LicenseKey
 );

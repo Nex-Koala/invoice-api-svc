@@ -28,6 +28,8 @@ internal class InvoiceDocumentConfiguration : IEntityTypeConfiguration<InvoiceDo
         builder.Property(x => x.SubmissionStatus).IsRequired();
         builder.Property(x => x.DocumentStatus).HasConversion<string>();
         builder.Property(x => x.LongId).HasMaxLength(50);
+        builder.Property(x => x.BillingReferenceId).HasMaxLength(150);
+        builder.Property(x => x.AdditionalDocumentReferenceID).HasMaxLength(1000);
 
         builder
             .HasOne(x => x.Supplier)

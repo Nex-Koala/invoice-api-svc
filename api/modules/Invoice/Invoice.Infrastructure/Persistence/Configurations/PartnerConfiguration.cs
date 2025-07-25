@@ -56,12 +56,6 @@ internal class PartnerConfiguration : IEntityTypeConfiguration<Partner>
 
         builder.Property(x => x.CountryCode).HasMaxLength(10);
 
-        builder.Property(x => x.LicenseKey).IsRequired().HasMaxLength(50);
-
         builder.Property(x => x.Status).IsRequired();
-
-        builder.Property(x => x.SubmissionCount).IsRequired();
-
-        builder.Property(x => x.MaxSubmissions).IsRequired();
     }
 }
