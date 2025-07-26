@@ -131,7 +131,7 @@
 				</div>
 
 				<div class="row">
-					<div class="col">
+					<div class="col" style="width: 50%;">
 						<b><xsl:value-of select="invoice/supplierName" /></b>
 						<p><xsl:value-of select="invoice/supplierAddress" /></p>
 						<p><xsl:value-of select="invoice/supplierContact" /></p>
@@ -484,9 +484,9 @@
 				</div>
 
 				<div class="footer">
-					<p>
+					<!--<p>
 						Digital Signature:<br /><xsl:value-of select="invoice/digitalSignature" />
-					</p>
+					</p>-->
 					<p>
 						Date and Time of Validation:
 						<xsl:value-of select="invoice/dateTimeValidated" />
