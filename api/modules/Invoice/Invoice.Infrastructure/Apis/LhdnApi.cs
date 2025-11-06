@@ -58,7 +58,11 @@ namespace NexKoala.WebApi.Invoice.Infrastructure.Apis
             else
             {
                 var result = await response.Content.ReadAsStringAsync();
-                throw new GenericException(result);
+                var submissionResult = JsonConvert.DeserializeObject<RejectedDocument>(result);
+                return new SubmitInvoiceResponse
+                {
+                    RejectedDocuments = submissionResult != null ? new List<RejectedDocument> { submissionResult } : null
+                };
             }
         }
 

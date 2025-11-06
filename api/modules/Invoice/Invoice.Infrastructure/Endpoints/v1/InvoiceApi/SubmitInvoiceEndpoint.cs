@@ -25,7 +25,7 @@ public static class SubmitInvoiceEndpoint
                         return Results.Unauthorized();
                     }
 
-                    if (!await quotaService.TryAcquireQuota(userId))
+                    if (!await quotaService.HasQuotaAsync(userId, request.Invoices.Count))
                     {
                         List<string> errors = new();
                         errors.Add("Quota exceeded");

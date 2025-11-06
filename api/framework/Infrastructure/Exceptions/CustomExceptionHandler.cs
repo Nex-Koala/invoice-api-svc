@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using NexKoala.Framework.Core.Exceptions;
+using NexKoala.Framework.Core.Wrappers;
 
 namespace NexKoala.Framework.Infrastructure.Exceptions;
 public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IExceptionHandler
@@ -12,40 +13,46 @@ public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IE
     {
         ArgumentNullException.ThrowIfNull(httpContext);
         ArgumentNullException.ThrowIfNull(exception);
-        var problemDetails = new ProblemDetails();
-        problemDetails.Instance = httpContext.Request.Path;
 
+        // default fallback
+        int statusCode = StatusCodes.Status500InternalServerError;
+        string message = "An unexpected error occurred.";
+        List<string> errors = new();
+        bool succeeded = false;
+
+        // handle known exception types
         if (exception is FluentValidation.ValidationException fluentException)
         {
-            problemDetails.Detail = "one or more validation errors occurred";
-            problemDetails.Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1";
-            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            List<string> validationErrors = new List<string>();
-            foreach (var error in fluentException.Errors)
-            {
-                validationErrors.Add(error.ErrorMessage);
-            }
-            problemDetails.Extensions.Add("errors", validationErrors);
+            statusCode = StatusCodes.Status400BadRequest;
+            message = "One or more validation errors occurred.";
+            errors = fluentException.Errors.Select(e => e.ErrorMessage).ToList();
         }
-
         else if (exception is GenericException e)
         {
-            httpContext.Response.StatusCode = (int)e.StatusCode;
-            problemDetails.Detail = e.Message;
+            statusCode = e.StatusCode == 0 ? StatusCodes.Status500InternalServerError : (int)e.StatusCode;
+            message = e.Message;
             if (e.ErrorMessages != null && e.ErrorMessages.Any())
-            {
-                problemDetails.Extensions.Add("errors", e.ErrorMessages);
-            }
+                errors = e.ErrorMessages.ToList();
         }
-
         else
         {
-            problemDetails.Detail = exception.Message;
+            message = exception.Message;
         }
 
         LogContext.PushProperty("StackTrace", exception.StackTrace);
-        logger.LogError("{ProblemDetail}", problemDetails.Detail);
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken).ConfigureAwait(false);
+        logger.LogError(exception, "Exception handled: {Message}", message);
+
+        var response = new Response<object>
+        {
+            Succeeded = succeeded,
+            Message = message,
+            Errors = errors,
+            Data = null
+        };
+
+        httpContext.Response.StatusCode = statusCode;
+        httpContext.Response.ContentType = "application/json";
+        await httpContext.Response.WriteAsJsonAsync(response, cancellationToken).ConfigureAwait(false);
         return true;
     }
 }
