@@ -34,11 +34,12 @@ public sealed class SubmitInvoiceComamndHandler
     private readonly ILogger<SubmitInvoiceComamndHandler> _logger;
     private readonly IPublisher _publisher;
     private readonly IMsicService _msicService;
+    private readonly IQuotaService _quotaService;
 
     public SubmitInvoiceComamndHandler(ILhdnApi lhdnApi, [FromKeyedServices("invoice:invoiceDocuments")] IRepository<InvoiceDocument> invoiceDocumentRepository,
         [FromKeyedServices("invoice:uomMappings")] IRepository<UomMapping> uomMappingRepository, [FromKeyedServices("invoice:partners")] IRepository<Partner> partnerRepository,
         [FromKeyedServices("invoice:classificationMappings")] IRepository<ClassificationMapping> classificationMappingRepository,
-        ILogger<SubmitInvoiceComamndHandler> logger, IPublisher publisher, IMsicService msicService)
+        ILogger<SubmitInvoiceComamndHandler> logger, IPublisher publisher, IMsicService msicService, IQuotaService quotaService)
     {
         _lhdnApi = lhdnApi;
         _invoiceDocumentRepository = invoiceDocumentRepository;
@@ -48,6 +49,7 @@ public sealed class SubmitInvoiceComamndHandler
         _logger = logger;
         _publisher = publisher;
         _msicService = msicService;
+        _quotaService = quotaService;
     }
 
     public async Task<object> Handle(
@@ -993,6 +995,8 @@ public sealed class SubmitInvoiceComamndHandler
         {
             Documents = documentList.ToArray()
         };
+
+        await _quotaService.DeductQuotaAsync(request.UserId, request.Invoices.Count);
 
         var response = await _lhdnApi.SubmitInvoiceAsync(payload, partnerTin);
 
