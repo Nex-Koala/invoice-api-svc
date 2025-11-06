@@ -1033,12 +1033,12 @@ public sealed class SubmitInvoiceComamndHandler
                     {
                         foreach (var detail in error.Details)
                         {
-                            errorMessages.Add($"{error?.Message ?? "Unknown Error"}: {detail?.Message ?? "No detail message"}");
+                            errorMessages.Add($"{error?.Code ?? error?.Message ?? "Unknown Error"}: {detail?.Message ?? "No detail message"}");
                         }
                     }
                     else
                     {
-                        errorMessages.Add(error?.Message ?? "Unknown error");
+                        errorMessages.Add(error?.Code ?? error?.Message ?? "Unknown error");
                     }
                 }
             }

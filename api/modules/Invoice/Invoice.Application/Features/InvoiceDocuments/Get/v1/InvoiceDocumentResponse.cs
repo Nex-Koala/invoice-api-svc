@@ -59,6 +59,7 @@ public class SupplierDto
     public string? Email { get; set; }
     public string? ContactNumber { get; set; }
     public string? City { get; set; }
+    public string? State { get; set; }
     public string? PostalCode { get; set; }
     public string? CountryCode { get; set; }
 }
