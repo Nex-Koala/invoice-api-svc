@@ -19,6 +19,8 @@ internal class GetInvoiceDocumentByInvoiceNumber: Specification<InvoiceDocument,
         if (getSuccessSubmit)
         {
             Query.Where(i => i.SubmissionStatus);
+            Query.Where(i => i.DocumentStatus == DocumentStatus.Submitted && i.DocumentStatus == DocumentStatus.Valid);
         }
+
     }
 }
